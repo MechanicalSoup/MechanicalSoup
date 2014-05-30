@@ -10,7 +10,7 @@ class Browser:
         response = self.session.get(*args, **kwargs)
         return Page(response)
 
-    def submit(self, form, url=None):
+    def _build_request(self, form, url=None):
         method = form['method']
         action = form['action']
         url = urllib.parse.urljoin(url, action)
@@ -30,7 +30,13 @@ class Browser:
                 continue
             payload[name] = textarea.text
 
-        return Page(self.session.post(url, data=payload))
+        return requests.Request(method, url, data=payload)
+
+    def submit(self, form, url=None):
+        request = self._build_request(form, url)
+        request = self.session.prepare_request(request)
+        response = self.session.send(request)
+        return Page(response)
 
 class Page:
     def __init__(self, response):
