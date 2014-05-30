@@ -10,11 +10,12 @@ class Browser:
         response = self.session.get(*args, **kwargs)
         return Page(response)
 
-    def submit(self, response, form):
+    def submit(self, form, url=None):
         method = form['method']
         action = form['action']
-        url = urllib.parse.urljoin(response.url, action)
+        url = urllib.parse.urljoin(url, action)
 
+        # read http://www.w3.org/TR/html5/forms.html
         payload = dict()
         for input in form.select("input"):
             name = input.get('name')
@@ -22,6 +23,12 @@ class Browser:
                 continue
             value = input['value']
             payload[name] = value
+
+        for textarea in form.select("textarea"):
+            name = input.get('name')
+            if not name:
+                continue
+            payload[name] = textarea.text
 
         return Page(self.session.post(url, data=payload))
 
