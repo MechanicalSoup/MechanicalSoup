@@ -3,6 +3,16 @@ MechanicalSoup
 
 A Python library for automating interaction with websites. MechanicalSoup automatically stores and sends cookies, follows redirects, and can follow links and submit forms.
 
+Installation
+------
+
+[![Latest Version](https://pypip.in/version/MechanicalSoup/badge.svg)](https://pypi.python.org/pypi/MechanicalSoup/)
+
+From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
+
+     pip install MechanicalSoup
+    
+
 Rationale
 ------
 
