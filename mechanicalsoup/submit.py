@@ -1,6 +1,6 @@
 import requests
 import bs4
-import urllib.parse
+from six.moves import urllib
 
 class Browser:
     def __init__(self, session=None):
