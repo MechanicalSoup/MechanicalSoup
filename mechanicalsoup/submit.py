@@ -25,7 +25,7 @@ class Browser:
             payload[name] = value
 
         for textarea in form.select("textarea"):
-            name = input.get('name')
+            name = textarea.get('name')
             if not name:
                 continue
             payload[name] = textarea.text
