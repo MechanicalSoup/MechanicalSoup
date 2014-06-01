@@ -19,7 +19,7 @@ login_form = login_page.soup.select("#login")[0].select("form")[0]
 login_form.select("#login_field")[0]['value'] = args.username
 login_form.select("#password")[0]['value'] = args.password
 
-# submit!
+# submit form
 page2 = browser.submit(login_form, login_page.response.url)
 
 # verify we are now logged in
