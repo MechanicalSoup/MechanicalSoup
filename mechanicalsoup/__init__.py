@@ -1,1 +1,1 @@
-from .submit import Browser
+from .browser import Browser
