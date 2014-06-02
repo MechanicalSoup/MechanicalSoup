@@ -21,6 +21,8 @@ class Browser:
             name = input.get('name')
             if not name:
                 continue
+            if input.get('type') == 'radio' and not 'checked' in input.attrs:
+                continue
             value = input['value']
             payload[name] = value
 
