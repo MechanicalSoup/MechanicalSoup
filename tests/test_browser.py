@@ -42,7 +42,7 @@ def test_submit_online():
     form.find_next("input", {"name" : "size", "value": "medium"})['checked'] = ""
     form.find_next("input", {"name" : "topping", "value": "cheese"})['checked'] = ""
     form.find_next("input", {"name" : "topping", "value": "onion"})['checked'] = ""
-    # form.find_next("textarea", {"name" : "comments"}).text = 'freezer'
+    form.find_next("textarea", {"name" : "comments"}).insert(0, 'freezer')
 
     response = browser.submit(form, page.url)
     json = response.json()
@@ -51,5 +51,5 @@ def test_submit_online():
     assert data["custtel"] == '555'
     assert data["size"] == "medium"
     assert data["topping"] == ["cheese", "onion"]
-    # assert data["comments"] == "freezer"
+    assert data["comments"] == "freezer"
 
