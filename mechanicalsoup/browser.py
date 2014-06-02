@@ -21,10 +21,15 @@ class Browser:
             name = input.get('name')
             if not name:
                 continue
-            if input.get('type') == 'radio' and not 'checked' in input.attrs:
+            if input.get('type') in ('radio', 'checkbox') and 'checked' not in input.attrs:
                 continue
             value = input['value']
-            payload[name] = value
+            if input.get('type') == 'checkbox':
+                if not name in payload:
+                    payload[name] = list()
+                payload[name].append(value)
+            else:
+                payload[name] = value
 
         for textarea in form.select("textarea"):
             name = textarea.get('name')
