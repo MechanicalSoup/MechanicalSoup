@@ -47,6 +47,8 @@ From [`example.py`](example.py), code to log into the GitHub website:
     page3 = browser.get("https://github.com/matt-hickford/MechanicalSoup")
     assert page3.soup.select(".logout-form")
 
+For an example with a more complicated form (with checkboxes, radio buttons and textareas), read [`tests/test_browser.py`](tests/test_browser.py).
+
 Development
 ---------
 

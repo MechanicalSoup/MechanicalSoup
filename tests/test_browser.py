@@ -1,6 +1,30 @@
 import mechanicalsoup
 from bs4 import BeautifulSoup
 
+def test_submit_online():
+    """Complete and submit the pizza form at http://httpbin.org/forms/post """
+    browser = mechanicalsoup.Browser()
+    page = browser.get("http://httpbin.org/forms/post")
+    form = page.soup.form
+
+    form.find_next("input", {"name" : "custname"})['value'] = 'Philip J. Fry'
+    form.find_next("input", {"name" : "custtel"})['value'] = '555'
+    form.find_next("input", {"name" : "size", "value": "medium"})['checked'] = ""
+    form.find_next("input", {"name" : "topping", "value": "cheese"})['checked'] = ""
+    form.find_next("input", {"name" : "topping", "value": "onion"})['checked'] = ""
+    form.find_next("textarea", {"name" : "comments"}).insert(0, 'freezer')
+
+    response = browser.submit(form, page.url)
+
+    # helpfully the form submits to http://httpbin.org/post which simply returns the request headers in json format
+    json = response.json()
+    data = json['form']
+    assert data["custname"] == 'Philip J. Fry'
+    assert data["custtel"] == '555'
+    assert data["size"] == "medium"
+    assert data["topping"] == ["cheese", "onion"]
+    assert data["comments"] == "freezer"
+
 def test_build_request():
     form_html = """
     <form method='post' action='http://httpbin.org/post'>
@@ -31,25 +55,4 @@ def test_build_request():
     assert request.data['comments'] == 'freezer' 
     assert request.data['size'] == 'medium' 
     assert request.data['topping'] == ['cheese', 'onion']
-
-def test_submit_online():
-    browser = mechanicalsoup.Browser()
-    page = browser.get("http://httpbin.org/forms/post")
-    form = page.soup.form
-
-    form.find_next("input", {"name" : "custname"})['value'] = 'Philip J. Fry'
-    form.find_next("input", {"name" : "custtel"})['value'] = '555'
-    form.find_next("input", {"name" : "size", "value": "medium"})['checked'] = ""
-    form.find_next("input", {"name" : "topping", "value": "cheese"})['checked'] = ""
-    form.find_next("input", {"name" : "topping", "value": "onion"})['checked'] = ""
-    form.find_next("textarea", {"name" : "comments"}).insert(0, 'freezer')
-
-    response = browser.submit(form, page.url)
-    json = response.json()
-    data = json['form']
-    assert data["custname"] == 'Philip J. Fry'
-    assert data["custtel"] == '555'
-    assert data["size"] == "medium"
-    assert data["topping"] == ["cheese", "onion"]
-    assert data["comments"] == "freezer"
-
+    
