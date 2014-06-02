@@ -7,7 +7,7 @@ here = path.abspath(path.dirname(__file__))
 setup(
     name='MechanicalSoup',
 
-    version='0.0.2',
+    version='0.0.3',
 
     description='A Python library for automating interaction with websites',
 
@@ -24,7 +24,12 @@ setup(
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
     ],
 
     packages=['mechanicalsoup'],
