@@ -20,7 +20,7 @@ login_form.select("#login_field")[0]['value'] = args.username
 login_form.select("#password")[0]['value'] = args.password
 
 # submit form
-page2 = browser.submit(login_form, login_page.response.url)
+page2 = browser.submit(login_form, login_page.url)
 
 # verify we are now logged in
 assert page2.soup.select(".logout-form")

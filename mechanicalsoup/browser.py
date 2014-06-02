@@ -6,9 +6,18 @@ class Browser:
     def __init__(self, session=None):
         self.session = session or requests.Session()
 
+    @staticmethod
+    def add_soup(response):
+        if 'text/html' in response.headers['Content-Type']:
+            try:
+                response.soup = bs4.BeautifulSoup(response.content)
+            except:
+                pass
+
     def get(self, *args, **kwargs):
         response = self.session.get(*args, **kwargs)
-        return Page(response)
+        Browser.add_soup(response)
+        return response
 
     def _build_request(self, form, url=None):
         method = form['method']
@@ -43,9 +52,5 @@ class Browser:
         request = self._build_request(form, url)
         request = self.session.prepare_request(request)
         response = self.session.send(request)
-        return Page(response)
-
-class Page:
-    def __init__(self, response):
-        self.response = response
-        self.soup = bs4.BeautifulSoup(response.content)
+        Browser.add_soup(response)
+        return response
