@@ -44,7 +44,7 @@ From [`example.py`](example.py), code to log into the GitHub website:
     assert page2.soup.select(".logout-form")
 
     # verify we remain logged in (thanks to cookies) as we browse the rest of the site
-    page3 = browser.get("https://github.com/matt-hickford/MechanicalSoup")
+    page3 = browser.get("https://github.com/colonelpanic/MechanicalSoup")
     assert page3.soup.select(".logout-form")
 
 For an example with a more complicated form (with checkboxes, radio buttons and textareas), read [`tests/test_browser.py`](tests/test_browser.py).
@@ -52,7 +52,7 @@ For an example with a more complicated form (with checkboxes, radio buttons and 
 Development
 ---------
 
-[![Build Status](https://travis-ci.org/matt-hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/matt-hickford/MechanicalSoup)
+[![Build Status](https://travis-ci.org/colonelpanic/MechanicalSoup.svg?branch=master)](https://travis-ci.org/colonelpanic/MechanicalSoup)
 
 ### Tests
 
