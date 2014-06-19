@@ -52,7 +52,7 @@ For an example with a more complicated form (with checkboxes, radio buttons and 
 Development
 ---------
 
-[![Build Status](https://travis-ci.org/colonelpanic/MechanicalSoup.svg?branch=master)](https://travis-ci.org/colonelpanic/MechanicalSoup)
+[![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
 
 ### Tests
 
