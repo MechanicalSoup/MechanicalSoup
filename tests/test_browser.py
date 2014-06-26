@@ -8,7 +8,7 @@ def test_submit_online():
     form = page.soup.form
 
     form.find_next("input", {"name" : "custname"})['value'] = 'Philip J. Fry'
-    form.find_next("input", {"name" : "custtel"})['value'] = '555'
+    assert 'value' not in form.find('input', {'name' : 'custtel'}).attrs # leave custtel blank without value
     form.find_next("input", {"name" : "size", "value": "medium"})['checked'] = ""
     form.find_next("input", {"name" : "topping", "value": "cheese"})['checked'] = ""
     form.find_next("input", {"name" : "topping", "value": "onion"})['checked'] = ""
@@ -20,7 +20,7 @@ def test_submit_online():
     json = response.json()
     data = json['form']
     assert data["custname"] == 'Philip J. Fry'
-    assert data["custtel"] == '555'
+    assert data["custtel"] == '' # web browser submits '' for input left blank
     assert data["size"] == "medium"
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"

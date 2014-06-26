@@ -32,7 +32,7 @@ class Browser:
                 continue
             if input.get('type') in ('radio', 'checkbox') and 'checked' not in input.attrs:
                 continue
-            value = input.get('value')
+            value = input.get('value', '')
             if input.get('type') == 'checkbox':
                 if not name in payload:
                     payload[name] = list()
