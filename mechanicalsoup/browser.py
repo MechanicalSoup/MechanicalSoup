@@ -19,6 +19,11 @@ class Browser:
         Browser.add_soup(response)
         return response
 
+    def post(self, *args, **kwargs):
+        response = self.session.post(*args, **kwargs)
+        Browser.add_soup(response)
+        return response
+
     def _build_request(self, form, url=None):
         method = form['method']
         action = form['action']
