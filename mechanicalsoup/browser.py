@@ -1,6 +1,8 @@
 import requests
 import bs4
 from six.moves import urllib
+from os.path import basename #for filename
+from mimetypes import guess_type #for content-type
 
 class Browser:
     def __init__(self, session=None):
@@ -31,6 +33,8 @@ class Browser:
 
         # read http://www.w3.org/TR/html5/forms.html
         payload = dict()
+        files = dict() #files dict
+        
         for input in form.select("input"):
             name = input.get('name')
             if not name:
@@ -42,8 +46,20 @@ class Browser:
                 if not name in payload:
                     payload[name] = list()
                 payload[name].append(value)
+            
+            #input type file
+            elif input.get('type') == 'file':
+                if not value:
+                    continue
+                files[name] = (basename(value), open(value, 'rb'), guess_type(value)[0] )
+                
+                
             else:
                 payload[name] = value
+            
+
+
+
 
         for textarea in form.select("textarea"):
             name = textarea.get('name')
@@ -51,7 +67,8 @@ class Browser:
                 continue
             payload[name] = textarea.text
 
-        return requests.Request(method, url, data=payload)
+        #files=files
+        return requests.Request(method, url, data=payload, files=files)
 
     def submit(self, form, url=None):
         request = self._build_request(form, url)
@@ -59,3 +76,14 @@ class Browser:
         response = self.session.send(request)
         Browser.add_soup(response)
         return response
+
+
+
+
+
+
+
+
+
+
+
