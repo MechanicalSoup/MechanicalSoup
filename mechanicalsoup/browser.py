@@ -31,27 +31,39 @@ class Browser:
 
         # read http://www.w3.org/TR/html5/forms.html
         payload = dict()
+        files = dict()
+        
         for input in form.select("input"):
             name = input.get('name')
+            value = input.get('value', '') # web browsers use empty string for inputs with missing values
             if not name:
                 continue
+
             if input.get('type') in ('radio', 'checkbox') and 'checked' not in input.attrs:
                 continue
-            value = input.get('value', '')
+
             if input.get('type') == 'checkbox':
                 if not name in payload:
                     payload[name] = list()
                 payload[name].append(value)
+            
+            elif input.get('type') == 'file':
+                # read http://www.cs.tut.fi/~jkorpela/forms/file.html
+                # in web browsers, file upload only happens if the form's (or submit button's) enctype attribute is set to 'multipart/form-data'. we don't care, simplify.
+                if not value:
+                    continue
+                files[name] = open(value, 'rb')
+                
             else:
                 payload[name] = value
-
+            
         for textarea in form.select("textarea"):
             name = textarea.get('name')
             if not name:
                 continue
             payload[name] = textarea.text
 
-        return requests.Request(method, url, data=payload)
+        return requests.Request(method, url, data=payload, files=files)
 
     def submit(self, form, url=None):
         request = self._build_request(form, url)
