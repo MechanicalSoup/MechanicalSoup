@@ -30,7 +30,7 @@ class Browser:
         url = urllib.parse.urljoin(url, action)
 
         # read http://www.w3.org/TR/html5/forms.html
-        payload = dict()
+        data = dict()
         files = dict()
         
         for input in form.select("input"):
@@ -43,9 +43,9 @@ class Browser:
                 continue
 
             if input.get('type') == 'checkbox':
-                if not name in payload:
-                    payload[name] = list()
-                payload[name].append(value)
+                if not name in data:
+                    data[name] = list()
+                data[name].append(value)
             
             elif input.get('type') == 'file':
                 # read http://www.cs.tut.fi/~jkorpela/forms/file.html
@@ -55,19 +55,22 @@ class Browser:
                 files[name] = open(value, 'rb')
                 
             else:
-                payload[name] = value
+                data[name] = value
             
         for textarea in form.select("textarea"):
             name = textarea.get('name')
             if not name:
                 continue
-            payload[name] = textarea.text
+            data[name] = textarea.text
 
-        return requests.Request(method, url, data=payload, files=files)
+        return requests.Request(method, url, data=data, files=files)
+
+    def _prepare_request(self, form, url=None):
+        request = self._build_request(form, url)
+        return self.session.prepare_request(request)
 
     def submit(self, form, url=None):
-        request = self._build_request(form, url)
-        request = self.session.prepare_request(request)
+        request = self._prepare_request(form, url)
         response = self.session.send(request)
         Browser.add_soup(response)
         return response
