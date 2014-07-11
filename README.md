@@ -72,3 +72,9 @@ Development
 ### Tests
 
     py.test
+
+See also
+------
+
+* [RoboBrowser](https://github.com/jmcarp/robobrowser), a similar library, also based on Requests and BeautifulSoup.
+ 
