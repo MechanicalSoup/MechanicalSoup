@@ -1,9 +1,9 @@
 MechanicalSoup
 ==============
 
-A Mechanize-inspired Python library for automating interaction with websites. MechanicalSoup automatically stores and sends cookies, follows redirects, and can follow links and submit forms. It doesn't do Javascript.
+A Python library for automating interaction with websites. MechanicalSoup automatically stores and sends cookies, follows redirects, and can follow links and submit forms. It doesn't do Javascript.
 
-I was a fond user of the Python [Mechanize](https://github.com/jjlee/mechanize) library, but unfortunately it's [incompatible with Python 3](https://github.com/jjlee/mechanize/issues/96), and its development has halted. MechanicalSoup provides a similar API, built on Python giants [Requests](http://docs.python-requests.org/en/latest/) (for http sessions) and [BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/) (for document navigation).
+I was a fond user of the [Mechanize](https://github.com/jjlee/mechanize) library, but unfortunately it's  [incompatible with Python 3](https://github.com/jjlee/mechanize/issues/96) and development is inactive. MechanicalSoup provides a similar API, built on Python giants [Requests](http://docs.python-requests.org/en/latest/) (for http sessions) and [BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/) (for document navigation).
 
 Installation
 ------
@@ -81,5 +81,5 @@ See also
 ------
 
 * [RoboBrowser](https://github.com/jmcarp/robobrowser) a similar library, also based on Requests and BeautifulSoup.
-* [Show Hacker News post](https://news.ycombinator.com/item?id=8012103)
-* [Reddit post](http://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/)
+* [Hacker News post](https://news.ycombinator.com/item?id=8012103)
+* [Reddit discussion](http://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/)
