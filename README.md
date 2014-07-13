@@ -13,6 +13,8 @@ Installation
 From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
 
      pip install MechanicalSoup
+     
+Pythons version 2.6 through 3.4 are supported (and tested against).
 
 Example
 ------
@@ -63,9 +65,9 @@ For an example with a more complicated form (with checkboxes, radio buttons and 
 Development
 ---------
 
-[![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
-
 ### Tests
+
+[![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
 
     py.test
 
