@@ -8,7 +8,8 @@ class Browser:
 
     @staticmethod
     def add_soup(response):
-        if 'text/html' in response.headers['Content-Type']:
+        if 'Content-Type' in response.headers \
+                and 'text/html' in response.headers['Content-Type']:
             try:
                 response.soup = bs4.BeautifulSoup(response.content)
             except:
