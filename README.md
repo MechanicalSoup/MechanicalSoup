@@ -77,7 +77,7 @@ Development
 * Compare with [RoboBrowser](https://github.com/jmcarp/robobrowser) (I didn't know about this project at the time)
 * Add features from Mechanize (history, following links)
 * Easier API for completing forms
-* Write docs and publish website
+* [Write docs and publish website](https://github.com/hickford/MechanicalSoup/issues/6)
 
 See also
 ------
