@@ -12,10 +12,10 @@ setup(
 
     description='A Python library for automating interaction with websites',
 
-    url='https://github.com/matt-hickford/MechanicalSoup',
+    url='https://github.com/hickford/MechanicalSoup',
 
-    author='Matt Hickford',
-    author_email='matt.hickford@gmail.com',
+    author='Mirth Hickford',
+    author_email='mirth.hickford@gmail.com',
 
     license='MIT',
 
