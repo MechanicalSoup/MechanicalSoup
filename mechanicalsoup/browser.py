@@ -15,6 +15,11 @@ class Browser:
             except:
                 pass
 
+    def request(self, *args, **kwargs):
+        response = self.session.request(*args, **kwargs)
+        Browser.add_soup(response)
+        return response
+
     def get(self, *args, **kwargs):
         response = self.session.get(*args, **kwargs)
         Browser.add_soup(response)
@@ -25,14 +30,14 @@ class Browser:
         Browser.add_soup(response)
         return response
 
-    def _build_request(self, form, url=None):
+    def _build_request(self, form, url=None, **kwargs):
         method = form['method']
         action = form['action']
         url = urllib.parse.urljoin(url, action)
 
         # read http://www.w3.org/TR/html5/forms.html
-        data = dict()
-        files = dict()
+        data = kwargs.get('data') or dict()
+        files = kwargs.get('files') or dict()
         
         for input in form.select("input"):
             name = input.get('name')
@@ -66,14 +71,14 @@ class Browser:
                 continue
             data[name] = textarea.text
 
-        return requests.Request(method, url, data=data, files=files)
+        return requests.Request(method, url, data=data, files=files, **kwargs)
 
-    def _prepare_request(self, form, url=None):
-        request = self._build_request(form, url)
+    def _prepare_request(self, form, url=None, **kwargs):
+        request = self._build_request(form, url, **kwargs)
         return self.session.prepare_request(request)
 
-    def submit(self, form, url=None):
-        request = self._prepare_request(form, url)
+    def submit(self, form, url=None, **kwargs):
+        request = self._prepare_request(form, url, **kwargs)
         response = self.session.send(request)
         Browser.add_soup(response)
         return response
