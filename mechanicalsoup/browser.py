@@ -1,6 +1,7 @@
 import requests
 import bs4
 from six.moves import urllib
+from six import string_types
 
 class Browser:
     def __init__(self, session=None):
@@ -52,7 +53,9 @@ class Browser:
                 # in web browsers, file upload only happens if the form's (or submit button's) enctype attribute is set to 'multipart/form-data'. we don't care, simplify.
                 if not value:
                     continue
-                files[name] = open(value, 'rb')
+                if isinstance(value, string_types):
+                    value = open(value, 'rb')
+                files[name] = value
                 
             else:
                 data[name] = value
