@@ -65,9 +65,9 @@ For an example with a more complicated form (with checkboxes, radio buttons and 
 Development
 ---------
 
-### Tests
-
 [![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
+
+### Tests
 
     py.test
 
