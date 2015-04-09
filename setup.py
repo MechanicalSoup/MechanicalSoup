@@ -37,7 +37,7 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'requests',
+        'requests >= 2.0',
         'beautifulsoup4',
         'six >= 1.4'
         ],
