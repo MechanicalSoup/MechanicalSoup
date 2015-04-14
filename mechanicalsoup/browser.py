@@ -71,6 +71,14 @@ class Browser:
                 continue
             data[name] = textarea.text
 
+        for select in form.select("select"):
+            name = select.get('name')
+            if not name:
+                continue
+            for i, option in enumerate(select.select("option")):
+                if i == 0 or "selected" in option.attrs:
+                    data[name] = option.get('value', '')
+ 
         return requests.Request(method, url, data=data, files=files, **kwargs)
 
     def _prepare_request(self, form, url=None, **kwargs):

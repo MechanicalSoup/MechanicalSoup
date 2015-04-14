@@ -45,6 +45,10 @@ form_html = """
  <p><label> <input type=checkbox name="topping" value="mushroom"> Mushroom </label></p>
 </fieldset>
 <input name="pic" type="file">
+<select name="shape">
+ <option value="round">Round</option>
+ <option value="square" selected>Square</option>
+</select>
 """
 
 def test_build_request():
@@ -58,6 +62,7 @@ def test_build_request():
     assert request.data['comments'] == 'freezer' 
     assert request.data['size'] == 'medium' 
     assert request.data['topping'] == ['cheese', 'onion']
+    assert request.data['shape'] == 'square'
 
     request = browser._prepare_request(form)
     assert "application/x-www-form-urlencoded" in request.headers['Content-Type']
