@@ -60,7 +60,7 @@ page3 = browser.get("https://github.com/hickford/MechanicalSoup")
 assert page3.soup.select(".logout-form")
 ```
 
-For an example with a more complicated form (with checkboxes, radio buttons and textareas), read [`tests/test_browser.py`](tests/test_browser.py).
+For an example with a more complex form (checkboxes, radio buttons and textareas), read [`tests/test_browser.py`](tests/test_browser.py).
 
 Development
 ---------
