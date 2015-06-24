@@ -10,10 +10,7 @@ def test_submit_online():
     input_data = {"custname": "Philip J. Fry"}
     form.input(input_data)
 
-    # leave custtel blank without value
-    assert "value" not in form.find("input", {"name": "custtel"}).attrs
-
-    check_data = {"size": "medium", "topping": "cheese", "topping": "onion"}
+    check_data = {"size": "medium", "topping": ["cheese", "onion"]}
     form.check(check_data)
 
     form.textarea({"comments": "freezer"})
@@ -29,3 +26,6 @@ def test_submit_online():
     assert data["size"] == "medium"
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"
+
+if __name__ == '__main__':
+    test_submit_online()

@@ -9,8 +9,13 @@ class Form:
 
     def check(self, data):
         for (name, value) in data.items():
-            self.form.find("input", {"name": name, "value": value})[
-                "checked"] = ""
+            if isinstance(value, list):
+                for choice in value:
+                    self.form.find("input", {"name": name, "value": choice})[
+                        "checked"] = ""
+            else:
+                self.form.find("input", {"name": name, "value": value})[
+                    "checked"] = ""
 
     def textarea(self, data):
         for (name, value) in data.items():
