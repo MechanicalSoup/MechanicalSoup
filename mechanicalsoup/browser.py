@@ -2,8 +2,11 @@ import requests
 import bs4
 from six.moves import urllib
 from six import string_types
+from .form import Form
+
 
 class Browser:
+
     def __init__(self, session=None):
         self.session = session or requests.Session()
 
@@ -38,10 +41,11 @@ class Browser:
         # read http://www.w3.org/TR/html5/forms.html
         data = kwargs.get('data') or dict()
         files = kwargs.get('files') or dict()
-        
+
         for input in form.select("input"):
             name = input.get('name')
-            value = input.get('value', '') # web browsers use empty string for inputs with missing values
+            # web browsers use empty string for inputs with missing values
+            value = input.get('value', '')
             if not name:
                 continue
 
@@ -52,19 +56,21 @@ class Browser:
                 if not name in data:
                     data[name] = list()
                 data[name].append(value)
-            
+
             elif input.get('type') == 'file':
                 # read http://www.cs.tut.fi/~jkorpela/forms/file.html
-                # in web browsers, file upload only happens if the form's (or submit button's) enctype attribute is set to 'multipart/form-data'. we don't care, simplify.
+                # in web browsers, file upload only happens if the form's (or
+                # submit button's) enctype attribute is set to
+                # 'multipart/form-data'. we don't care, simplify.
                 if not value:
                     continue
                 if isinstance(value, string_types):
                     value = open(value, 'rb')
                 files[name] = value
-                
+
             else:
                 data[name] = value
-            
+
         for textarea in form.select("textarea"):
             name = textarea.get('name')
             if not name:
@@ -78,7 +84,7 @@ class Browser:
             for i, option in enumerate(select.select("option")):
                 if i == 0 or "selected" in option.attrs:
                     data[name] = option.get('value', '')
- 
+
         return requests.Request(method, url, data=data, files=files, **kwargs)
 
     def _prepare_request(self, form, url=None, **kwargs):
@@ -86,6 +92,8 @@ class Browser:
         return self.session.prepare_request(request)
 
     def submit(self, form, url=None, **kwargs):
+        if isinstance(form, Form):
+            form = form.form
         request = self._prepare_request(form, url, **kwargs)
         response = self.session.send(request)
         Browser.add_soup(response)
