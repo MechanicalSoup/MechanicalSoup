@@ -7,30 +7,29 @@ from .form import Form
 
 class Browser:
 
-    def __init__(self, session=None):
+    def __init__(self, session=None, soup_config={}):
         self.session = session or requests.Session()
+        self.soup_config = soup_config
 
     @staticmethod
-    def add_soup(response):
+    def add_soup(response, soup_config):
         if "text/html" in response.headers.get("Content-Type", ""):
-            try:
-                response.soup = bs4.BeautifulSoup(response.content)
-            except:
-                pass
+            response.soup = bs4.BeautifulSoup(
+                response.content, **soup_config)
 
     def request(self, *args, **kwargs):
         response = self.session.request(*args, **kwargs)
-        Browser.add_soup(response)
+        Browser.add_soup(response, self.soup_config)
         return response
 
     def get(self, *args, **kwargs):
         response = self.session.get(*args, **kwargs)
-        Browser.add_soup(response)
+        Browser.add_soup(response, self.soup_config)
         return response
 
     def post(self, *args, **kwargs):
         response = self.session.post(*args, **kwargs)
-        Browser.add_soup(response)
+        Browser.add_soup(response, self.soup_config)
         return response
 
     def _build_request(self, form, url=None, **kwargs):
@@ -96,5 +95,5 @@ class Browser:
             form = form.form
         request = self._prepare_request(form, url, **kwargs)
         response = self.session.send(request)
-        Browser.add_soup(response)
+        Browser.add_soup(response, self.soup_config)
         return response
