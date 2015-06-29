@@ -7,9 +7,9 @@ from .form import Form
 
 class Browser:
 
-    def __init__(self, session=None, soup_config={}):
+    def __init__(self, session=None, soup_config=None):
         self.session = session or requests.Session()
-        self.soup_config = soup_config
+        self.soup_config = soup_config or dict()
 
     @staticmethod
     def add_soup(response, soup_config):
