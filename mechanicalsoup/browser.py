@@ -48,13 +48,12 @@ class Browser:
             if not name:
                 continue
 
-            if input.get("type") in ("radio", "checkbox") and "checked" not in input.attrs:
+            if input.get("type") in ("radio", "checkbox") \
+                    and "checked" not in input.attrs:
                 continue
 
             if input.get("type") == "checkbox":
-                if not name in data:
-                    data[name] = list()
-                data[name].append(value)
+                data.setdefault(name, []).append(value)
 
             elif input.get("type") == "file":
                 # read http://www.cs.tut.fi/~jkorpela/forms/file.html
