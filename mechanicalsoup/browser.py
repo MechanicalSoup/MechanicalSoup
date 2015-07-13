@@ -48,8 +48,7 @@ class Browser:
             if not name:
                 continue
 
-            if input.get("type") in ("radio", "checkbox") \
-                    and "checked" not in input.attrs:
+            if input.get("type") in ("radio", "checkbox") and "checked" not in input.attrs:
                 continue
 
             if input.get("type") == "checkbox":
