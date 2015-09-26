@@ -8,7 +8,7 @@ I was a fond user of the [Mechanize](https://github.com/jjlee/mechanize) library
 Installation
 ------
 
-[![Latest Version](https://pypip.in/version/MechanicalSoup/badge.svg)](https://pypi.python.org/pypi/MechanicalSoup/)
+[![Latest Version](https://img.shields.io/pypi/v/nine.svg)](https://pypi.python.org/pypi/MechanicalSoup/)
 
 From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
 
@@ -60,7 +60,7 @@ page3 = browser.get("https://github.com/hickford/MechanicalSoup")
 assert page3.soup.select(".logout-form")
 ```
 
-For an example with a more complex form (checkboxes, radio buttons and textareas), read [`tests/test_browser.py`](tests/test_browser.py).
+For an example with a more complex form (checkboxes, radio buttons and textareas), read [`tests/test_browser.py`](tests/test_browser.py) and [`tests/test_form.py`](tests/test_form.py).
 
 Development
 ---------
