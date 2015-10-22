@@ -14,7 +14,7 @@ From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
 
      pip install MechanicalSoup
      
-Pythons version 2.6 through 3.4 are supported (and tested against).
+Pythons version 2.6 through 3.5 are supported (and tested against).
 
 Example
 ------
