@@ -84,7 +84,7 @@ class Browser(object):
                 if i == 0 or "selected" in option.attrs:
                     data[name] = option.get("value", "")
 
-        if method == "get":
+        if method.lower() == "get":
             kwargs["params"] = data
         else:
             kwargs["data"] = data
