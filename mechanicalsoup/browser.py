@@ -40,8 +40,8 @@ class Browser(object):
             raise ValueError('no URL to submit to')
 
         # read http://www.w3.org/TR/html5/forms.html
-        data = kwargs.get("data") or dict()
-        files = kwargs.get("files") or dict()
+        data = kwargs.pop("data", dict())
+        files = kwargs.pop("files", dict())
 
         for input in form.select("input"):
             name = input.get("name")
@@ -84,7 +84,11 @@ class Browser(object):
                 if i == 0 or "selected" in option.attrs:
                     data[name] = option.get("value", "")
 
-        return requests.Request(method, url, data=data, files=files, **kwargs)
+        if method == "get":
+            kwargs["params"] = data
+        else:
+            kwargs["data"] = data
+        return requests.Request(method, url, files=files, **kwargs)
 
     def _prepare_request(self, form, url=None, **kwargs):
         request = self._build_request(form, url, **kwargs)
