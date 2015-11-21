@@ -5,7 +5,7 @@ from six import string_types
 from .form import Form
 
 
-class Browser:
+class Browser(object):
 
     def __init__(self, session=None, soup_config=None):
         self.session = session or requests.Session()
