@@ -33,9 +33,11 @@ class Browser:
         return response
 
     def _build_request(self, form, url=None, **kwargs):
-        method = form["method"]
-        action = form["action"]
+        method = form.get("method", "get")
+        action = form.get("action")
         url = urllib.parse.urljoin(url, action)
+        if url is None:  # This happens when both `action` and `url` are None.
+            raise ValueError('no URL to submit to')
 
         # read http://www.w3.org/TR/html5/forms.html
         data = kwargs.get("data") or dict()
