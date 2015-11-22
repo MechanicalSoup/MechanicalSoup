@@ -5,7 +5,7 @@ from six import string_types
 from .form import Form
 
 
-class Browser:
+class Browser(object):
 
     def __init__(self, session=None, soup_config=None):
         self.session = session or requests.Session()
@@ -33,13 +33,15 @@ class Browser:
         return response
 
     def _build_request(self, form, url=None, **kwargs):
-        method = form["method"]
-        action = form["action"]
+        method = form.get("method", "get")
+        action = form.get("action")
         url = urllib.parse.urljoin(url, action)
+        if url is None:  # This happens when both `action` and `url` are None.
+            raise ValueError('no URL to submit to')
 
         # read http://www.w3.org/TR/html5/forms.html
-        data = kwargs.get("data") or dict()
-        files = kwargs.get("files") or dict()
+        data = kwargs.pop("data", dict())
+        files = kwargs.pop("files", dict())
 
         for input in form.select("input"):
             name = input.get("name")
@@ -82,7 +84,11 @@ class Browser:
                 if i == 0 or "selected" in option.attrs:
                     data[name] = option.get("value", "")
 
-        return requests.Request(method, url, data=data, files=files, **kwargs)
+        if method.lower() == "get":
+            kwargs["params"] = data
+        else:
+            kwargs["data"] = data
+        return requests.Request(method, url, files=files, **kwargs)
 
     def _prepare_request(self, form, url=None, **kwargs):
         request = self._build_request(form, url, **kwargs)
