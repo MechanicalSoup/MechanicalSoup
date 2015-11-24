@@ -41,8 +41,7 @@ login_page = browser.get("https://github.com/login")
 login_form = login_page.soup.select("#login")[0].select("form")[0]
 
 # specify username and password
-login_form.select("#login_field")[0]['value'] = args.username
-login_form.select("#password")[0]['value'] = args.password
+login_form.input({"login": args.username, "password": args.password})
 
 # submit form
 page2 = browser.submit(login_form, login_page.url)
@@ -73,15 +72,12 @@ Development
 
 ### Roadmap
 
-* Draw [Substack](http://substack.net/art)-style readme art
-* Compare with [RoboBrowser](https://github.com/jmcarp/robobrowser) (I didn't know about this project at the time)
-* Add features from Mechanize (history, following links)
-* Easier API for completing forms
+* Draw [Substack-style](http://substack.net/art) readme art (imagine a steaming bowl of cogs and noodles)
 * [Write docs and publish website](https://github.com/hickford/MechanicalSoup/issues/6)
 
 See also
 ------
 
-* [RoboBrowser](https://github.com/jmcarp/robobrowser) a similar library, also based on Requests and BeautifulSoup.
+* [RoboBrowser](https://github.com/jmcarp/robobrowser): a similar library, also based on Requests and BeautifulSoup.
 * [Hacker News post](https://news.ycombinator.com/item?id=8012103)
 * [Reddit discussion](http://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/)
