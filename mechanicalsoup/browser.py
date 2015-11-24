@@ -45,13 +45,16 @@ class Browser(object):
 
         for input in form.select("input"):
             name = input.get("name")
-            # web browsers use empty string for inputs with missing values
-            value = input.get("value", "")
             if not name:
                 continue
 
-            if input.get("type") in ("radio", "checkbox") and "checked" not in input.attrs:
-                continue
+            if input.get("type") in ("radio", "checkbox"):
+                if "checked" not in input.attrs:
+                    continue
+                value = input.get("value", "on")
+            else:
+                # web browsers use empty string for inputs with missing values
+                value = input.get("value", "")
 
             if input.get("type") == "checkbox":
                 data.setdefault(name, []).append(value)
@@ -80,9 +83,15 @@ class Browser(object):
             name = select.get("name")
             if not name:
                 continue
+            multiple = "multiple" in select.attrs
+            values = []
             for i, option in enumerate(select.select("option")):
-                if i == 0 or "selected" in option.attrs:
-                    data[name] = option.get("value", "")
+                if (i == 0 and not multiple) or "selected" in option.attrs:
+                    values.append(option.get("value", ""))
+            if multiple:
+                data[name] = values
+            elif values:
+                data[name] = values[-1]
 
         if method.lower() == "get":
             kwargs["params"] = data
