@@ -17,8 +17,7 @@ login_page = browser.get("https://github.com/login")
 login_form = login_page.soup.select("#login")[0].select("form")[0]
 
 # specify username and password
-login_form.select("#login_field")[0]['value'] = args.username
-login_form.select("#password")[0]['value'] = args.password
+login_form.input({"login": args.username, "password": args.password})
 
 # submit form
 page2 = browser.submit(login_form, login_page.url)
