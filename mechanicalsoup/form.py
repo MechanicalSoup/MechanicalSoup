@@ -7,6 +7,8 @@ class Form(object):
         for (name, value) in data.items():
             self.form.find("input", {"name": name})["value"] = value
 
+    attach = input
+
     def check(self, data):
         for (name, value) in data.items():
             if isinstance(value, list):
@@ -20,10 +22,6 @@ class Form(object):
     def textarea(self, data):
         for (name, value) in data.items():
             self.form.find("textarea", {"name": name}).insert(0, value)
-
-    def attach(self, data):
-        for (name, value) in data.items():
-            self.form.find("input", {"name": name})["value"] = value
 
     def choose_submit(self, el):
         # In a normal web browser, when a input[type=submit] is clicked,
