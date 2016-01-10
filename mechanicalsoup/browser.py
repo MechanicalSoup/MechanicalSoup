@@ -7,8 +7,13 @@ from .form import Form
 
 class Browser(object):
 
-    def __init__(self, session=None, soup_config=None):
+    def __init__(self, session=None, soup_config=None, requests_adapters=None):
         self.session = session or requests.Session()
+
+        if requests_adapters is not None:
+            for adaptee, adapter in requests_adapters.items():
+                self.session.mount(adaptee, adapter)
+
         self.soup_config = soup_config or dict()
 
     @staticmethod
