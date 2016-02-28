@@ -11,6 +11,7 @@ browser = mechanicalsoup.Browser()
 
 # request github login page. the result is a requests.Response object http://docs.python-requests.org/en/latest/user/quickstart/#response-content
 login_page = browser.get("https://github.com/login")
+login_page.raise_for_status()  # similar to assert login_page.ok but with full status code in case of failure.
 
 # login_page.soup is a BeautifulSoup object http://www.crummy.com/software/BeautifulSoup/bs4/doc/#beautifulsoup 
 # we grab the login form
