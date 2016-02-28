@@ -14,7 +14,7 @@ login_page = browser.get("https://github.com/login")
 
 # login_page.soup is a BeautifulSoup object http://www.crummy.com/software/BeautifulSoup/bs4/doc/#beautifulsoup 
 # we grab the login form
-login_form = login_page.soup.select("#login")[0].select("form")[0]
+login_form = login_page.soup.select_one('#login form')
 
 # specify username and password
 login_form.input({"login": args.username, "password": args.password})
