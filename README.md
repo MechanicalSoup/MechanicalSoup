@@ -8,7 +8,7 @@ I was a fond user of the [Mechanize](https://github.com/jjlee/mechanize) library
 Installation
 ------
 
-[![Latest Version](https://img.shields.io/pypi/v/nine.svg)](https://pypi.python.org/pypi/MechanicalSoup/)
+[![Latest Version](https://img.shields.io/pypi/v/MechanicalSoup.svg)](https://pypi.python.org/pypi/MechanicalSoup/)
 
 From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
 
