@@ -6,6 +6,7 @@ python:
   - 3.4
   - 3.5
   - pypy
+  - pypy3
 install:
   - python setup.py install
 script: py.test
