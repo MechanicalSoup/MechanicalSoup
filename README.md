@@ -13,8 +13,8 @@ Installation
 From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
 
      pip install MechanicalSoup
-     
-Pythons version 2.6 through 3.5 are supported (and tested against).
+
+Python versions 2.6-2.7, 3.3-3.5 and PyPy are supported (and tested against).
 
 Example
 ------
@@ -36,7 +36,7 @@ browser = mechanicalsoup.Browser()
 # request github login page. the result is a requests.Response object http://docs.python-requests.org/en/latest/user/quickstart/#response-content
 login_page = browser.get("https://github.com/login")
 
-# login_page.soup is a BeautifulSoup object http://www.crummy.com/software/BeautifulSoup/bs4/doc/#beautifulsoup 
+# login_page.soup is a BeautifulSoup object http://www.crummy.com/software/BeautifulSoup/bs4/doc/#beautifulsoup
 # we grab the login form
 login_form = login_page.soup.select("#login")[0].select("form")[0]
 
