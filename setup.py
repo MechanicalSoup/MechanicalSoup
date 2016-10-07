@@ -8,7 +8,7 @@ setup(
     name='MechanicalSoup',
 
     # useful: python setup.py sdist bdist_wheel upload
-    version='0.5.0',
+    version='0.6.0',
 
     description='A Python library for automating interaction with websites',
 
