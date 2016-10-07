@@ -1,9 +1,12 @@
+import warnings
 import requests
 import bs4
 from six.moves import urllib
 from six import string_types
 from .form import Form
 
+# see https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
+warnings.filterwarnings("ignore", "No parser was explicitly specified", module="bs4")
 
 class Browser(object):
 
@@ -20,7 +23,7 @@ class Browser(object):
     def add_soup(response, soup_config):
         if "text/html" in response.headers.get("Content-Type", ""):
             response.soup = bs4.BeautifulSoup(
-                response.content, "html.parser", **soup_config)
+                response.content, **soup_config)
 
     def request(self, *args, **kwargs):
         response = self.session.request(*args, **kwargs)
