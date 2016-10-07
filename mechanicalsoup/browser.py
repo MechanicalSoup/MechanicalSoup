@@ -4,6 +4,8 @@ import bs4
 from six.moves import urllib
 from six import string_types
 from .form import Form
+import webbrowser
+import tempfile
 
 # see https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
 warnings.filterwarnings("ignore", "No parser was explicitly specified", module="bs4")
@@ -118,3 +120,9 @@ class Browser(object):
         response = self.session.send(request)
         Browser.add_soup(response, self.soup_config)
         return response
+
+    def launch_browser(self, soup):
+        """Launch a browser on the page, for debugging purpose."""
+        with tempfile.NamedTemporaryFile(delete=False) as file:
+            file.write(soup.encode())
+        webbrowser.open('file://' + file.name)
