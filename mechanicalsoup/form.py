@@ -32,7 +32,9 @@ class Form(object):
             if type == "radio":
                 self.uncheck_all(name)
 
-            if not isinstance(value, list):
+            # Accept individual values (int, str)
+            # We just wrap them in a 1-value tuple.
+            if not isinstance(value, list) and not isinstance(value, tuple):
                 value = (value,)
             for choice in value:
                 choice = str(choice)  # Allow for example literal numbers
