@@ -10,7 +10,9 @@ def test_submit_online():
     input_data = {"custname": "Philip J. Fry"}
     form.input(input_data)
 
-    check_data = {"size": "medium", "topping": ["cheese", "onion"]}
+    check_data = {"size": "large", "topping": ["cheese"]}
+    form.check(check_data)
+    check_data = {"size": "medium", "topping": "onion"}
     form.check(check_data)
 
     form.textarea({"comments": "warm"})
