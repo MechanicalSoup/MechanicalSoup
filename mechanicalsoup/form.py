@@ -27,6 +27,9 @@ class Form(object):
             inputs = self.form.find_all("input", {"name": name})
             if inputs == []:
                 raise LinkNotFoundError("No input checkbox named " + name)
+            type = inputs[0].attrs.get('type', 'text')
+            if type == "radio":
+                self.uncheck_all(name)
 
             if not isinstance(value, list):
                 value = (value,)
