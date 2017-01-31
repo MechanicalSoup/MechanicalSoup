@@ -21,7 +21,7 @@ class Form(object):
 
     def textarea(self, data):
         for (name, value) in data.items():
-            self.form.find("textarea", {"name": name}).insert(0, value)
+            self.form.find("textarea", {"name": name}).string = value
 
     def choose_submit(self, el):
         # In a normal web browser, when a input[type=submit] is clicked,
