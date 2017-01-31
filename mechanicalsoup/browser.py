@@ -7,8 +7,11 @@ from .form import Form
 import webbrowser
 import tempfile
 
-# see https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
-warnings.filterwarnings("ignore", "No parser was explicitly specified", module="bs4")
+# see
+# https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
+warnings.filterwarnings(
+    "ignore", "No parser was explicitly specified", module="bs4")
+
 
 class Browser(object):
 
