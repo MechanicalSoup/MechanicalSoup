@@ -41,7 +41,7 @@ def test_submit_set():
     form["custname"] = "Philip J. Fry"
 
     form["size"] = "medium"
-    form["topping"] = ["cheese", "onion"]
+    form["topping"] = ("cheese", "onion")
 
     form["comments"] = "freezer"
 
