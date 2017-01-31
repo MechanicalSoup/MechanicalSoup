@@ -15,6 +15,11 @@ class Form(object):
 
     attach = input
 
+    def uncheck_all(self, name):
+        for option in self.form.find_all("input", {"name": name}):
+            if "checked" in option.attrs:
+                del option.attrs["checked"]
+
     def check(self, data):
         for (name, value) in data.items():
             if not isinstance(value, list):
