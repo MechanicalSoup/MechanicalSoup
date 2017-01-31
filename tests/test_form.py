@@ -13,6 +13,8 @@ def test_submit_online():
     check_data = {"size": "medium", "topping": ["cheese", "onion"]}
     form.check(check_data)
 
+    form.textarea({"comments": "warm"})
+    form.textarea({"comments": "actually, no, not warm"})
     form.textarea({"comments": "freezer"})
 
     response = browser.submit(form, page.url)
