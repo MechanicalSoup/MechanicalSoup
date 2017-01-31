@@ -25,7 +25,8 @@ class Form(object):
 
     def choose_submit(self, el):
         # In a normal web browser, when a input[type=submit] is clicked,
-        # all other submits aren't sent. You can use simulate this as following:
+        # all other submits aren't sent. You can use simulate this as
+        # following:
 
         # page = browser.get(URL)
         # form_el = page.soup.form
