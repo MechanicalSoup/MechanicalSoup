@@ -31,5 +31,33 @@ def test_submit_online():
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"
 
+
+def test_submit_set():
+    """Complete and submit the pizza form at http://httpbin.org/forms/post """
+    browser = mechanicalsoup.Browser()
+    page = browser.get("http://httpbin.org/forms/post")
+    form = mechanicalsoup.Form(page.soup.form)
+
+    form["custname"] = "Philip J. Fry"
+
+    form["size"] = "medium"
+    form["topping"] = ["cheese", "onion"]
+
+    form["comments"] = "freezer"
+
+    response = browser.submit(form, page.url)
+
+    # helpfully the form submits to http://httpbin.org/post which simply
+    # returns the request headers in json format
+    json = response.json()
+    data = json["form"]
+    assert data["custname"] == "Philip J. Fry"
+    assert data["custtel"] == ""  # web browser submits "" for input left blank
+    assert data["size"] == "medium"
+    assert data["topping"] == ["cheese", "onion"]
+    assert data["comments"] == "freezer"
+
+
 if __name__ == '__main__':
     test_submit_online()
+    test_submit_set()
