@@ -22,6 +22,12 @@ class Form(object):
 
     def check(self, data):
         for (name, value) in data.items():
+            # Complain if we don't find the name, regardless of the
+            # value
+            inputs = self.form.find_all("input", {"name": name})
+            if inputs == []:
+                raise LinkNotFoundError("No input checkbox named " + name)
+
             if not isinstance(value, list):
                 value = (value,)
             for choice in value:
