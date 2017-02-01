@@ -5,6 +5,7 @@ from .browser import Browser
 from .utils import LinkNotFoundError
 from .form import Form
 import sys
+import re
 
 
 class StatefulBrowser(Browser):
@@ -103,6 +104,50 @@ class StatefulBrowser(Browser):
         self.__current_page = resp.soup
         self.__current_form = None
         return resp
+
+    def list_links(self, *args, **kwargs):
+        """Display the list of links in the current page."""
+        print("Links in the current page:")
+        for l in self.links(*args, **kwargs):
+            print("    ", l)
+
+    def links(self, url_regex=None):
+        """Return links in the page, as a list of bs4.element.Tag object."""
+        if url_regex is not None:
+            res = []
+            for a in self.get_current_page().find_all('a', href=True):
+                if re.search(url_regex, a['href']):
+                    res.append(a)
+            return res
+        return self.get_current_page().find_all('a', href=True)
+
+    def find_link(self, url_regex=None):
+        """Find a link whose href property matches url_regex.
+
+        If several links match, return the first one found.
+
+        If url_regex is None, return the first link found on the page."""
+        links = self.links(url_regex)
+        if len(links) == 0:
+            raise LinkNotFoundError()
+        else:
+            return links[0]
+
+    def follow_link(self, url_regex=None):
+        """Find a link whose href property matches url_regex, and follow it.
+
+        If the link is not found, Raise LinkNotFoundError.
+        Before raising LinkNotFoundError, if debug is activated, list
+        available links in the page and launch a browser."""
+        try:
+            link = self.find_link(url_regex)
+            return self.open(self.absolute_url(link['href']))
+        except LinkNotFoundError:
+            if self.get_debug():
+                print('follow_link failed for', url_regex)
+                self.list_links()
+                self.launch_browser()
+            raise
 
     def launch_browser(self):
         """Launch a browser on the page, for debugging purpose."""
