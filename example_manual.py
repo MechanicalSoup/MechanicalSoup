@@ -1,4 +1,6 @@
-"""Example app to login to GitHub, using the plain Browser class."""
+"""Example app to login to GitHub, using the plain Browser class.
+
+See example.py for an example using the more advanced StatefulBrowser."""
 import argparse
 import mechanicalsoup
 
