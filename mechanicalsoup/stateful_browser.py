@@ -49,6 +49,14 @@ class StatefulBrowser(Browser):
         """Get the currently selected form. See select_form()."""
         return self.__current_form
 
+    def __setitem__(self, name, value):
+        """Call item assignment on the currently selected form."""
+        self.get_current_form()[name] = value
+
+    def new_control(self, type, name, value, **kwargs):
+        """Call new_control() on the currently selected form."""
+        return self.get_current_form().new_control(type, name, value, **kwargs)
+
     def get_current_page(self):
         """Get the current page as a soup object."""
         return self.__current_page
