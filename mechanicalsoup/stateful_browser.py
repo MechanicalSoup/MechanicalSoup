@@ -103,3 +103,7 @@ class StatefulBrowser(Browser):
         self.__current_page = resp.soup
         self.__current_form = None
         return resp
+
+    def launch_browser(self):
+        """Launch a browser on the page, for debugging purpose."""
+        super(StatefulBrowser, self).launch_browser(self.get_current_page())
