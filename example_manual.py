@@ -1,4 +1,4 @@
-"""Example app to login to GitHub"""
+"""Example app to login to GitHub, using the plain Browser class."""
 import argparse
 import mechanicalsoup
 
