@@ -1,3 +1,6 @@
+from .utils import LinkNotFoundError
+
+
 class Form(object):
 
     def __init__(self, form):
@@ -5,23 +8,29 @@ class Form(object):
 
     def input(self, data):
         for (name, value) in data.items():
-            self.form.find("input", {"name": name})["value"] = value
+            i = self.form.find("input", {"name": name})
+            if not i:
+                raise LinkNotFoundError("No input field named " + name)
+            i["value"] = value
 
     attach = input
 
     def check(self, data):
         for (name, value) in data.items():
-            if isinstance(value, list):
-                for choice in value:
-                    self.form.find("input", {"name": name, "value": choice})[
-                        "checked"] = ""
-            else:
-                self.form.find("input", {"name": name, "value": value})[
-                    "checked"] = ""
+            if not isinstance(value, list):
+                value = (value,)
+            for choice in value:
+                i = self.form.find("input", {"name": name, "value": choice})
+                if not i:
+                    raise LinkNotFoundError("No input checkbox named " + name)
+                i["checked"] = ""
 
     def textarea(self, data):
         for (name, value) in data.items():
-            self.form.find("textarea", {"name": name}).insert(0, value)
+            t = self.form.find("textarea", {"name": name})
+            if not t:
+                raise LinkNotFoundError("No textarea named " + name)
+            t.string = value
 
     def choose_submit(self, el):
         # In a normal web browser, when a input[type=submit] is clicked,

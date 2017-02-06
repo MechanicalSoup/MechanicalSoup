@@ -1,0 +1,2 @@
+class LinkNotFoundError(BaseException):
+    pass
