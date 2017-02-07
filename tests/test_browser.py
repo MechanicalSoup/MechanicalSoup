@@ -93,3 +93,8 @@ def test_prepare_request_file():
 
     request = browser._prepare_request(form)
     assert "multipart/form-data" in request.headers["Content-Type"]
+
+if __name__ == '__main__':
+    test_submit_online()
+    test_build_request()
+    test_prepare_request_file()
