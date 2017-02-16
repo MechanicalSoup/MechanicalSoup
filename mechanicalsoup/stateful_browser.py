@@ -124,16 +124,17 @@ class StatefulBrowser(Browser):
         for l in self.links(*args, **kwargs):
             print("    ", l)
 
-    def links(self, url_regex=None, *args, **kwargs):
+    def links(self, url_regex=None, link_text=None, *args, **kwargs):
         """Return links in the page, as a list of bs4.element.Tag object."""
+        all_links = self.get_current_page().find_all(
+            'a', href=True, *args, **kwargs)
         if url_regex is not None:
-            res = []
-            for a in self.get_current_page().find_all('a', href=True,
-                                                      *args, **kwargs):
-                if re.search(url_regex, a['href']):
-                    res.append(a)
-            return res
-        return self.get_current_page().find_all('a', href=True)
+            all_links = [a for a in all_links
+                         if re.search(url_regex, a['href'])]
+        if link_text is not None:
+            all_links = [a for a in all_links
+                         if a.text == link_text]
+        return all_links
 
     def find_link(self, url_regex=None, *args, **kwargs):
         """Find a link whose href property matches url_regex.
