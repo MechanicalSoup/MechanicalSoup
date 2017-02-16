@@ -80,6 +80,10 @@ class StatefulBrowser(Browser):
         self.__current_form = None
         return resp
 
+    def open_relative(self, url, *args, **kwargs):
+        """Like open, but URL can be relative to the currently visited page."""
+        return self.open(self.absolute_url(url))
+
     def select_form(self, *args, **kwargs):
         """Select a form in the current page. Arguments are the same
         as the select() method for a soup object."""
