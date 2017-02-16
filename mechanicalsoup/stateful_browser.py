@@ -124,36 +124,37 @@ class StatefulBrowser(Browser):
         for l in self.links(*args, **kwargs):
             print("    ", l)
 
-    def links(self, url_regex=None):
+    def links(self, url_regex=None, *args, **kwargs):
         """Return links in the page, as a list of bs4.element.Tag object."""
         if url_regex is not None:
             res = []
-            for a in self.get_current_page().find_all('a', href=True):
+            for a in self.get_current_page().find_all('a', href=True,
+                                                      *args, **kwargs):
                 if re.search(url_regex, a['href']):
                     res.append(a)
             return res
         return self.get_current_page().find_all('a', href=True)
 
-    def find_link(self, url_regex=None):
+    def find_link(self, url_regex=None, *args, **kwargs):
         """Find a link whose href property matches url_regex.
 
         If several links match, return the first one found.
 
         If url_regex is None, return the first link found on the page."""
-        links = self.links(url_regex)
+        links = self.links(url_regex, *args, **kwargs)
         if len(links) == 0:
             raise LinkNotFoundError()
         else:
             return links[0]
 
-    def follow_link(self, url_regex=None):
+    def follow_link(self, url_regex=None, *args, **kwargs):
         """Find a link whose href property matches url_regex, and follow it.
 
         If the link is not found, Raise LinkNotFoundError.
         Before raising LinkNotFoundError, if debug is activated, list
         available links in the page and launch a browser."""
         try:
-            link = self.find_link(url_regex)
+            link = self.find_link(url_regex, *args, **kwargs)
             return self.open(self.absolute_url(link['href']))
         except LinkNotFoundError:
             if self.get_debug():
