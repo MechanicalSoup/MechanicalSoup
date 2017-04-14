@@ -9,7 +9,7 @@ parser.add_argument("username")
 parser.add_argument("password")
 args = parser.parse_args()
 
-browser = mechanicalsoup.Browser()
+browser = mechanicalsoup.Browser(soup_config={'features': 'lxml'})
 
 # request github login page. the result is a requests.Response object
 # http://docs.python-requests.org/en/latest/user/quickstart/#response-content
