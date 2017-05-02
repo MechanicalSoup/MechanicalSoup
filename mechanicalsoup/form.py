@@ -121,13 +121,14 @@ class Form(object):
         # url = BASE_DOMAIN + form_el.attrs['action']
         # return browser.submit(form, url)
 
+        found = False
         for inp in self.form.select("input"):
             if inp.get('type') != 'submit':
                 continue
-            if inp == el:
+            if inp == el or inp['name'] == el:
                 continue
 
             del inp['name']
-            return True
+            found = True
 
-        return False
+        return found
