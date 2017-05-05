@@ -1,5 +1,9 @@
 import mechanicalsoup
-import requests_mock, urllib
+import requests_mock
+try:
+    from urllib.parse import parse_qsl
+except ImportError:
+    from urlparse import parse_qsl
 
 
 def test_submit_online():
@@ -90,7 +94,7 @@ def test_choose_submit():
         expect = [('comment', 'Created new page'),
                 ('save', 'Submit changes'),
                 ('text', '= Heading =\n\nNew page here!\n')]
-        query = urllib.parse.parse_qsl(request.text)
+        query = parse_qsl(request.text)
         assert(set(query) == set(expect))
         return 'Success!'
     mock.register_uri('POST', url + '/post', text=text_callback)
