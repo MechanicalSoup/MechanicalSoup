@@ -41,7 +41,7 @@ browser = mechanicalsoup.StatefulBrowser()
 
 browser.open("https://github.com")
 browser.follow_link("login")
-browser.select_form('#login form')
+browser.select_form('form')
 browser["login"] = args.username
 browser["password"] = args.password
 resp = browser.submit_selected()
