@@ -10,7 +10,7 @@ python:
   - pypy3
 install:
   - python setup.py install
-  - pip install flake8
+  - pip install flake8 requests_mock
 script:
   - |
     if ! python --version 2>&1 | grep -q -e 'Python 2.6'
