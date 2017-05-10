@@ -6,6 +6,7 @@ from six import string_types
 from .form import Form
 import webbrowser
 import tempfile
+from .utils import LinkNotFoundError
 
 # see
 # https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
@@ -15,7 +16,9 @@ warnings.filterwarnings(
 
 class Browser(object):
 
-    def __init__(self, session=None, soup_config=None, requests_adapters=None):
+    def __init__(self, session=None, soup_config=None, requests_adapters=None,
+                 raise_on_404=False):
+        self.__raise_on_404 = raise_on_404
         self.session = session or requests.Session()
 
         if requests_adapters is not None:
@@ -37,6 +40,8 @@ class Browser(object):
 
     def get(self, *args, **kwargs):
         response = self.session.get(*args, **kwargs)
+        if self.__raise_on_404 and response.status_code == 404:
+            raise LinkNotFoundError()
         Browser.add_soup(response, self.soup_config)
         return response
 

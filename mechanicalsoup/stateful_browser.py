@@ -9,9 +9,10 @@ import re
 
 
 class StatefulBrowser(Browser):
-    def __init__(self, session=None, soup_config=None, requests_adapters=None):
+    def __init__(self, session=None, soup_config=None, requests_adapters=None,
+                 *args, **kwargs):
         super(StatefulBrowser, self).__init__(
-            session, soup_config, requests_adapters)
+            session, soup_config, requests_adapters, *args, **kwargs)
         self.__debug = False
         self.__verbose = 0
         self.__current_page = None
