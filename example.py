@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 args.password = getpass("Please enter your GitHub password: ")
 
-browser = mechanicalsoup.StatefulBrowser(soup_config={'features': 'lxml'})
+browser = mechanicalsoup.StatefulBrowser(soup_config={'features': 'lxml'}, raise_on_404=True)
 # Uncomment for a more verbose output:
 # browser.set_verbose(2)
 
