@@ -23,6 +23,23 @@ def test_submit_online():
     assert data["comments"] == "Some comment here"
     assert data["nosuchfield"] == "new value"
 
+def test_no_404():
+    browser = mechanicalsoup.StatefulBrowser()
+    resp = browser.open("http://httpbin.org/nosuchpage")
+    assert resp.status_code == 404
+
+def test_404():
+    browser = mechanicalsoup.StatefulBrowser(raise_on_404=True)
+    try:
+        resp = browser.open("http://httpbin.org/nosuchpage")
+    except mechanicalsoup.LinkNotFoundError:
+        pass
+    else:
+        assert False
+    resp = browser.open("http://httpbin.org/")
+    assert resp.status_code == 200
 
 if __name__ == '__main__':
     test_submit_online()
+    test_no_404()
+    test_404()

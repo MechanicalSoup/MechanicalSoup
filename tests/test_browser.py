@@ -94,7 +94,25 @@ def test_prepare_request_file():
     request = browser._prepare_request(form)
     assert "multipart/form-data" in request.headers["Content-Type"]
 
+def test_no_404():
+    browser = mechanicalsoup.Browser()
+    resp = browser.get("http://httpbin.org/nosuchpage")
+    assert resp.status_code == 404
+
+def test_404():
+    browser = mechanicalsoup.Browser(raise_on_404=True)
+    try:
+        resp = browser.get("http://httpbin.org/nosuchpage")
+    except mechanicalsoup.LinkNotFoundError:
+        pass
+    else:
+        assert False
+    resp = browser.get("http://httpbin.org/")
+    assert resp.status_code == 200
+
 if __name__ == '__main__':
     test_submit_online()
     test_build_request()
     test_prepare_request_file()
+    test_no_404()
+    test_404()
