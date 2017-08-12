@@ -149,21 +149,25 @@ class StatefulBrowser(Browser):
         else:
             return links[0]
 
-    def follow_link(self, url_regex=None, *args, **kwargs):
-        """Find a link whose href property matches url_regex, and follow it.
+    def follow_link(self, link=None, *args, **kwargs):
+        """Follow a previously found link
+
+        if the `link` argument doesn't have a 'href' attribute, treat
+        it as a url_regex and look it up with `find_link`
 
         If the link is not found, Raise LinkNotFoundError.
         Before raising LinkNotFoundError, if debug is activated, list
         available links in the page and launch a browser."""
-        try:
-            link = self.find_link(url_regex, *args, **kwargs)
-            return self.open(self.absolute_url(link['href']))
-        except LinkNotFoundError:
-            if self.get_debug():
-                print('follow_link failed for', url_regex)
-                self.list_links()
-                self.launch_browser()
-            raise
+        if not hasattr(link, 'attrs') or 'href' not in link.attrs:
+            try:
+                link = self.find_link(link, *args, **kwargs)
+            except LinkNotFoundError:
+                if self.get_debug():
+                    print('follow_link failed for', link)
+                    self.list_links()
+                    self.launch_browser()
+                raise
+        return self.open(self.absolute_url(link['href']))
 
     def launch_browser(self):
         """Launch a browser on the page, for debugging purpose."""

@@ -5,6 +5,10 @@ def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.StatefulBrowser()
     browser.open("http://httpbin.org/")
+    for link in browser.links():
+        if link["href"] == "/":
+            browser.follow_link(link)
+            break
     browser.follow_link("forms/post")
     assert browser.get_url() == "http://httpbin.org/forms/post"
     browser.select_form("form")
