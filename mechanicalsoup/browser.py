@@ -134,3 +134,11 @@ class Browser(object):
         with tempfile.NamedTemporaryFile(delete=False) as file:
             file.write(soup.encode())
         webbrowser.open('file://' + file.name)
+
+    def close(self):
+        """Close the current session"""
+        self.session.cookies.clear()
+        self.session.close()
+
+    def __del__(self):
+        self.close()
