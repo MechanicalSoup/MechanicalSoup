@@ -84,8 +84,8 @@ class StatefulBrowser(Browser):
 
     def open_fake_page(self, page_text, url=None, soup_config=None):
         """Behave as if opening a page whose text is page_text, but do not
-        perform any network access. If url is set, pretend the page's URL is url.
-        Useful mainly for testing."""
+        perform any network access. If url is set, pretend the page's URL
+        is url. Useful mainly for testing."""
         soup_config = soup_config or dict()
         self.__current_page = bs4.BeautifulSoup(
                 page_text, **soup_config)
@@ -116,7 +116,6 @@ class StatefulBrowser(Browser):
                 kwargs['data'] = dict()
             kwargs['data'][btnName] = ''
 
-        form = self.get_current_form()
         resp = self.submit(self.__current_form,
                            url=self.__current_url,
                            *args, **kwargs)
