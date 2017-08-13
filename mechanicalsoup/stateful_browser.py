@@ -117,12 +117,8 @@ class StatefulBrowser(Browser):
             kwargs['data'][btnName] = ''
 
         form = self.get_current_form()
-        if "action" in form.form:
-            url = self.__current_url
-        else:
-            url = self.absolute_url(form.form["action"])
         resp = self.submit(self.__current_form,
-                           url=url,
+                           url=self.__current_url,
                            *args, **kwargs)
         self.__current_url = resp.url
         if hasattr(resp, "soup"):
