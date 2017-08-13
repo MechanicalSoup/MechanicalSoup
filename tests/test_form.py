@@ -86,7 +86,7 @@ choose_submit_form = '''
 </html>
 '''
 
-def test_choose_submit():
+def setup_mock_browser():
     url = 'mock://multi-button-form.com'
     mock = requests_mock.Adapter()
     mock.register_uri('GET', url, headers={'Content-Type': 'text/html'}, text=choose_submit_form)
@@ -98,8 +98,10 @@ def test_choose_submit():
         assert(set(query) == set(expect))
         return 'Success!'
     mock.register_uri('POST', url + '/post', text=text_callback)
+    return mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock}), url
 
-    browser = mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock})
+def test_choose_submit():
+    browser, url = setup_mock_browser()
     browser.open(url)
     form = browser.select_form('#choose-submit-form')
     browser['text'] = '= Heading =\n\nNew page here!\n'
@@ -109,8 +111,49 @@ def test_choose_submit():
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
 
+submit_form_noaction = '''
+<html>
+  <body>
+    <form id="choose-submit-form">
+      <input type="text" name="text1" value="someValue1" />
+      <input type="text" name="text2" value="someValue2" />
+      <input type="submit" name="save" />
+    </form>
+  </body>
+</html>
+'''
+
+def test_form_noaction():
+    browser, url = setup_mock_browser()
+    browser.open_fake_page(submit_form_noaction, url=url)
+    form = browser.select_form('#choose-submit-form')
+    browser['text1'] = 'newText1'
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and browser.get_url() == url)
+
+submit_form_action = '''
+<html>
+  <body>
+    <form id="choose-submit-form" action="mock://multi-button-form.com">
+      <input type="text" name="text1" value="someValue1" />
+      <input type="text" name="text2" value="someValue2" />
+      <input type="submit" name="save" />
+    </form>
+  </body>
+</html>
+'''
+
+def test_form_action():
+    browser, url = setup_mock_browser()
+    browser.open_fake_page(submit_form_action, url="http://example.com/invalid/")
+    form = browser.select_form('#choose-submit-form')
+    browser['text1'] = 'newText1'
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and browser.get_url() == url)
 
 if __name__ == '__main__':
     test_submit_online()
     test_submit_set()
     test_choose_submit()
+    test_form_noaction()
+    test_form_action()

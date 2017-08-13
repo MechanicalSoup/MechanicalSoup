@@ -6,6 +6,7 @@ from .utils import LinkNotFoundError
 from .form import Form
 import sys
 import re
+import bs4
 
 
 class StatefulBrowser(Browser):
@@ -80,6 +81,16 @@ class StatefulBrowser(Browser):
         self.__current_url = resp.url
         self.__current_form = None
         return resp
+
+    def open_fake_page(self, page_text, url=None, soup_config=None):
+        """Behave as if opening a page whose text is page_text, but do not
+        perform any network access. If url is set, pretend the page's URL is url.
+        Useful mainly for testing."""
+        soup_config = soup_config or dict()
+        self.__current_page = bs4.BeautifulSoup(
+                page_text, **soup_config)
+        self.__current_url = url
+        self.__current_form = None
 
     def open_relative(self, url, *args, **kwargs):
         """Like open, but URL can be relative to the currently visited page."""
