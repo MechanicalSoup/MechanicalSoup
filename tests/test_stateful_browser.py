@@ -4,6 +4,7 @@ import mechanicalsoup
 def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.StatefulBrowser()
+    browser.set_user_agent('testing https://github.com/hickford/MechanicalSoup')
     browser.open("http://httpbin.org/")
     for link in browser.links():
         if link["href"] == "/":
@@ -26,6 +27,13 @@ def test_submit_online():
     assert data["topping"] == "cheese"
     assert data["comments"] == "Some comment here"
     assert data["nosuchfield"] == "new value"
+
+    assert (json["headers"]["User-Agent"] ==
+            'testing https://github.com/hickford/MechanicalSoup')
+    # Ensure we haven't blown away any regular headers
+    assert {'Content-Length', 'Host', 'Content-Type', 'Connection', 'Accept',
+            'User-Agent', 'Accept-Encoding'}.issubset(json["headers"].keys())
+
 
 def test_no_404():
     browser = mechanicalsoup.StatefulBrowser()
