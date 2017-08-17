@@ -1,0 +1,5 @@
+__title__ = 'MechanicalSoup'
+__description__ = 'A Python library for automating interaction with websites'
+__url__ = 'https://github.com/hickford/MechanicalSoup'
+__version__ = '0.7.0'
+__license__ = 'MIT'
