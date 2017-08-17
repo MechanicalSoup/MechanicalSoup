@@ -31,8 +31,8 @@ def test_submit_online():
     assert (json["headers"]["User-Agent"] ==
             'testing https://github.com/hickford/MechanicalSoup')
     # Ensure we haven't blown away any regular headers
-    assert {'Content-Length', 'Host', 'Content-Type', 'Connection', 'Accept',
-            'User-Agent', 'Accept-Encoding'}.issubset(json["headers"].keys())
+    assert set(('Content-Length', 'Host', 'Content-Type', 'Connection', 'Accept',
+            'User-Agent', 'Accept-Encoding')).issubset(json["headers"].keys())
 
 
 def test_no_404():
