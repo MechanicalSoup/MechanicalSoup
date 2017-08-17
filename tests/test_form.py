@@ -78,30 +78,34 @@ choose_submit_form = '''
       <div class="buttons">
         <input type="submit" name="preview" value="Preview Page" /> 
         <input type="submit" name="diff" value="Review Changes" /> 
-        <input type="submit" id="save" name="save" value="Submit changes" /> 
-        <input type="submit" name="cancel" value="Cancel" />
+        <input type="submit" id="save" name="save" value="Submit changes" />
+        <button type="submit" name="cancel" value="Cancel" />
       </div>
     </form>
   </body>
 </html>
 '''
 
-def setup_mock_browser():
+def setup_mock_browser(expected_post=None):
     url = 'mock://multi-button-form.com'
     mock = requests_mock.Adapter()
     mock.register_uri('GET', url, headers={'Content-Type': 'text/html'}, text=choose_submit_form)
-    def text_callback(request, context):
-        expect = [('comment', 'Created new page'),
-                ('save', 'Submit changes'),
-                ('text', '= Heading =\n\nNew page here!\n')]
-        query = parse_qsl(request.text)
-        assert(set(query) == set(expect))
-        return 'Success!'
-    mock.register_uri('POST', url + '/post', text=text_callback)
+    if expected_post:
+        def text_callback(request, context):
+            query = parse_qsl(request.text)
+            assert(set(query) == set(expected_post))
+            return 'Success!'
+        mock.register_uri('POST', url + '/post', text=text_callback)
     return mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock}), url
 
 def test_choose_submit():
-    browser, url = setup_mock_browser()
+    browser, url = setup_mock_browser(
+        expected_post=[
+            ('comment', 'Created new page'),
+            ('save', 'Submit changes'),
+            ('text', '= Heading =\n\nNew page here!\n')
+        ]
+    )
     browser.open(url)
     form = browser.select_form('#choose-submit-form')
     browser['text'] = '= Heading =\n\nNew page here!\n'
@@ -110,6 +114,23 @@ def test_choose_submit():
     assert(found)
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
+
+    browser, url = setup_mock_browser(
+        expected_post=[
+            ('comment', 'Testing choosing cancel button'),
+            ('cancel', 'Cancel'),
+            ('text', '= Heading =\n\nNew page here!\n')
+        ]
+    )
+    browser.open(url)
+    form = browser.select_form('#choose-submit-form')
+    browser['text'] = '= Heading =\n\nNew page here!\n'
+    browser['comment'] = 'Testing choosing cancel button'
+    found = form.choose_submit('cancel')
+    assert(found)
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and res.text == 'Success!')
+
 
 submit_form_noaction = '''
 <html>
