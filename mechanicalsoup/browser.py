@@ -124,6 +124,14 @@ class Browser(object):
         headers = {}
         if self.user_agent:
             headers['User-Agent'] = self.user_agent
+        else:
+            try:
+                requests_ua = requests.utils.default_user_agent()
+            except AttributeError:
+                headers['User-Agent'] = '%s/%s' % (__title__, __version__)
+            else:
+                headers['User-Agent'] = '%s (%s/%s)' % (
+                    requests_ua, __title__, __version__)
 
         return requests.Request(method, url,
                                 files=files, headers=headers, **kwargs)
