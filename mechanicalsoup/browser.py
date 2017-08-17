@@ -66,10 +66,8 @@ class Browser(object):
         data = kwargs.pop("data", dict())
         files = kwargs.pop("files", dict())
 
-        for input in form.select("input"):
+        for input in form.select("input[name], button[name]"):
             name = input.get("name")
-            if not name:
-                continue
 
             if input.get("type") in ("radio", "checkbox"):
                 if "checked" not in input.attrs:

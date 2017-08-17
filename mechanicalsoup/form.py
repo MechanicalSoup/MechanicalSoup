@@ -122,9 +122,8 @@ class Form(object):
         # return browser.submit(form, url)
 
         found = False
-        for inp in self.form.select("input"):
-            if inp.get('type') != 'submit':
-                continue
+        inps = self.form.select('input[type="submit"], button[type="submit"]')
+        for inp in inps:
             if inp == el or inp['name'] == el:
                 continue
 
