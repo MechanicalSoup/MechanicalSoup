@@ -2,5 +2,7 @@ from .utils import LinkNotFoundError
 from .browser import Browser
 from .form import Form
 from .stateful_browser import StatefulBrowser
+from .__version__ import __version__
 
-__all__ = ['LinkNotFoundError', 'Browser', 'StatefulBrowser', 'Form']
+__all__ = ['LinkNotFoundError', 'Browser', 'StatefulBrowser', 'Form',
+           '__version__']

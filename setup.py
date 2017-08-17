@@ -4,17 +4,21 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
+about = {}
+with open(path.join(here, 'mechanicalsoup', '__version__.py'), 'r', 'utf-8') as f:
+    exec(f.read(), about)
+
 setup(
-    name='MechanicalSoup',
+    name=about['__title__'],
 
     # useful: python setup.py sdist bdist_wheel upload
-    version='0.7.0',
+    version=about['__version__'],
 
-    description='A Python library for automating interaction with websites',
+    description=about['__description__'],
 
-    url='https://github.com/hickford/MechanicalSoup',
+    url=about['__url__'],
 
-    license='MIT',
+    license=about['__license__'],
 
     classifiers=[
         'License :: OSI Approved :: MIT License',
