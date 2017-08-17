@@ -7,6 +7,7 @@ from .form import Form
 import webbrowser
 import tempfile
 from .utils import LinkNotFoundError
+from .__version__ import __version__, __title__
 
 # see
 # https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
@@ -17,9 +18,10 @@ warnings.filterwarnings(
 class Browser(object):
 
     def __init__(self, session=None, soup_config=None, requests_adapters=None,
-                 raise_on_404=False):
+                 raise_on_404=False, user_agent=None):
         self.__raise_on_404 = raise_on_404
         self.session = session or requests.Session()
+        self.user_agent = user_agent
 
         if requests_adapters is not None:
             for adaptee, adapter in requests_adapters.items():
@@ -32,6 +34,9 @@ class Browser(object):
         if "text/html" in response.headers.get("Content-Type", ""):
             response.soup = bs4.BeautifulSoup(
                 response.content, **soup_config)
+
+    def set_user_agent(self, user_agent):
+        self.user_agent = user_agent
 
     def request(self, *args, **kwargs):
         response = self.session.request(*args, **kwargs)
@@ -115,7 +120,21 @@ class Browser(object):
             kwargs["params"] = data
         else:
             kwargs["data"] = data
-        return requests.Request(method, url, files=files, **kwargs)
+
+        headers = {}
+        if self.user_agent:
+            headers['User-Agent'] = self.user_agent
+        else:
+            try:
+                requests_ua = requests.utils.default_user_agent()
+            except AttributeError:
+                headers['User-Agent'] = '%s/%s' % (__title__, __version__)
+            else:
+                headers['User-Agent'] = '%s (%s/%s)' % (
+                    requests_ua, __title__, __version__)
+
+        return requests.Request(method, url,
+                                files=files, headers=headers, **kwargs)
 
     def _prepare_request(self, form, url=None, **kwargs):
         request = self._build_request(form, url, **kwargs)

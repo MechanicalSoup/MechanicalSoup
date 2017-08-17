@@ -29,6 +29,9 @@ def test_submit_online():
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"
 
+    assert json["headers"]["User-Agent"].startswith('python-requests/')
+    assert 'MechanicalSoup' in json["headers"]["User-Agent"]
+
 form_html = """
 <form method="post" action="http://httpbin.org/post">
 <input name="customer" value="Philip J. Fry"/>
