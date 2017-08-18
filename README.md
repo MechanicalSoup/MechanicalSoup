@@ -91,7 +91,7 @@ Development
 
 [![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
 
-You can develop against multiple versions of Python using virtualenv:
+You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
     python3 -m venv .virtual-py3 && source .virtual-py3/bin/activate
     pip install pytest flake8 requests_mock
