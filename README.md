@@ -92,9 +92,27 @@ Development
 
 [![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
 
-### Tests
+You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
-    py.test
+    python3 -m venv .virtual-py3 && source .virtual-py3/bin/activate
+    pip install pytest flake8 requests_mock
+and
+
+    virtualenv -p python2 --no-site-packages .virtual-py2 && source .virtual-py2/bin/activate
+    pip install pytest flake8 requests_mock
+
+After making changes, check syntax:
+
+    flake8 $(git ls-files mechanicalsoup/'*.py') example.py
+
+Then run py.test in all virtualenvs:
+
+    source .virtual-py3/bin/activate
+    python setup.py install && pytest
+
+    source .virtual-py2/bin/activate
+    python setup.py install && pytest
+
 
 ### Roadmap
 
