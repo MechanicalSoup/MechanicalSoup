@@ -51,7 +51,13 @@ def test_404():
     resp = browser.open("http://httpbin.org/")
     assert resp.status_code == 200
 
+def test_user_agent():
+    browser = mechanicalsoup.StatefulBrowser(user_agent='007')
+    resp = browser.open("http://httpbin.org/user-agent")
+    assert resp.json() == {'user-agent': '007'}
+
 if __name__ == '__main__':
     test_submit_online()
     test_no_404()
     test_404()
+    test_user_agent()

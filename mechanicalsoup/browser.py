@@ -21,7 +21,8 @@ class Browser(object):
                  raise_on_404=False, user_agent=None):
         self.__raise_on_404 = raise_on_404
         self.session = session or requests.Session()
-        self.user_agent = user_agent
+
+        self.set_user_agent(user_agent)
 
         if requests_adapters is not None:
             for adaptee, adapter in requests_adapters.items():
@@ -36,7 +37,18 @@ class Browser(object):
                 response.content, **soup_config)
 
     def set_user_agent(self, user_agent):
-        self.user_agent = user_agent
+        # set a default user_agent if not specified
+        if user_agent is None:
+            try:
+                requests_ua = requests.utils.default_user_agent()
+            except AttributeError:
+                user_agent = '%s/%s' % (__title__, __version__)
+            else:
+                user_agent = '%s (%s/%s)' % (
+                    requests_ua, __title__, __version__)
+
+        # the requests module uses a case-insensitive dict for session headers
+        self.session.headers['User-agent'] = user_agent
 
     def request(self, *args, **kwargs):
         response = self.session.request(*args, **kwargs)
@@ -119,20 +131,7 @@ class Browser(object):
         else:
             kwargs["data"] = data
 
-        headers = {}
-        if self.user_agent:
-            headers['User-Agent'] = self.user_agent
-        else:
-            try:
-                requests_ua = requests.utils.default_user_agent()
-            except AttributeError:
-                headers['User-Agent'] = '%s/%s' % (__title__, __version__)
-            else:
-                headers['User-Agent'] = '%s (%s/%s)' % (
-                    requests_ua, __title__, __version__)
-
-        return requests.Request(method, url,
-                                files=files, headers=headers, **kwargs)
+        return requests.Request(method, url, files=files, **kwargs)
 
     def _prepare_request(self, form, url=None, **kwargs):
         request = self._build_request(form, url, **kwargs)
