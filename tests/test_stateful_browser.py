@@ -56,8 +56,24 @@ def test_user_agent():
     resp = browser.open("http://httpbin.org/user-agent")
     assert resp.json() == {'user-agent': '007'}
 
+def test_open_relative():
+    # Open an arbitrary httpbin page to set the current URL
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open("http://httpbin.org/html")
+
+    # Open a relative page and make sure remote host and browser agree on URL
+    resp = browser.open_relative("/get")
+    assert resp.json()['url'] == "http://httpbin.org/get"
+    assert browser.get_url() == "http://httpbin.org/get"
+
+    # Test passing additional kwargs to the session
+    resp = browser.open_relative("/basic-auth/me/123", auth=('me', '123'))
+    assert browser.get_url() == "http://httpbin.org/basic-auth/me/123"
+    assert resp.json() == {"authenticated": True, "user": "me"}
+
 if __name__ == '__main__':
     test_submit_online()
     test_no_404()
     test_404()
     test_user_agent()
+    test_open_relative()

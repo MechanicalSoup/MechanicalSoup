@@ -94,7 +94,7 @@ class StatefulBrowser(Browser):
 
     def open_relative(self, url, *args, **kwargs):
         """Like open, but URL can be relative to the currently visited page."""
-        return self.open(self.absolute_url(url))
+        return self.open(self.absolute_url(url), *args, **kwargs)
 
     def select_form(self, *args, **kwargs):
         """Select a form in the current page. Arguments are the same
