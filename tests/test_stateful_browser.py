@@ -1,4 +1,6 @@
 import mechanicalsoup
+import re
+from bs4 import BeautifulSoup
 
 
 def test_submit_online():
@@ -71,9 +73,30 @@ def test_open_relative():
     assert browser.get_url() == "http://httpbin.org/basic-auth/me/123"
     assert resp.json() == {"authenticated": True, "user": "me"}
 
+def test_links():
+    browser = mechanicalsoup.StatefulBrowser()
+    html = '<a class="bluelink" href="/blue" id="blue_link">A Blue Link</a>'
+    expected = [BeautifulSoup(html).a]
+    browser.open_fake_page(html)
+
+    # Test StatefulBrowser.links url_regex argument
+    assert browser.links(url_regex="bl") == expected
+    assert browser.links(url_regex="bluish") == []
+
+    # Test StatefulBrowser.links link_text argument
+    assert browser.links(link_text="A Blue Link") == expected
+    assert browser.links(link_text="Blue") == []
+
+    # Test StatefulBrowser.links kwargs passed to BeautifulSoup.find_all
+    assert browser.links(string=re.compile('Blue')) == expected
+    assert browser.links(class_="bluelink") == expected
+    assert browser.links(id="blue_link") == expected
+    assert browser.links(id="blue") == []
+
 if __name__ == '__main__':
     test_submit_online()
     test_no_404()
     test_404()
     test_user_agent()
     test_open_relative()
+    test_links()
