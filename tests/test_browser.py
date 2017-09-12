@@ -1,6 +1,7 @@
 import mechanicalsoup
 from bs4 import BeautifulSoup
 import tempfile
+from requests.cookies import RequestsCookieJar
 
 
 def test_submit_online():
@@ -113,9 +114,33 @@ def test_404():
     resp = browser.get("http://httpbin.org/")
     assert resp.status_code == 200
 
+def test_set_cookiejar():
+    """Set cookies locally and test that they are received remotely."""
+    # construct a phony cookiejar and attach it to the session
+    jar = RequestsCookieJar()
+    jar.set('field', 'value')
+    assert jar.get('field') == 'value'
+
+    browser = mechanicalsoup.Browser()
+    browser.set_cookiejar(jar)
+    resp = browser.get("http://httpbin.org/cookies")
+    assert resp.json() == {'cookies': {'field': 'value'}}
+
+def test_get_cookiejar():
+    """Test that cookies set by the remote host update our session."""
+    browser = mechanicalsoup.Browser()
+    resp = browser.get("http://httpbin.org/cookies/set?k1=v1&k2=v2")
+    assert resp.json() == {'cookies': {'k1': 'v1', 'k2': 'v2'}}
+
+    jar = browser.get_cookiejar()
+    assert jar.get('k1') == 'v1'
+    assert jar.get('k2') == 'v2'
+
 if __name__ == '__main__':
     test_submit_online()
     test_build_request()
     test_prepare_request_file()
     test_no_404()
     test_404()
+    test_set_cookiejar()
+    test_get_cookiejar()
