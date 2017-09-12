@@ -36,6 +36,16 @@ class Browser(object):
             response.soup = bs4.BeautifulSoup(
                 response.content, **soup_config)
 
+    def set_cookiejar(self, cookiejar):
+        """Replaces the current cookiejar in the requests session. Since the
+        session handles cookies automatically without calling this function,
+        only use this when default cookie handling is insufficient."""
+        self.session.cookies = cookiejar
+
+    def get_cookiejar(self):
+        """Gets the cookiejar from the requests session."""
+        return self.session.cookies
+
     def set_user_agent(self, user_agent):
         # set a default user_agent if not specified
         if user_agent is None:
