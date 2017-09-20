@@ -75,7 +75,8 @@ def test_open_relative():
 
 def test_links():
     browser = mechanicalsoup.StatefulBrowser()
-    html = '<a class="bluelink" href="/blue" id="blue_link">A Blue Link</a>'
+    html = '''<a class="bluelink" href="/blue" id="blue_link">A Blue Link</a>
+              <a class="redlink" href="/red" id="red_link">A Red Link</a>'''
     expected = [BeautifulSoup(html).a]
     browser.open_fake_page(html)
 
@@ -92,6 +93,11 @@ def test_links():
     assert browser.links(class_="bluelink") == expected
     assert browser.links(id="blue_link") == expected
     assert browser.links(id="blue") == []
+
+    # Test returning a non-singleton
+    two_links = browser.links(id=re.compile('_link'))
+    assert len(two_links) == 2
+    assert two_links == BeautifulSoup(html).find_all('a')
 
 if __name__ == '__main__':
     test_submit_online()
