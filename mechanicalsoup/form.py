@@ -125,9 +125,9 @@ class Form(object):
         inps = self.form.select('input[type="submit"], button[type="submit"]')
         for inp in inps:
             if inp == el or inp['name'] == el:
+                found = True
                 continue
 
             del inp['name']
-            found = True
 
         return found
