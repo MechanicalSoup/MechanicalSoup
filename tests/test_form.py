@@ -131,6 +131,26 @@ def test_choose_submit(expected_post):
     assert(res.status_code == 200 and res.text == 'Success!')
 
 
+choose_submit_fail_form = '''
+<html>
+  <form id="choose-submit-form">
+    <input type="submit" name="test_submit" value="Test Submit" />
+  </form>
+</html>
+'''
+
+@pytest.mark.parametrize("select_name", [
+    pytest.param({'name': 'does_not_exist', 'result': False}, id='not found'),
+    pytest.param({'name': 'test_submit', 'result': True}, id='found'),
+])
+def test_choose_submit_fail(select_name):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(choose_submit_fail_form)
+    form = browser.select_form('#choose-submit-form')
+    found = form.choose_submit(select_name['name'])
+    assert(found == select_name['result'])
+
+
 submit_form_noaction = '''
 <html>
   <body>
