@@ -1,8 +1,9 @@
 import mechanicalsoup
+import sys
 from bs4 import BeautifulSoup
 import tempfile
 from requests.cookies import RequestsCookieJar
-
+import pytest
 
 def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
@@ -137,10 +138,4 @@ def test_get_cookiejar():
     assert jar.get('k2') == 'v2'
 
 if __name__ == '__main__':
-    test_submit_online()
-    test_build_request()
-    test_prepare_request_file()
-    test_no_404()
-    test_404()
-    test_set_cookiejar()
-    test_get_cookiejar()
+    pytest.main(sys.argv)

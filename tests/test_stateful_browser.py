@@ -1,4 +1,5 @@
 import mechanicalsoup
+import sys
 import re
 from bs4 import BeautifulSoup
 
@@ -100,9 +101,4 @@ def test_links():
     assert two_links == BeautifulSoup(html).find_all('a')
 
 if __name__ == '__main__':
-    test_submit_online()
-    test_no_404()
-    test_404()
-    test_user_agent()
-    test_open_relative()
-    test_links()
+    pytest.main(sys.argv)
