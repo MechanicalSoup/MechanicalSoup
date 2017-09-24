@@ -1,7 +1,8 @@
 import mechanicalsoup
 import re
 from bs4 import BeautifulSoup
-
+from test_form import setup_mock_browser
+import pytest
 
 def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
@@ -98,3 +99,28 @@ def test_links():
     two_links = browser.links(id=re.compile('_link'))
     assert len(two_links) == 2
     assert two_links == BeautifulSoup(html).find_all('a')
+
+
+@pytest.mark.parametrize("expected_post", [
+    pytest.param(
+        [
+            ('comment', 'Selecting an input submit'),
+            ('diff', 'Review Changes'),
+            ('text', 'Setting some text!')
+        ], id='input'),
+    pytest.param(
+        [
+            ('comment', 'Selecting a button submit'),
+            ('cancel', 'Cancel'),
+            ('text', '= Heading =\n\nNew page here!\n')
+        ], id='button'),
+])
+def test_submit_btnName(expected_post):
+    '''Tests that the btnName argument chooses the submit button.'''
+    browser, url = setup_mock_browser(expected_post=expected_post)
+    browser.open(url)
+    form = browser.select_form('#choose-submit-form')
+    browser['text'] = expected_post[2][1]
+    browser['comment'] = expected_post[0][1]
+    res = browser.submit_selected(btnName = expected_post[1][0])
+    assert(res.status_code == 200 and res.text == 'Success!')
