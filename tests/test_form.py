@@ -1,5 +1,6 @@
 import mechanicalsoup
 import requests_mock
+import pytest
 try:
     from urllib.parse import parse_qsl
 except ImportError:
@@ -98,35 +99,27 @@ def setup_mock_browser(expected_post=None):
         mock.register_uri('POST', url + '/post', text=text_callback)
     return mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock}), url
 
-def test_choose_submit():
-    browser, url = setup_mock_browser(
-        expected_post=[
+@pytest.mark.parametrize("expected_post", [
+    pytest.param(
+        [
             ('comment', 'Created new page'),
             ('save', 'Submit changes'),
             ('text', '= Heading =\n\nNew page here!\n')
-        ]
-    )
-    browser.open(url)
-    form = browser.select_form('#choose-submit-form')
-    browser['text'] = '= Heading =\n\nNew page here!\n'
-    browser['comment'] = 'Created new page'
-    found = form.choose_submit('save')
-    assert(found)
-    res = browser.submit_selected()
-    assert(res.status_code == 200 and res.text == 'Success!')
-
-    browser, url = setup_mock_browser(
-        expected_post=[
+        ], id='save'),
+    pytest.param(
+        [
             ('comment', 'Testing choosing cancel button'),
             ('cancel', 'Cancel'),
             ('text', '= Heading =\n\nNew page here!\n')
-        ]
-    )
+        ], id='cancel'),
+])
+def test_choose_submit(expected_post):
+    browser, url = setup_mock_browser(expected_post=expected_post)
     browser.open(url)
     form = browser.select_form('#choose-submit-form')
-    browser['text'] = '= Heading =\n\nNew page here!\n'
-    browser['comment'] = 'Testing choosing cancel button'
-    found = form.choose_submit('cancel')
+    browser['text'] = expected_post[2][1]
+    browser['comment'] = expected_post[0][1]
+    found = form.choose_submit(expected_post[1][0])
     assert(found)
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
