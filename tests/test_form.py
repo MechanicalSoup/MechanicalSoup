@@ -102,6 +102,12 @@ def setup_mock_browser(expected_post=None):
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
         [
+            ('comment', 'Testing preview page'),
+            ('preview', 'Preview Page'),
+            ('text', 'Setting some text!')
+        ], id='preview'),
+    pytest.param(
+        [
             ('comment', 'Created new page'),
             ('save', 'Submit changes'),
             ('text', '= Heading =\n\nNew page here!\n')
