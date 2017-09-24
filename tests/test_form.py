@@ -171,10 +171,3 @@ def test_form_action():
     browser['text1'] = 'newText1'
     res = browser.submit_selected()
     assert(res.status_code == 200 and browser.get_url() == url)
-
-if __name__ == '__main__':
-    test_submit_online()
-    test_submit_set()
-    test_choose_submit()
-    test_form_noaction()
-    test_form_action()

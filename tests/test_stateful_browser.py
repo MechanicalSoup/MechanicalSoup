@@ -98,11 +98,3 @@ def test_links():
     two_links = browser.links(id=re.compile('_link'))
     assert len(two_links) == 2
     assert two_links == BeautifulSoup(html).find_all('a')
-
-if __name__ == '__main__':
-    test_submit_online()
-    test_no_404()
-    test_404()
-    test_user_agent()
-    test_open_relative()
-    test_links()

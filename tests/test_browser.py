@@ -135,12 +135,3 @@ def test_get_cookiejar():
     jar = browser.get_cookiejar()
     assert jar.get('k1') == 'v1'
     assert jar.get('k2') == 'v2'
-
-if __name__ == '__main__':
-    test_submit_online()
-    test_build_request()
-    test_prepare_request_file()
-    test_no_404()
-    test_404()
-    test_set_cookiejar()
-    test_get_cookiejar()
