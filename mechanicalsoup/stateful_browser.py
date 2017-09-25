@@ -110,11 +110,10 @@ class StatefulBrowser(Browser):
         return self.__current_form
 
     def submit_selected(self, btnName=None, *args, **kwargs):
-        """Submit the form selected with select_form()."""
+        """Submit the form selected with select_form(). If there are multiple
+        submit input/button elements, use 'btnName' to choose between them."""
         if btnName is not None:
-            if 'data' not in kwargs:
-                kwargs['data'] = dict()
-            kwargs['data'][btnName] = ''
+            self.get_current_form().choose_submit(btnName)
 
         resp = self.submit(self.__current_form,
                            url=self.__current_url,
