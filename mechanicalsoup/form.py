@@ -131,7 +131,7 @@ class Form(object):
             if inp == el or inp['name'] == el:
                 if found:
                     raise LinkNotFoundError(
-                        "Multiple submit elements match: {}".format(el)
+                        "Multiple submit elements match: {0}".format(el)
                     )
                 found = True
                 continue
@@ -140,5 +140,5 @@ class Form(object):
 
         if not found:
             raise LinkNotFoundError(
-                "Specified submit element not found: {}".format(el)
+                "Specified submit element not found: {0}".format(el)
             )
