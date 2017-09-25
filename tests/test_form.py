@@ -1,5 +1,7 @@
 import mechanicalsoup
+import sys
 import requests_mock
+import pytest
 try:
     from urllib.parse import parse_qsl
 except ImportError:
@@ -98,38 +100,75 @@ def setup_mock_browser(expected_post=None):
         mock.register_uri('POST', url + '/post', text=text_callback)
     return mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock}), url
 
-def test_choose_submit():
-    browser, url = setup_mock_browser(
-        expected_post=[
+@pytest.mark.parametrize("expected_post", [
+    pytest.param(
+        [
+            ('comment', 'Testing preview page'),
+            ('preview', 'Preview Page'),
+            ('text', 'Setting some text!')
+        ], id='preview'),
+    pytest.param(
+        [
             ('comment', 'Created new page'),
             ('save', 'Submit changes'),
             ('text', '= Heading =\n\nNew page here!\n')
-        ]
-    )
-    browser.open(url)
-    form = browser.select_form('#choose-submit-form')
-    browser['text'] = '= Heading =\n\nNew page here!\n'
-    browser['comment'] = 'Created new page'
-    found = form.choose_submit('save')
-    assert(found)
-    res = browser.submit_selected()
-    assert(res.status_code == 200 and res.text == 'Success!')
-
-    browser, url = setup_mock_browser(
-        expected_post=[
+        ], id='save'),
+    pytest.param(
+        [
             ('comment', 'Testing choosing cancel button'),
             ('cancel', 'Cancel'),
             ('text', '= Heading =\n\nNew page here!\n')
-        ]
-    )
+        ], id='cancel'),
+])
+def test_choose_submit(expected_post):
+    browser, url = setup_mock_browser(expected_post=expected_post)
     browser.open(url)
     form = browser.select_form('#choose-submit-form')
-    browser['text'] = '= Heading =\n\nNew page here!\n'
-    browser['comment'] = 'Testing choosing cancel button'
-    found = form.choose_submit('cancel')
-    assert(found)
+    browser['text'] = expected_post[2][1]
+    browser['comment'] = expected_post[0][1]
+    form.choose_submit(expected_post[1][0])
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
+
+
+choose_submit_fail_form = '''
+<html>
+  <form id="choose-submit-form">
+    <input type="submit" name="test_submit" value="Test Submit" />
+  </form>
+</html>
+'''
+
+@pytest.mark.parametrize("select_name", [
+    pytest.param({'name': 'does_not_exist', 'fails': True}, id='not found'),
+    pytest.param({'name': 'test_submit', 'fails': False}, id='found'),
+])
+def test_choose_submit_fail(select_name):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(choose_submit_fail_form)
+    form = browser.select_form('#choose-submit-form')
+    if select_name['fails']:
+        with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+            form.choose_submit(select_name['name'])
+    else:
+        form.choose_submit(select_name['name'])
+
+
+choose_submit_multiple_match_form = '''
+<html>
+  <form id="choose-submit-form">
+    <input type="submit" name="test_submit" value="First Submit" />
+    <input type="submit" name="test_submit" value="Second Submit" />
+  </form>
+</html>
+'''
+
+def test_choose_submit_multiple_match():
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(choose_submit_multiple_match_form)
+    form = browser.select_form('#choose-submit-form')
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.choose_submit('test_submit')
 
 
 submit_form_noaction = '''
@@ -173,8 +212,4 @@ def test_form_action():
     assert(res.status_code == 200 and browser.get_url() == url)
 
 if __name__ == '__main__':
-    test_submit_online()
-    test_submit_set()
-    test_choose_submit()
-    test_form_noaction()
-    test_form_action()
+    pytest.main(sys.argv)
