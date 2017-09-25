@@ -111,7 +111,8 @@ class Form(object):
     def choose_submit(self, el):
         '''Selects the submit input (or button) element specified by 'el',
         where 'el' can be either a bs4.element.Tag or just its name attribute.
-        If the element is not found, raise a LinkNotFoundError exception.'''
+        If the element is not found or if multiple elements match, raise a
+        LinkNotFoundError exception.'''
         # In a normal web browser, when a input[type=submit] is clicked,
         # all other submits aren't sent. You can use simulate this as
         # following:
@@ -128,6 +129,10 @@ class Form(object):
         inps = self.form.select('input[type="submit"], button[type="submit"]')
         for inp in inps:
             if inp == el or inp['name'] == el:
+                if found:
+                    raise LinkNotFoundError(
+                        "Multiple submit elements match: {0}".format(el)
+                    )
                 found = True
                 continue
 
