@@ -1,4 +1,5 @@
 import mechanicalsoup
+import sys
 import re
 from bs4 import BeautifulSoup
 from test_form import setup_mock_browser
@@ -124,3 +125,6 @@ def test_submit_btnName(expected_post):
     browser['comment'] = expected_post[0][1]
     res = browser.submit_selected(btnName = expected_post[1][0])
     assert(res.status_code == 200 and res.text == 'Success!')
+
+if __name__ == '__main__':
+    pytest.main(sys.argv)
