@@ -109,6 +109,9 @@ class Form(object):
         return control
 
     def choose_submit(self, el):
+        '''Selects the submit input (or button) element specified by 'el',
+        where 'el' can be either a bs4.element.Tag or just its name attribute.
+        If the element is not found, raise a LinkNotFoundError exception.'''
         # In a normal web browser, when a input[type=submit] is clicked,
         # all other submits aren't sent. You can use simulate this as
         # following:
@@ -130,4 +133,7 @@ class Form(object):
 
             del inp['name']
 
-        return found
+        if not found:
+            raise LinkNotFoundError(
+                "Specified submit element not found: {}".format(el)
+            )

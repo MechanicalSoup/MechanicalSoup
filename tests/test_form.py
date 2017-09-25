@@ -125,8 +125,7 @@ def test_choose_submit(expected_post):
     form = browser.select_form('#choose-submit-form')
     browser['text'] = expected_post[2][1]
     browser['comment'] = expected_post[0][1]
-    found = form.choose_submit(expected_post[1][0])
-    assert(found)
+    form.choose_submit(expected_post[1][0])
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
 
@@ -140,15 +139,18 @@ choose_submit_fail_form = '''
 '''
 
 @pytest.mark.parametrize("select_name", [
-    pytest.param({'name': 'does_not_exist', 'result': False}, id='not found'),
-    pytest.param({'name': 'test_submit', 'result': True}, id='found'),
+    pytest.param({'name': 'does_not_exist', 'fails': True}, id='not found'),
+    pytest.param({'name': 'test_submit', 'fails': False}, id='found'),
 ])
 def test_choose_submit_fail(select_name):
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page(choose_submit_fail_form)
     form = browser.select_form('#choose-submit-form')
-    found = form.choose_submit(select_name['name'])
-    assert(found == select_name['result'])
+    if select_name['fails']:
+        with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+            form.choose_submit(select_name['name'])
+    else:
+        form.choose_submit(select_name['name'])
 
 
 submit_form_noaction = '''
