@@ -12,6 +12,7 @@ python:
 install:
   - python setup.py install
   - pip install flake8 requests_mock
+  - pip install --upgrade pytest
 script:
   - |
     if ! python --version 2>&1 | grep -q -e 'Python 2.6'
