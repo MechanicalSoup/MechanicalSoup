@@ -153,6 +153,23 @@ def test_choose_submit_fail(select_name):
         form.choose_submit(select_name['name'])
 
 
+choose_submit_multiple_match_form = '''
+<html>
+  <form id="choose-submit-form">
+    <input type="submit" name="test_submit" value="First Submit" />
+    <input type="submit" name="test_submit" value="Second Submit" />
+  </form>
+</html>
+'''
+
+def test_choose_submit_multiple_match():
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(choose_submit_multiple_match_form)
+    form = browser.select_form('#choose-submit-form')
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.choose_submit('test_submit')
+
+
 submit_form_noaction = '''
 <html>
   <body>
