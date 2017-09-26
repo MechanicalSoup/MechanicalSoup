@@ -1,0 +1,8 @@
+[run]
+include =
+    # The tested code will be located wherever the module was installed.
+    */mechanicalsoup/*.py
+
+omit =
+    */__version__.py
+    */__init__.py
