@@ -121,5 +121,12 @@ def test_submit_btnName(expected_post):
     res = browser.submit_selected(btnName = expected_post[1][0])
     assert(res.status_code == 200 and res.text == 'Success!')
 
+def test_get_set_debug():
+    browser = mechanicalsoup.StatefulBrowser()
+    # Debug mode is off by default
+    assert(not browser.get_debug())
+    browser.set_debug(True)
+    assert(browser.get_debug())
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
