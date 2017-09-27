@@ -133,5 +133,11 @@ def test_get_cookiejar():
     assert jar.get('k1') == 'v1'
     assert jar.get('k2') == 'v2'
 
+def test_post():
+    browser = mechanicalsoup.Browser()
+    data = {'color': 'blue', 'colorblind': 'True'}
+    resp = browser.post("http://httpbin.org/post", data)
+    assert(resp.status_code == 200 and resp.json()['form'] == data)
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
