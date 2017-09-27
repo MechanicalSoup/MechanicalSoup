@@ -128,5 +128,18 @@ def test_get_set_debug():
     browser.set_debug(True)
     assert(browser.get_debug())
 
+def test_list_links(capsys):
+    # capsys is a pytest fixture that allows us to inspect the std{err,out}
+    browser = mechanicalsoup.StatefulBrowser()
+    links = '''
+     <a href="/link1">Link #1</a>
+     <a href="/link2" id="link2"> Link #2</a>
+'''
+    browser.open_fake_page('<html>{0}</html>'.format(links))
+    browser.list_links()
+    out, err = capsys.readouterr()
+    expected = 'Links in the current page:{0}'.format(links)
+    assert out == expected
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
