@@ -92,6 +92,7 @@ Development
 
 [![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
 [![Coverage Status](https://codecov.io/gh/hickford/MechanicalSoup/branch/master/graph/badge.svg)](https://codecov.io/gh/hickford/MechanicalSoup)
+[![Requirements Status](https://requires.io/github/hickford/MechanicalSoup/requirements.svg?branch=master)](https://requires.io/github/hickford/MechanicalSoup/requirements/?branch=master)
 
 You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
