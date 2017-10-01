@@ -45,5 +45,13 @@ setup(
         'requests >= 2.0',
         'beautifulsoup4',
         'six >= 1.4'
-        ],
+    ],
+    setup_requires=[
+        'pytest-runner',
+    ],
+    tests_require=[
+        'pytest',
+        'pytest-cov',
+        'requests_mock'
+    ]
 )
