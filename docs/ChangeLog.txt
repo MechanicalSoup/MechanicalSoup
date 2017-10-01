@@ -21,6 +21,9 @@ Main changes:
 * There is now a direct interface to the cookiejar in `*Browser`
   classes (`(set|get)_cookiejar` methods).
 
+* This is the last MechanicalSoup version supporting Python 2.6 and
+  3.3.
+
 Bug fixes:
 ----------
 
