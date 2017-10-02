@@ -88,7 +88,7 @@ class StatefulBrowser(Browser):
         is url. Useful mainly for testing."""
         soup_config = soup_config or dict()
         self.__current_page = bs4.BeautifulSoup(
-                page_text, **soup_config)
+            page_text, **soup_config)
         self.__current_url = url
         self.__current_form = None
 

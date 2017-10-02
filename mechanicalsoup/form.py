@@ -49,7 +49,7 @@ class Form(object):
                     raise LinkNotFoundError(
                         "No input checkbox named %s with choice %s" %
                         (name, choice)
-                        )
+                    )
 
     def textarea(self, data):
         for (name, value) in data.items():
