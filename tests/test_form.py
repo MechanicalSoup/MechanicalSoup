@@ -69,7 +69,7 @@ choose_submit_form = '''
 <html>
   <body>
     <!-- vaguely based on Trac edit-page form -->
-    <form id="choose-submit-form" method="post" action="mock://multi-button-form.com/post">
+    <form id="choose-submit-form" method="post" action="mock://form.com/post">
       <textarea id="text" class="wikitext trac-resizable" name="text" cols="80" rows="40">
       </textarea>
       <div class="field">
@@ -88,10 +88,10 @@ choose_submit_form = '''
 </html>
 '''
 
-def setup_mock_browser(expected_post=None):
-    url = 'mock://multi-button-form.com'
+def setup_mock_browser(expected_post=None, text=choose_submit_form):
+    url = 'mock://form.com'
     mock = requests_mock.Adapter()
-    mock.register_uri('GET', url, headers={'Content-Type': 'text/html'}, text=choose_submit_form)
+    mock.register_uri('GET', url, headers={'Content-Type': 'text/html'}, text=text)
     if expected_post:
         def text_callback(request, context):
             query = parse_qsl(request.text)
@@ -194,7 +194,7 @@ def test_form_noaction():
 submit_form_action = '''
 <html>
   <body>
-    <form id="choose-submit-form" action="mock://multi-button-form.com">
+    <form id="choose-submit-form" action="mock://form.com">
       <input type="text" name="text1" value="someValue1" />
       <input type="text" name="text2" value="someValue2" />
       <input type="submit" name="save" />
@@ -210,6 +210,37 @@ def test_form_action():
     browser['text1'] = 'newText1'
     res = browser.submit_selected()
     assert(res.status_code == 200 and browser.get_url() == url)
+
+
+set_select_form = '''
+<html>
+  <form method="post" action="mock://form.com/post">
+    <select name="entree">
+      <option value="tofu" selected="selected">Tofu Stir Fry</option>
+      <option value="curry">Red Curry</option>
+      <option value="tempeh">Tempeh Tacos</option>
+    </select>
+    <input type="submit" value="Select" />
+  </form>
+</html>
+'''
+
+@pytest.mark.parametrize("option", [
+    pytest.param({'result': [('entree', 'tofu')], 'default': True},
+                 id='default'),
+    pytest.param({'result': [('entree', 'curry')], 'default': False},
+                 id='selected'),
+])
+def test_set_select(option):
+    '''Test the branch of Form.set that finds "select" elements.'''
+    browser, url = setup_mock_browser(expected_post=option['result'],
+                                      text=set_select_form)
+    browser.open(url)
+    browser.select_form('form')
+    if not option['default']:
+      browser[option['result'][0][0]] = option['result'][0][1]
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and res.text == 'Success!')
 
 if __name__ == '__main__':
     pytest.main(sys.argv)
