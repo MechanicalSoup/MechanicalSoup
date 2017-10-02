@@ -97,17 +97,13 @@ Development
 You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
     python3 -m venv .virtual-py3 && source .virtual-py3/bin/activate
-    pip install pytest pytest-cov flake8 requests_mock
+    pip install pytest pytest-cov pytest-flake8 requests_mock
 and
 
     virtualenv -p python2 --no-site-packages .virtual-py2 && source .virtual-py2/bin/activate
-    pip install pytest pytest-cov flake8 requests_mock
+    pip install pytest pytest-cov pytest-flake8 requests_mock
 
-After making changes, check syntax:
-
-    flake8 $(git ls-files mechanicalsoup/'*.py') example.py
-
-Then run py.test in all virtualenvs:
+After making changes, run pytest in all virtualenvs:
 
     source .virtual-py3/bin/activate
     python setup.py install && pytest
