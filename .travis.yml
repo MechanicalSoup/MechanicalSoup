@@ -10,6 +10,7 @@ python:
 install:
   - pip install flake8
   - pip install --upgrade pytest # needed for cases where there is already an old pytest installed
+  - pip install pytest-cov       # needed for the codecov uploader
 script:
   - flake8 $(git ls-files mechanicalsoup/'*.py') example.py
   - python setup.py test
