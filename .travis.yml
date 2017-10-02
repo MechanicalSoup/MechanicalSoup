@@ -8,11 +8,9 @@ python:
   - pypy
   - pypy3
 install:
-  - pip install flake8
   - pip install --upgrade pytest # needed for cases where there is already an old pytest installed
   - pip install pytest-cov       # needed for the codecov uploader
 script:
-  - flake8 $(git ls-files mechanicalsoup/'*.py') example.py
   - python setup.py test
 after_success:
   - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
