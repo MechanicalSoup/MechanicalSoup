@@ -40,5 +40,5 @@ print(page2.soup.title.text)
 
 # verify we remain logged in (thanks to cookies) as we browse the rest of
 # the site
-page3 = browser.get("https://github.com/hickford/MechanicalSoup")
+page3 = browser.get("https://github.com/MechanicalSoup/MechanicalSoup")
 assert page3.soup.select(".logout-form")

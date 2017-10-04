@@ -64,7 +64,7 @@ print(page.title.text)
 
 # verify we remain logged in (thanks to cookies) as we browse the rest of
 # the site
-page3 = browser.open("https://github.com/hickford/MechanicalSoup")
+page3 = browser.open("https://github.com/MechanicalSoup/MechanicalSoup")
 assert page3.soup.select(".logout-form")
 ```
 
@@ -90,9 +90,9 @@ See also https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parse
 Development
 ---------
 
-[![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/hickford/MechanicalSoup)
-[![Coverage Status](https://codecov.io/gh/hickford/MechanicalSoup/branch/master/graph/badge.svg)](https://codecov.io/gh/hickford/MechanicalSoup)
-[![Requirements Status](https://requires.io/github/hickford/MechanicalSoup/requirements.svg?branch=master)](https://requires.io/github/hickford/MechanicalSoup/requirements/?branch=master)
+[![Build Status](https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master)](https://travis-ci.org/MechanicalSoup/MechanicalSoup)
+[![Coverage Status](https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg)](https://codecov.io/gh/MechanicalSoup/MechanicalSoup)
+[![Requirements Status](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master)](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master)
 
 You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
@@ -115,7 +115,7 @@ After making changes, run pytest in all virtualenvs:
 ### Roadmap
 
 * Draw [Substack-style](http://substack.net/art) readme art (imagine a steaming bowl of cogs and noodles)
-* [Write docs and publish website](https://github.com/hickford/MechanicalSoup/issues/6)
+* [Write docs and publish website](https://github.com/MechanicalSoup/MechanicalSoup/issues/6)
 
 See also
 ------
