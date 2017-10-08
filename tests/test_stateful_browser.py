@@ -162,6 +162,13 @@ def test_launch_browser(mocker):
     assert webbrowser.open.call_count == 1
     browser.close()
 
+def test_find_link():
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page('<html></html>')
+    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+        browser.find_link('nosuchlink')
+    browser.close()
+
 def test_verbose(capsys):
     '''Tests that the btnName argument chooses the submit button.'''
     browser, url = setup_mock_browser()
