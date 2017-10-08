@@ -43,6 +43,10 @@ class StatefulBrowser(Browser):
         * >= 1 shows each visited URL."""
         self.__verbose = verbose
 
+    def get_verbose(self):
+        """Get the verbosity level (see set_verbose())."""
+        return self.__verbose
+
     def get_url(self):
         """Get the URL of the currently visited page."""
         return self.__current_url

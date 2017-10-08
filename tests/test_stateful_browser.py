@@ -162,5 +162,27 @@ def test_launch_browser(mocker):
     assert webbrowser.open.call_count == 1
     browser.close()
 
+def test_verbose(capsys):
+    '''Tests that the btnName argument chooses the submit button.'''
+    browser, url = setup_mock_browser()
+    browser.open(url)
+    out, err = capsys.readouterr()
+    assert out == ""
+    assert err == ""
+    assert browser.get_verbose() == 0
+    browser.set_verbose(1)
+    browser.open(url)
+    out, err = capsys.readouterr()
+    assert out == "."
+    assert err == ""
+    assert browser.get_verbose() == 1
+    browser.set_verbose(2)
+    browser.open(url)
+    out, err = capsys.readouterr()
+    assert out == "mock://form.com\n"
+    assert err == ""
+    assert browser.get_verbose() == 2
+    browser.close()
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
