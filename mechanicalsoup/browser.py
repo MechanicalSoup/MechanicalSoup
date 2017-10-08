@@ -162,9 +162,11 @@ class Browser(object):
         webbrowser.open('file://' + file.name)
 
     def close(self):
-        """Close the current session"""
-        self.session.cookies.clear()
-        self.session.close()
+        """Close the current session, if still open."""
+        if self.session is not None:
+            self.session.cookies.clear()
+            self.session.close()
+            self.session = None
 
     def __del__(self):
         self.close()
