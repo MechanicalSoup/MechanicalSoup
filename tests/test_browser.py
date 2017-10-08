@@ -1,3 +1,4 @@
+import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 import mechanicalsoup
 import sys
 from bs4 import BeautifulSoup
