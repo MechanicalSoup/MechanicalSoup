@@ -160,6 +160,11 @@ def test_launch_browser(mocker):
         browser.follow_link('nosuchlink')
     # mock.assert_called_once() not available on some versions :-(
     assert webbrowser.open.call_count == 1
+    mocker.resetall()
+    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+        browser.select_form('nosuchlink')
+    # mock.assert_called_once() not available on some versions :-(
+    assert webbrowser.open.call_count == 1
     browser.close()
 
 def test_find_link():
