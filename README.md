@@ -94,6 +94,10 @@ Development
 [![Coverage Status](https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg)](https://codecov.io/gh/MechanicalSoup/MechanicalSoup)
 [![Requirements Status](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master)](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master)
 
+Installing dependencies and running tests can be done with:
+
+    python setup.py test
+
 You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
     python3 -m venv .virtual-py3 && source .virtual-py3/bin/activate
@@ -106,11 +110,14 @@ and
 After making changes, run pytest in all virtualenvs:
 
     source .virtual-py3/bin/activate
-    python setup.py install && pytest
+    pytest
 
     source .virtual-py2/bin/activate
-    python setup.py install && pytest
+    pytest
 
+Installation should be as simple as:
+
+    python setup.py install
 
 ### Roadmap
 
