@@ -38,12 +38,14 @@ def test_submit_online():
     # Ensure we haven't blown away any regular headers
     assert set(('Content-Length', 'Host', 'Content-Type', 'Connection', 'Accept',
             'User-Agent', 'Accept-Encoding')).issubset(json["headers"].keys())
+    browser.close()
 
 
 def test_no_404():
     browser = mechanicalsoup.StatefulBrowser()
     resp = browser.open("http://httpbin.org/nosuchpage")
     assert resp.status_code == 404
+    browser.close()
 
 def test_404():
     browser = mechanicalsoup.StatefulBrowser(raise_on_404=True)
@@ -51,11 +53,13 @@ def test_404():
         resp = browser.open("http://httpbin.org/nosuchpage")
     resp = browser.open("http://httpbin.org/")
     assert resp.status_code == 200
+    browser.close()
 
 def test_user_agent():
     browser = mechanicalsoup.StatefulBrowser(user_agent='007')
     resp = browser.open("http://httpbin.org/user-agent")
     assert resp.json() == {'user-agent': '007'}
+    browser.close()
 
 def test_open_relative():
     # Open an arbitrary httpbin page to set the current URL
@@ -71,6 +75,7 @@ def test_open_relative():
     resp = browser.open_relative("/basic-auth/me/123", auth=('me', '123'))
     assert browser.get_url() == "http://httpbin.org/basic-auth/me/123"
     assert resp.json() == {"authenticated": True, "user": "me"}
+    browser.close()
 
 def test_links():
     browser = mechanicalsoup.StatefulBrowser()
@@ -97,6 +102,7 @@ def test_links():
     two_links = browser.links(id=re.compile('_link'))
     assert len(two_links) == 2
     assert two_links == BeautifulSoup(html).find_all('a')
+    browser.close()
 
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
@@ -121,6 +127,7 @@ def test_submit_btnName(expected_post):
     browser['comment'] = expected_post[0][1]
     res = browser.submit_selected(btnName = expected_post[1][0])
     assert(res.status_code == 200 and res.text == 'Success!')
+    browser.close()
 
 def test_get_set_debug():
     browser = mechanicalsoup.StatefulBrowser()
@@ -128,6 +135,7 @@ def test_get_set_debug():
     assert(not browser.get_debug())
     browser.set_debug(True)
     assert(browser.get_debug())
+    browser.close()
 
 def test_list_links(capsys):
     # capsys is a pytest fixture that allows us to inspect the std{err,out}
@@ -141,6 +149,7 @@ def test_list_links(capsys):
     out, err = capsys.readouterr()
     expected = 'Links in the current page:{0}'.format(links)
     assert out == expected
+    browser.close()
 
 def test_launch_browser(mocker):
     browser = mechanicalsoup.StatefulBrowser()
@@ -151,6 +160,7 @@ def test_launch_browser(mocker):
         browser.follow_link('nosuchlink')
     # mock.assert_called_once() not available on some versions :-(
     assert webbrowser.open.call_count == 1
+    browser.close()
 
 if __name__ == '__main__':
     pytest.main(sys.argv)
