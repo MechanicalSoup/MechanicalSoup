@@ -51,6 +51,7 @@ setup(
         'pytest',
         'pytest-cov',
         'pytest-flake8',
+        'pytest-mock',
         'requests_mock'
     ]
 )

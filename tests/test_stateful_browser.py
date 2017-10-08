@@ -4,6 +4,7 @@ import re
 from bs4 import BeautifulSoup
 from test_form import setup_mock_browser
 import pytest
+import webbrowser
 
 def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
@@ -140,6 +141,16 @@ def test_list_links(capsys):
     out, err = capsys.readouterr()
     expected = 'Links in the current page:{0}'.format(links)
     assert out == expected
+
+def test_launch_browser(mocker):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.set_debug(True)
+    browser.open_fake_page('<html></html>')
+    mocker.patch('webbrowser.open')
+    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+        browser.follow_link('nosuchlink')
+    # mock.assert_called_once() not available on some versions :-(
+    assert webbrowser.open.call_count == 1
 
 if __name__ == '__main__':
     pytest.main(sys.argv)
