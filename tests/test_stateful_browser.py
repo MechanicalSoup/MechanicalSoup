@@ -197,5 +197,20 @@ def test_verbose(capsys):
     assert browser.get_verbose() == 2
     browser.close()
 
+def test_new_control():
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open("http://httpbin.org/forms/post")
+    browser.select_form("form")
+    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+        # The control doesn't exist, yet.
+        browser["temperature"] = "cold"
+    browser.new_control("text", "temperature", "warm")
+    browser["temperature"] = "hot"
+    response = browser.submit_selected()
+    json = response.json()
+    data = json["form"]
+    assert data["temperature"] == "hot"
+    browser.close()
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
