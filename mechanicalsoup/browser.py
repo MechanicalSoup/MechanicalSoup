@@ -61,6 +61,14 @@ class Browser(object):
         self.session.headers['User-agent'] = user_agent
 
     def request(self, *args, **kwargs):
+        """Straightforward wrapper around requests session.request
+        (http://docs.python-requests.org/en/master/api/).
+
+        This is a low-level function that should not be called for
+        basic usage (use .get or .post instead). Use it if you need an
+        HTTP verb that mechanicalsoup doesn't manage (e.g. MKCOL) for
+        example.
+        """
         response = self.session.request(*args, **kwargs)
         Browser.add_soup(response, self.soup_config)
         return response

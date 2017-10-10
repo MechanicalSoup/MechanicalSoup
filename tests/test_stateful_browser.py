@@ -7,6 +7,12 @@ from test_form import setup_mock_browser
 import pytest
 import webbrowser
 
+def test_request_forward():
+    browser, url = setup_mock_browser(expected_post=[('var1', 'val1'), ('var2', 'val2')])
+    r = browser.request('POST', url + '/post', data={'var1': 'val1', 'var2': 'val2'})
+    assert r.text == 'Success!'
+    browser.close()
+
 def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.StatefulBrowser()
