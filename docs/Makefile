@@ -46,6 +46,12 @@ help:
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 
+.PHONY: apidoc
+# Create a list of modules with the proper .. automodule:: directive.
+# Use --no-toc to avoid creating a list containing only one module.
+apidoc:
+	sphinx-apidoc --no-toc -o . ../mechanicalsoup
+
 clean:
 	rm -rf $(BUILDDIR)/*
 
