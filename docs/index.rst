@@ -15,7 +15,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-
+   mechanicalsoup
+   ChangeLog
 
 Indices and tables
 ==================
