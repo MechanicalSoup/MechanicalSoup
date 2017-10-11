@@ -1,11 +1,12 @@
-from setuptools import setup, find_packages  # Always prefer setuptools over distutils
+from setuptools import setup  # Always prefer setuptools over distutils
 from codecs import open  # To use a consistent encoding
 from os import path
 
 here = path.abspath(path.dirname(__file__))
 
 about = {}
-with open(path.join(here, 'mechanicalsoup', '__version__.py'), 'r', 'utf-8') as f:
+with open(path.join(here, 'mechanicalsoup', '__version__.py'),
+          'r', 'utf-8') as f:
     exec(f.read(), about)
 
 setup(
@@ -35,9 +36,9 @@ setup(
 
     packages=['mechanicalsoup'],
 
-    # List run-time dependencies here.  These will be installed by pip when your
-    # project is installed. For an analysis of "install_requires" vs pip's
-    # requirements files see:
+    # List run-time dependencies here. These will be installed by pip
+    # when your project is installed. For an analysis of
+    # "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'requests >= 2.0',
