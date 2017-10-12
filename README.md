@@ -9,12 +9,13 @@ Installation
 ------
 
 [![Latest Version](https://img.shields.io/pypi/v/MechanicalSoup.svg)](https://pypi.python.org/pypi/MechanicalSoup/)
+[![Supported Versions](https://img.shields.io/pypi/pyversions/mechanicalsoup.svg)](https://pypi.python.org/pypi/MechanicalSoup/)
 
 From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
 
      pip install MechanicalSoup
 
-Python versions 2.7, 3.4-3.6, PyPy and PyPy3 are supported (and tested against).
+PyPy and PyPy3 are also supported (and tested against).
 
 Example
 ------
@@ -93,6 +94,8 @@ Development
 [![Build Status](https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master)](https://travis-ci.org/MechanicalSoup/MechanicalSoup)
 [![Coverage Status](https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg)](https://codecov.io/gh/MechanicalSoup/MechanicalSoup)
 [![Requirements Status](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master)](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master)
+
+Python version support in the current master branch may differ from the latest release in [PyPI](https://pypi.python.org/pypi/MechanicalSoup/). Please inspect `.travis.yml` or run `python setup.py --classifiers` to see which versions of Python are supported in the current master branch.
 
 Installing dependencies and running tests can be done with:
 
