@@ -101,11 +101,11 @@ Installing dependencies and running tests can be done with:
 You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
     python3 -m venv .virtual-py3 && source .virtual-py3/bin/activate
-    pip install pytest pytest-cov pytest-flake8 requests_mock
+    pip install bs4 pytest pytest-cov pytest-flake8 pytest-mock requests_mock
 and
 
     virtualenv -p python2 --no-site-packages .virtual-py2 && source .virtual-py2/bin/activate
-    pip install pytest pytest-cov pytest-flake8 requests_mock
+    pip install bs4 pytest pytest-cov pytest-flake8 pytest-mock requests_mock
 
 After making changes, run pytest in all virtualenvs:
 
