@@ -3,7 +3,7 @@ MechanicalSoup
 
 A Python library for automating interaction with websites. MechanicalSoup automatically stores and sends cookies, follows redirects, and can follow links and submit forms. It doesn't do Javascript.
 
-MechanicalSoup was created by [M Hickford](https://github.com/hickford/), who was a fond user of the [Mechanize](https://github.com/jjlee/mechanize) library. Unfortunately is [incompatible with Python 3](https://github.com/jjlee/mechanize/issues/96) and its development is inactive. MechanicalSoup provides a similar API, built on Python giants [Requests](http://docs.python-requests.org/en/latest/) (for http sessions) and [BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/) (for document navigation). Since 2017 it is a project actively maintained by a small team including @hemberger and @moy.
+MechanicalSoup was created by [M Hickford](https://github.com/hickford/), who was a fond user of the [Mechanize](https://github.com/jjlee/mechanize) library. Unfortunately, Mechanize is [incompatible with Python 3](https://github.com/jjlee/mechanize/issues/96) and its development is inactive. MechanicalSoup provides a similar API, built on Python giants [Requests](http://docs.python-requests.org/en/latest/) (for http sessions) and [BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/) (for document navigation). Since 2017 it is a project actively maintained by a small team including @hemberger and @moy.
 
 Installation
 ------
