@@ -49,13 +49,8 @@ class Browser(object):
     def set_user_agent(self, user_agent):
         # set a default user_agent if not specified
         if user_agent is None:
-            try:
-                requests_ua = requests.utils.default_user_agent()
-            except AttributeError:
-                user_agent = '%s/%s' % (__title__, __version__)
-            else:
-                user_agent = '%s (%s/%s)' % (
-                    requests_ua, __title__, __version__)
+            requests_ua = requests.utils.default_user_agent()
+            user_agent = '%s (%s/%s)' % (requests_ua, __title__, __version__)
 
         # the requests module uses a case-insensitive dict for session headers
         self.session.headers['User-agent'] = user_agent
