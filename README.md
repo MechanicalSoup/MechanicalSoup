@@ -101,6 +101,15 @@ Installing dependencies and running tests can be done with:
 
     python setup.py test
 
+The documentation can be generated and viewed with:
+
+    pip install sphinx
+    python setup.py build_sphinx
+    firefox docs/_build/html/index.html
+
+The documentation is generated from docstrings within `*.py` files,
+and `*.rst` documentation files in the `docs/` directory.
+
 You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
     python3 -m venv .virtual-py3 && source .virtual-py3/bin/activate
