@@ -113,11 +113,11 @@ and `*.rst` documentation files in the `docs/` directory.
 You can develop against multiple versions of Python using [virtualenv](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments):
 
     python3 -m venv .virtual-py3 && source .virtual-py3/bin/activate
-    pip install bs4 pytest pytest-cov pytest-flake8 pytest-mock requests_mock
+    pip install -r requirements.txt -r tests/requirements.txt
 and
 
     virtualenv -p python2 --no-site-packages .virtual-py2 && source .virtual-py2/bin/activate
-    pip install bs4 pytest pytest-cov pytest-flake8 pytest-mock requests_mock
+    pip install -r requirements.txt -r tests/requirements.txt
 
 After making changes, run pytest in all virtualenvs:
 
