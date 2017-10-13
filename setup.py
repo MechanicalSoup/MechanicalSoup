@@ -2,6 +2,13 @@ from setuptools import setup  # Always prefer setuptools over distutils
 from codecs import open  # To use a consistent encoding
 from os import path
 
+
+def requirements_from_file(filename):
+    """Parses a pip requirements file into a list."""
+    return [line.strip() for line in open(filename, 'r')
+            if line.strip() and not line.strip().startswith('--')]
+
+
 here = path.abspath(path.dirname(__file__))
 
 about = {}
@@ -40,19 +47,7 @@ setup(
     # when your project is installed. For an analysis of
     # "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=[
-        'requests >= 2.0',
-        'beautifulsoup4',
-        'six >= 1.4'
-    ],
-    setup_requires=[
-        'pytest-runner',
-    ],
-    tests_require=[
-        'pytest',
-        'pytest-cov',
-        'pytest-flake8',
-        'pytest-mock',
-        'requests_mock'
-    ]
+    install_requires=requirements_from_file('requirements.txt'),
+    setup_requires=['pytest-runner'],
+    tests_require=requirements_from_file('tests/requirements.txt'),
 )
