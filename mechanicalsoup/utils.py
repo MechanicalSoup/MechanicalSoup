@@ -3,7 +3,8 @@ class LinkNotFoundError(BaseException):
 
     This happens in situations like (non-exhaustive list):
 
-    * :func:`~mechanicalsoup.StatefulBrowser.find_link` is called, but no link is found.
+    * :func:`~mechanicalsoup.StatefulBrowser.find_link` is called, but
+      no link is found.
 
     * The browser was configured with raise_on_404=True and a 404
       error is triggered while browsing.
