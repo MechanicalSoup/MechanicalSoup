@@ -215,6 +215,9 @@ def test_new_control():
     browser.new_control("text", "temperature", "warm")
     browser.new_control("textarea", "size", "Sooo big !")
     browser.new_control("text", "comments", "This is an override comment")
+    browser.new_control("checkbox", "foo", "valval", checked="checked")
+    tag = browser.get_current_form().form.find("input", {"name": "foo"})
+    assert tag.attrs["checked"] == "checked"
     browser["temperature"] = "hot"
     response = browser.submit_selected()
     json = response.json()
@@ -223,6 +226,7 @@ def test_new_control():
     assert data["temperature"] == "hot"
     assert data["size"] == "Sooo big !"
     assert data["comments"] == "This is an override comment"
+    assert data["foo"] == "valval"
     browser.close()
 
 
