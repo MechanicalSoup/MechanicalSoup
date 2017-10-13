@@ -246,5 +246,27 @@ def test_form_noaction():
         res = browser.submit_selected()
     browser.close()
 
+submit_form_noname = '''
+<html>
+  <body>
+    <form id="choose-submit-form" method="post" action="mock://form.com/post">
+      <textarea>Value</textarea> <!-- no name -->
+      <select> <!-- no name -->
+        <option value="tofu" selected="selected">Tofu Stir Fry</option>
+        <option value="curry">Red Curry</option>
+        <option value="tempeh">Tempeh Tacos</option>
+      </select>
+    </form>
+  </body>
+</html>
+'''
+
+def test_form_noname():
+    browser, url = setup_mock_browser(expected_post=[])
+    browser.open_fake_page(submit_form_noname, url=url)
+    browser.select_form('#choose-submit-form')
+    response = browser.submit_selected()
+    browser.close()
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
