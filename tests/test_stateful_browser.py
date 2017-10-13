@@ -268,5 +268,27 @@ def test_form_noname():
     response = browser.submit_selected()
     browser.close()
 
+submit_form_multiple = '''
+<html>
+  <body>
+    <form id="choose-submit-form" method="post" action="mock://form.com/post">
+      <select name="foo" multiple>
+        <option value="tofu" selected="selected">Tofu Stir Fry</option>
+        <option value="curry">Red Curry</option>
+        <option value="tempeh" selected="selected">Tempeh Tacos</option>
+      </select>
+    </form>
+  </body>
+</html>
+'''
+
+def test_form_multiple():
+    browser, url = setup_mock_browser(expected_post=[('foo', 'tempeh'), ('foo', 'tofu')])
+    browser.open_fake_page(submit_form_multiple, url=url)
+    browser.select_form('#choose-submit-form')
+    response = browser.submit_selected()
+    browser.close()
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
