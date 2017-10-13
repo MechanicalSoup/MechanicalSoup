@@ -1,3 +1,3 @@
 {
-  "userBlacklist": ["moy", "hemberger", "hickford"] // Users in this list will never be mentioned by mention-bot
+  "userBlacklist": ["moy", "hemberger", "hickford"]
 }
