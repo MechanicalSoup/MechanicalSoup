@@ -93,9 +93,10 @@ def setup_mock_browser(expected_post=None, text=choose_submit_form):
     url = 'mock://form.com'
     mock = requests_mock.Adapter()
     mock.register_uri('GET', url, headers={'Content-Type': 'text/html'}, text=text)
-    if expected_post:
+    if expected_post is not None:
         def text_callback(request, context):
-            query = parse_qsl(request.text)
+            # Python 2's parse_qsl doesn't like None argument
+            query = parse_qsl(request.text) if request.text else ()
             assert(set(query) == set(expected_post))
             return 'Success!'
         mock.register_uri('POST', url + '/post', text=text_callback)
