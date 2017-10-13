@@ -8,6 +8,22 @@ class Form(object):
         self.form = form
 
     def input(self, data):
+        """Fill-in a set of fields in a form.
+
+        Example: filling-in a login/password form
+
+        .. code-block:: python
+
+           form.input({"login": username, "password": password})
+
+        This will find the input element named "login" and give it the
+        value ``username``, and the input element named "password" and
+        give it the value ``password``.
+
+        The type of element (input, textarea, select, ...) does not
+        need to be given.
+        """
+
         for (name, value) in data.items():
             i = self.form.find("input", {"name": name})
             if not i:

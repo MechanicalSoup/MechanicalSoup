@@ -243,5 +243,42 @@ def test_set_select(option):
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
 
+page_with_missing_elements = '''
+<html>
+  <form method="post">
+    <input name="foo">
+    <textarea name="bar">
+    </textarea>
+    <select name="entree">
+      <option value="tofu" selected="selected">Tofu Stir Fry</option>
+      <option value="curry">Red Curry</option>
+      <option value="tempeh">Tempeh Tacos</option>
+    </select>
+    <fieldset>
+     <legend> Pizza Toppings </legend>
+     <p><label> <input type=checkbox name="topping" value="bacon"> Bacon </label></p>
+     <p><label> <input type=checkbox name="topping" value="cheese" checked> Extra Cheese </label></p>
+     <p><label> <input type=checkbox name="topping" value="onion" checked> Onion </label></p>
+     <p><label> <input type=checkbox name="topping" value="mushroom"> Mushroom </label></p>
+    </fieldset>
+    <input type="submit" value="Select" />
+  </form>
+</html>
+'''
+def test_form_not_found():
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(page_with_missing_elements, url="http://example.com/invalid/")
+    form = browser.select_form('form')
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.input({'foo': 'bar', 'nosuchname': 'nosuchval'})
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.check({'foo': 'bar', 'nosuchname': 'nosuchval'})
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.check({'entree': 'cheese'})
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.check({'topping': 'tofu'})
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.textarea({'bar': 'value', 'foo': 'nosuchval'})
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
