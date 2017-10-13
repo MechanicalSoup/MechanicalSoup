@@ -225,5 +225,26 @@ def test_new_control():
     assert data["comments"] == "This is an override comment"
     browser.close()
 
+
+submit_form_noaction = '''
+<html>
+  <body>
+    <form id="choose-submit-form">
+      <input type="text" name="text1" value="someValue1" />
+      <input type="text" name="text2" value="someValue2" />
+      <input type="submit" name="save" />
+    </form>
+  </body>
+</html>
+'''
+
+def test_form_noaction():
+    browser, url = setup_mock_browser()
+    browser.open_fake_page(submit_form_noaction)
+    form = browser.select_form('#choose-submit-form')
+    with pytest.raises(ValueError, message="no URL to submit to"):
+        res = browser.submit_selected()
+    browser.close()
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
