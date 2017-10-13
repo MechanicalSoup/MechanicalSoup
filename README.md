@@ -17,6 +17,14 @@ From [PyPI](https://pypi.python.org/pypi/MechanicalSoup/)
 
 PyPy and PyPy3 are also supported (and tested against).
 
+Documentation
+-------------
+
+The full documentation is available on
+http://mechanicalsoup.readthedocs.io/. You may want to jump directly
+to the
+[automaticaly generated API documentation](http://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.html).
+
 Example
 ------
 
@@ -94,6 +102,7 @@ Development
 [![Build Status](https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master)](https://travis-ci.org/MechanicalSoup/MechanicalSoup)
 [![Coverage Status](https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg)](https://codecov.io/gh/MechanicalSoup/MechanicalSoup)
 [![Requirements Status](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master)](https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest)](http://mechanicalsoup.readthedocs.io/en/latest/?badge=latest)
 
 Python version support in the current master branch may differ from the latest release in [PyPI](https://pypi.python.org/pypi/MechanicalSoup/). Please inspect `.travis.yml` or run `python setup.py --classifiers` to see which versions of Python are supported in the current master branch.
 
