@@ -210,12 +210,19 @@ def test_new_control():
     with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
         # The control doesn't exist, yet.
         browser["temperature"] = "cold"
+    browser["size"] = "large"  # Existing radio
+    browser["comments"] = "This is a comment"  # Existing textarea
     browser.new_control("text", "temperature", "warm")
+    browser.new_control("textarea", "size", "Sooo big !")
+    browser.new_control("text", "comments", "This is an override comment")
     browser["temperature"] = "hot"
     response = browser.submit_selected()
     json = response.json()
     data = json["form"]
+    print(data)
     assert data["temperature"] == "hot"
+    assert data["size"] == "Sooo big !"
+    assert data["comments"] == "This is an override comment"
     browser.close()
 
 if __name__ == '__main__':

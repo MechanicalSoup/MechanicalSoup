@@ -110,11 +110,11 @@ class Form(object):
         raise LinkNotFoundError()
 
     def new_control(self, type, name, value, **kwargs):
-        old = self.form.find('input', {'name': name})
-        if old:
+        old_input = self.form.find_all('input', {'name': name})
+        for old in old_input:
             old.decompose()
-        old = self.form.find('textarea', {'name': name})
-        if old:
+        old_textarea = self.form.find_all('textarea', {'name': name})
+        for old in old_textarea:
             old.decompose()
         # We don't have access to the original soup object, so we
         # instantiate a new BeautifulSoup() to call new_tag().
