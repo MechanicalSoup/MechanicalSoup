@@ -280,5 +280,23 @@ def test_form_not_found():
     with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
         form.textarea({'bar': 'value', 'foo': 'nosuchval'})
 
+page_with_radio = '''
+<html>
+  <form method="post">
+    <input type=checkbox name="foo" value="bacon"> This is a checkbox
+  </form>
+</html>
+'''
+def test_form_not_found():
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(page_with_radio, url="http://example.com/invalid/")
+    form = browser.select_form('form')
+    assert "checked" not in form.form.find("input", {"name": "foo"}).attrs
+    form["foo"] = True
+    assert form.form.find("input", {"name": "foo"}).attrs["checked"] == ""
+    form["foo"] = False
+    assert "checked" not in form.form.find("input", {"name": "foo"}).attrs
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
