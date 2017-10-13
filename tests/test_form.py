@@ -288,7 +288,7 @@ page_with_radio = '''
   </form>
 </html>
 '''
-def test_form_not_found():
+def test_form_check_uncheck():
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page(page_with_radio, url="http://example.com/invalid/")
     form = browser.select_form('form')
