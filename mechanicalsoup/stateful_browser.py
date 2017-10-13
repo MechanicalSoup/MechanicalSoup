@@ -12,6 +12,28 @@ import bs4
 class StatefulBrowser(Browser):
     def __init__(self, session=None, soup_config=None, requests_adapters=None,
                  *args, **kwargs):
+        """Build a StatefulBrowser.
+
+        :param soup_config: Configuration passed to MechanicalSoup to affect the way HTML is parsed.
+        :param requests_adapters: Configuration passed to requests, to affect the way HTTP requests are performed.
+        :param raise_on_404: If True, raise :class:`LinkNotFoundError`
+              when visiting a page triggers a 404 Not Found error.
+
+        Examples ::
+
+            browser = mechanicalsoup.StatefulBrowser(
+                soup_config={'features': 'lxml'},  # Use the lxml HTML parser
+                raise_on_404=True,
+                user_agent='MyBot/0.1: mysite.example.com/bot_info'
+            )
+            browser.open(url)
+            # ...
+            browser.close()
+
+        Once not used anymore, the browser must be closed
+        using :func:`~Browser.close`.
+
+        """
         super(StatefulBrowser, self).__init__(
             session, soup_config, requests_adapters, *args, **kwargs)
         self.__debug = False
