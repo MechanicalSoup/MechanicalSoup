@@ -54,13 +54,11 @@ class Form(object):
                 value = (value,)
             for choice in value:
                 choice = str(choice)  # Allow for example literal numbers
-                found = False
                 for i in inputs:
                     if i.attrs.get("value", "on") == choice:
                         i["checked"] = ""
-                        found = True
                         break
-                if not found:
+                else:
                     print(self.form)
                     raise LinkNotFoundError(
                         "No input checkbox named %s with choice %s" %
