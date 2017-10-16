@@ -160,6 +160,8 @@ class StatefulBrowser(Browser):
         self.__current_url = resp.url
         if hasattr(resp, "soup"):
             self.__current_page = resp.soup
+        else:
+            self.__current_page = None
         self.__current_form = None
         return resp
 
