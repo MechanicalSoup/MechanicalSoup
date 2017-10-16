@@ -89,6 +89,8 @@ class Form(object):
                     if "checked" in input.attrs:
                         del input.attrs["checked"]
                 else:
+                    if isinstance(value, list) or isinstance(value, tuple):
+                        self.uncheck_all(name)
                     self.check({name: value})
             else:
                 input["value"] = value

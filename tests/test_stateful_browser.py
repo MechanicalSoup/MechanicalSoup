@@ -27,7 +27,9 @@ def test_submit_online():
     browser.select_form("form")
     browser["custname"] = "Customer Name Here"
     browser["size"] = "medium"
-    browser["topping"] = ("cheese")
+    browser["topping"] = ("cheese", "bacon")
+    # Change our mind to make sure old boxes are unticked
+    browser["topping"] = ("cheese", "onion")
     browser["comments"] = "Some comment here"
     browser.get_current_form().set("nosuchfield", "new value", True)
     response = browser.submit_selected()
@@ -36,7 +38,7 @@ def test_submit_online():
     assert data["custname"] == "Customer Name Here"
     assert data["custtel"] == ""  # web browser submits "" for input left blank
     assert data["size"] == "medium"
-    assert data["topping"] == "cheese"
+    assert set(data["topping"]) == set(("cheese", "onion"))
     assert data["comments"] == "Some comment here"
     assert data["nosuchfield"] == "new value"
 
