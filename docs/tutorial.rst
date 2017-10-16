@@ -1,6 +1,164 @@
 MechanicalSoup tutorial
 =======================
 
+First contact, step by step
+---------------------------
+
+As a simple example, we'll browse http://httpbin.org/, a website
+designed to test tools like MechanicalSoup.
+
+First, let's create a browser object::
+
+  >>> import mechanicalsoup
+  >>> browser = mechanicalsoup.StatefulBrowser()
+
+To customize the way to build a browser (change the user-agent, the
+HTML parser to use, the way to react to 404 Not Found errors, ...),
+see :func:`~mechanicalsoup.StatefulBrowser.__init__`.
+
+Now, open the webpage we want::
+
+  >>> browser.open("http://httpbin.org/")
+  <Response [200]>
+
+The return value of :func:`~mechanicalsoup.StatefulBrowser.open` is an
+object of type requests.Response_. Actually, MechanicalSoup is using
+the requests_ library to do the actual requests to the website, so
+there's no surprise that we're getting such object. In short, it
+contains the data and meta-data that the server sent us. You see the
+HTTP response status, 200, which means "OK", but the object also
+contains the content of the page we just downloaded.
+
+Just like a normal browser's URL bar, the browser remembers which URL
+it's browsing::
+
+  >>> browser.get_url()
+  'http://httpbin.org/'
+
+Now, let's follow the link to ``/forms/post``::
+
+  >>> browser.follow_link("forms")
+  <Response [200]>
+  >>> browser.get_url()
+  'http://httpbin.org/forms/post'
+
+We passed a regular expression ``"forms"``
+to :func:`~mechanicalsoup.StatefulBrowser.follow_link`, who followed
+the link whose text matched this expression. There are many other ways
+to call :func:`~mechanicalsoup.StatefulBrowser.follow_link`, but we'll
+get back to it.
+
+We're now visiting http://httpbin.org/forms/post, which contains a
+form. Let's see the page content::
+
+  >>> browser.get_current_page()
+  <!DOCTYPE html>
+  <html>
+  ...
+  <form action="/post" method="post">
+  ...
+
+Actually, the return type
+of :func:`~mechanicalsoup.StatefulBrowser().get_current_page` is
+bs4.BeautifulSoup_. BeautifulSoup, aka bs4, is the second library used
+by Mechanicalsoup: it is an HTML manipulation library. You can now
+navigate in the tags of the pages using BeautifulSoup. For example, to
+get all the ``<legend>`` tags::
+
+  >>> browser.get_current_page().find_all('legend')
+  [<legend> Pizza Size </legend>, <legend> Pizza Toppings </legend>]
+
+To fill-in a form, we need to tell MechanicalSoup which form we're
+going to fill-in and submit::
+
+  >>> browser.select_form('form[action="/post"]')
+
+The argument to :func:`~mechanicalsoup.StatefulBrowser.select_form` is
+a CSS selector. Here, we select an HTML tag named ``form`` having an
+attribute ``action`` whose value is ``"/post"``. Since there's only
+one form in the page, ``browser.select_form()`` would have done the
+trick too.
+
+Now, give a value to fields in the form. For text fields, it's simple:
+just give a value for ``input`` element based on their ``name``
+attribute::
+
+  >>> browser["custname"] = "Me"
+  >>> browser["custtel"] = "00 00 0001"
+  >>> browser["custemail"] = "nobody@example.com"
+
+For radio buttons, well, it's simple too: radio buttons have several
+``input`` tag with the same ``name`` and different values, just select
+the one you need (``"size"`` is the ``name`` attribute, ``"medium"``
+is the ``"value"`` attribute of the element we want to tick)::
+
+  >>> browser["size"] = "medium"
+
+For checkboxes, one can use the same mechanism to check one box::
+
+  >>> browser["topping"] = "bacon"
+
+But we can also check any number of boxes by assigning a list to the
+field::
+
+  >>> browser["topping"] = ("bacon", "cheese")
+
+Let's see what the filled-in form looks like::
+
+  >>> browser.launch_browser()
+
+Actually, ``browser["..."] = "..."`` is just a helper to fill-in a
+form, but you can use any tool BeautifulSoup provides to modify the
+soup object, and MechanicalSoup will take care of submitting the form
+for you.
+
+:func:`~mechanicalsoup.StatefulBrowser.launch_browser` will launch a
+real web browser on the current page visited by our ``browser``
+object, including the changes we just made to the form (note that it
+does not open the real webpage, but creates a temporary file
+containing the page content, and point your browser to this file). Try
+changing the boxes ticked and the content of the text field, and
+re-launch the browser.
+
+Assuming we're satisfied with the content of the form, we can submit
+it (i.e. simulate a click on the sumbit button)::
+
+  >>> response = browser.submit_selected()
+
+The response is not an HTML page, so the browser doesn't parse it to a
+BeautifulSoup object, but we can still see the text it contains::
+
+  >>> print(response.text)
+  {
+    "args": {},
+    "data": "",
+    "files": {},
+    "form": {
+      "comments": "",
+      "custemail": "nobody@example.com",
+      "custname": "Me",
+      "custtel": "00 00 0001",
+      "delivery": "",
+      "size": "medium",
+      "topping": [
+        "bacon",
+        "cheese"
+      ]
+    },
+  ...
+
+To sum up, here is the complete example (`examples/expl_httpbin.py
+<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/expl_httpbin.py>`__):
+
+.. literalinclude:: ../examples/expl_httpbin.py
+
+.. _requests: http://docs.python-requests.org/en/master/
+.. _requests.Response: http://docs.python-requests.org/en/master/api/#requests.Response
+.. _bs4.BeautifulSoup: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#beautifulsoup
+
+A more complete example: logging-in into GitHub
+-----------------------------------------------
+
 The simplest way to use MechanicalSoup is to use
 the :class:`~mechanicalsoup.StatefulBrowser` class (this example is
 available as `example.py
