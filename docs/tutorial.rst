@@ -103,14 +103,14 @@ field::
 
   >>> browser["topping"] = ("bacon", "cheese")
 
-Let's see what the filled-in form looks like::
-
-  >>> browser.launch_browser()
-
 Actually, ``browser["..."] = "..."`` is just a helper to fill-in a
 form, but you can use any tool BeautifulSoup provides to modify the
 soup object, and MechanicalSoup will take care of submitting the form
 for you.
+
+Let's see what the filled-in form looks like::
+
+  >>> browser.launch_browser()
 
 :func:`~mechanicalsoup.StatefulBrowser.launch_browser` will launch a
 real web browser on the current page visited by our ``browser``
@@ -119,6 +119,11 @@ does not open the real webpage, but creates a temporary file
 containing the page content, and point your browser to this file). Try
 changing the boxes ticked and the content of the text field, and
 re-launch the browser.
+
+This method is very useful in complement with your browser's web
+development tools. For example, with Firefox, right-click "Inspect
+Element" on a field will give you everything you need to manipulate
+this field (in particular the ``name`` and ``value`` attributes).
 
 Assuming we're satisfied with the content of the form, we can submit
 it (i.e. simulate a click on the sumbit button)::
