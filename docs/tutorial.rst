@@ -103,10 +103,11 @@ field::
 
   >>> browser["topping"] = ("bacon", "cheese")
 
-Actually, ``browser["..."] = "..."`` is just a helper to fill-in a
-form, but you can use any tool BeautifulSoup provides to modify the
-soup object, and MechanicalSoup will take care of submitting the form
-for you.
+Actually, ``browser["..."] = "..."`` (i.e. calls
+to :func:`~mechanicalsoup.StatefulBrowser.__setitem__`) is just a
+helper to fill-in a form, but you can use any tool BeautifulSoup
+provides to modify the soup object, and MechanicalSoup will take care
+of submitting the form for you.
 
 Let's see what the filled-in form looks like::
 

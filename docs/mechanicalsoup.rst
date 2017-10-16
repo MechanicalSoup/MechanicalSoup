@@ -5,4 +5,4 @@ The mechanicalsoup package: API documentation
     :members:
     :undoc-members:
     :show-inheritance:
-    :special-members: __init__
+    :special-members: __init__, __setitem__
