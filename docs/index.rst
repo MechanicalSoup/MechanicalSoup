@@ -27,6 +27,7 @@ Contents:
 
    introduction
    tutorial
+   faq
    external-resources
    mechanicalsoup
    ChangeLog
