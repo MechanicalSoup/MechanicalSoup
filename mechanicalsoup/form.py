@@ -86,7 +86,8 @@ class Form(object):
                     input.attrs["checked"] = ""
                 elif value is False:
                     # f["foo"] = False unchecks it
-                    del input.attrs["checked"]
+                    if "checked" in input.attrs:
+                        del input.attrs["checked"]
                 else:
                     self.check({name: value})
             else:
