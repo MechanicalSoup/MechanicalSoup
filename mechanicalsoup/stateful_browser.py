@@ -124,10 +124,21 @@ class StatefulBrowser(Browser):
         """Like open, but URL can be relative to the currently visited page."""
         return self.open(self.absolute_url(url), *args, **kwargs)
 
-    def select_form(self, *args, **kwargs):
-        """Select a form in the current page. Arguments are the same
-        as the select() method for a soup object."""
-        found_forms = self.__current_page.select(*args, **kwargs)
+    def select_form(self, selector="form", *args, **kwargs):
+        """Select a form in the current page.
+
+        Arguments are the same as the select() method for a soup
+        object. ``selector`` is a string containing a CSS selector.
+
+        If the ``selector`` argument is not given, it defaults
+        to "form", so one can call ``browser.select_form()`` to select
+        the form if there is only one form in the page.
+
+        See also: `.select() method in BeautifulSoup
+        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors>`__
+
+        """
+        found_forms = self.__current_page.select(selector, *args, **kwargs)
         if len(found_forms) < 1:
             if self.__debug:
                 print('select_form failed for', *args)
