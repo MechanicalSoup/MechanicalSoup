@@ -153,7 +153,7 @@ BeautifulSoup object, but we can still see the text it contains::
   ...
 
 To sum up, here is the complete example (`examples/expl_httpbin.py
-<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/expl_httpbin.py>`__):
+<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/examples/expl_httpbin.py>`__):
 
 .. literalinclude:: ../examples/expl_httpbin.py
 
