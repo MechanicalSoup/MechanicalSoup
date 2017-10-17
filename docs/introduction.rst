@@ -1,31 +1,38 @@
 Introduction
 ============
 
-.. image:: https://img.shields.io/pypi/pyversions/mechanicalsoup.svg
-   :alt: Supported versions
-   :target: https://badge.fury.io/py/MechanicalSoup
+|Latest Version| |Supported Versions|
 
-.. image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
-   :alt: Latest version
-   :target: https://pypi.python.org/pypi/MechanicalSoup/
+PyPy and PyPy3 are also supported (and tested against).
 
 Find MechanicalSoup on Python Package Index (Pypi):
 https://pypi.python.org/pypi/MechanicalSoup/
 
-Installation (in the user's directory)::
+Installation
+------------
 
-  pip install --user MechanicalSoup
-
-Installation (system-wide)::
+Download and install the latest released version from `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__::
 
   pip install MechanicalSoup
 
-Alternatively, you may clone and install the library from source::
+Download and install the development version from GitHub::
+
+  pip install git+https://github.com/MechanicalSoup/MechanicalSoup
+
+Installing from source (installs the version in the current working directory)::
 
   git clone https://github.com/MechanicalSoup/MechanicalSoup.git
   cd MechanicalSoup
   python setup.py install
 
+(In all cases, add ``--user`` option to the ``install`` command to
+install in the current user's home directory)
+
 Development: see https://github.com/MechanicalSoup/MechanicalSoup
 
 Example code: https://github.com/MechanicalSoup/MechanicalSoup/tree/master/examples/
+
+.. |Latest Version| image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
+   :target: https://pypi.python.org/pypi/MechanicalSoup/
+.. |Supported Versions| image:: https://img.shields.io/pypi/pyversions/mechanicalsoup.svg
+   :target: https://pypi.python.org/pypi/MechanicalSoup/
