@@ -33,11 +33,11 @@ Installation
 
 PyPy and PyPy3 are also supported (and tested against).
 
-From `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__::
+Download and install the latest released version from `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__::
 
      pip install MechanicalSoup
 
-Installing from source::
+Installing from source (installs the version in the current working directory)::
 
   python setup.py install
 
