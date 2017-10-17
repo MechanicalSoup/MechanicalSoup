@@ -35,7 +35,11 @@ PyPy and PyPy3 are also supported (and tested against).
 
 Download and install the latest released version from `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__::
 
-     pip install MechanicalSoup
+  pip install MechanicalSoup
+
+Download and install the development version from GitHub::
+
+  pip install git+https://github.com/MechanicalSoup/MechanicalSoup
 
 Installing from source (installs the version in the current working directory)::
 
