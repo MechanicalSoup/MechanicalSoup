@@ -109,6 +109,12 @@ For an example with a more complex form (checkboxes, radio buttons and
 textareas), read `tests/test_browser.py <tests/test_browser.py>`__
 and `tests/test_form.py <tests/test_form.py>`__.
 
+Development
+-----------
+
+Instructions for building, testing and contributing to MechanicalSoup:
+see `<CONTRIBUTING.rst>`__.
+
 Common problems
 ---------------
 

@@ -1,6 +1,7 @@
 from setuptools import setup  # Always prefer setuptools over distutils
 from codecs import open  # To use a consistent encoding
 from os import path
+import re
 
 
 def requirements_from_file(filename):
@@ -9,9 +10,17 @@ def requirements_from_file(filename):
             if line.strip() and not line.strip().startswith('--')]
 
 
-def read(fname):
+def read(fname, URL):
     """Read the content of a file."""
-    return open(path.join(path.dirname(__file__), fname)).read()
+    readme = open(path.join(path.dirname(__file__), fname)).read()
+    if hasattr(readme, 'decode'):
+        # In Python 3, turn bytes into str.
+        readme = readme.decode('utf8')
+    # turn relative links into absolute ones
+    readme = re.sub(r'`<([^>]*)>`__',
+                    r'`\1 <' + URL + r"/\1/blob/master/>`__",
+                    readme)
+    return readme
 
 
 here = path.abspath(path.dirname(__file__))
@@ -28,7 +37,7 @@ setup(
     version=about['__version__'],
 
     description=about['__description__'],
-    long_description=read('README.rst'),
+    long_description=read('README.rst', about['__url__']),
     url=about['__url__'],
 
     license=about['__license__'],
