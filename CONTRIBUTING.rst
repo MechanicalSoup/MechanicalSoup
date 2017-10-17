@@ -8,8 +8,8 @@ When editing please don't reformat code—this makes diffs and pull requests har
 Hints on Development
 --------------------
 
-|Build Status| |Coverage Status| |Requirements Status| |Documentation
-Status|
+|Build Status| |Coverage Status|
+|Requirements Status| |Documentation Status|
 
 Python version support in the current master branch may differ from the
 latest release in
