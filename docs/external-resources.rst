@@ -12,6 +12,9 @@ External libraries
 * `MechanicalSoup tag on stackoverflow
   <https://stackoverflow.com/questions/tagged/mechanicalsoup>`__
 
+* `MechanicalSoup on Gitter
+  <https://gitter.im/MechanicalSoup/Lobby>`__
+
 Projects using MechanicalSoup
 -----------------------------
 
