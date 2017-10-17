@@ -9,6 +9,11 @@ def requirements_from_file(filename):
             if line.strip() and not line.strip().startswith('--')]
 
 
+def read(fname):
+    """Read the content of a file."""
+    return open(path.join(path.dirname(__file__), fname)).read()
+
+
 here = path.abspath(path.dirname(__file__))
 
 about = {}
@@ -23,7 +28,7 @@ setup(
     version=about['__version__'],
 
     description=about['__description__'],
-
+    long_description=read('README.rst'),
     url=about['__url__'],
 
     license=about['__license__'],
