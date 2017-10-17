@@ -262,6 +262,9 @@ page_with_missing_elements = '''
      <p><label> <input type=checkbox name="topping" value="onion" checked> Onion </label></p>
      <p><label> <input type=checkbox name="topping" value="mushroom"> Mushroom </label></p>
     </fieldset>
+    <input type=radio name="size" value="small">
+    <input type=radio name="size" value="medium">
+    <input type=radio name="size" value="large">
     <input type="submit" value="Select" />
   </form>
 </html>
@@ -280,6 +283,8 @@ def test_form_not_found():
         form.check({'topping': 'tofu'})
     with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
         form.textarea({'bar': 'value', 'foo': 'nosuchval'})
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.set_radio({'size': 'tiny'})
 
 page_with_radio = '''
 <html>
@@ -293,9 +298,12 @@ def test_form_check_uncheck():
     browser.open_fake_page(page_with_radio, url="http://example.com/invalid/")
     form = browser.select_form('form')
     assert "checked" not in form.form.find("input", {"name": "foo"}).attrs
+
     form["foo"] = True
     assert form.form.find("input", {"name": "foo"}).attrs["checked"] == ""
-    form["foo"] = False
+
+    # Test explicit unchecking (skipping the call to Form.uncheck_all)
+    form.set_checkbox({"foo": False}, uncheck_other_boxes=False)
     assert "checked" not in form.form.find("input", {"name": "foo"}).attrs
 
 
