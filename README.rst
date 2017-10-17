@@ -87,6 +87,9 @@ and `<tests/test_form.py>`__.
 Development
 -----------
 
+|Build Status| |Coverage Status|
+|Requirements Status| |Documentation Status|
+
 Instructions for building, testing and contributing to MechanicalSoup:
 see `<CONTRIBUTING.rst>`__.
 
@@ -109,3 +112,11 @@ See also
    :target: https://pypi.python.org/pypi/MechanicalSoup/
 .. |Supported Versions| image:: https://img.shields.io/pypi/pyversions/mechanicalsoup.svg
    :target: https://pypi.python.org/pypi/MechanicalSoup/
+.. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master
+   :target: https://travis-ci.org/MechanicalSoup/MechanicalSoup
+.. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/MechanicalSoup/MechanicalSoup
+.. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master
+   :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
+.. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
+   :target: http://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
