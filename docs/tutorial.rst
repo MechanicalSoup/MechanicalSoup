@@ -184,3 +184,10 @@ in the source:
 
 .. literalinclude:: ../examples/example_manual.py
    :language: python
+
+More examples
+~~~~~~~~~~~~~
+
+For more examples, see the `examples
+<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/examples/>`__
+directory in MechanicalSoup's source code.
