@@ -1,3 +1,5 @@
+# Validate all YAML changes, e.g. http://lint.travis-ci.org/
+
 sudo: false
 language: python
 python:
