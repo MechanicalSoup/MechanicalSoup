@@ -1,6 +1,34 @@
 Frequently Asked Questions
 ==========================
 
+When to use MechanicalSoup?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MechanicalSoup is designed to simulate the behavior of a human using a
+web browser. Possible use-case include:
+
+* Interacting with a website that doesn't provide a webservice API,
+  out of a browser.
+
+* Testing a website you're developing
+
+There are also situations when you should *not* use MechanicalSoup,
+like:
+
+* If the website provides a webservice API (e.g. REST), then you
+  should use this API and you don't need MechanicalSoup.
+
+* If the website you're interacting with does not contain HTML pages,
+  then MechanicalSoup won't bring anything compared to `requests
+  <http://docs.python-requests.org/>`__, so just use requests instead.
+
+* If the website relies on JavaScript, then you probably need a
+  fully-fledged browser. `Selenium <http://www.seleniumhq.org/>`__ may
+  help you there, but it's a far heavier solution than MechanicalSoup.
+
+* If the website is specifically designed to interact with humans,
+  please don't go against the will of the website's owner.
+
 "No parser was explicitly specified"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
