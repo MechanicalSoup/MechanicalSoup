@@ -55,59 +55,34 @@ documentation <http://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.htm
 Example
 -------
 
-From `example.py <example.py>`__, code to log into the GitHub
-website:
+From `<examples/expl_duck_duck_go.py>`__, code to get the results from
+a DuckDuckGo search:
 
 .. code:: python
 
-    """Example app to login to GitHub using the StatefulBrowser class."""
-
-    from __future__ import print_function
-    import argparse
+    """Example usage of MechanicalSoup to get the results from
+    DuckDuckGo."""
+    
     import mechanicalsoup
-    from getpass import getpass
+    
+    # Connect to duckduckgo
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open("https://duckduckgo.com/")
+    
+    # Fill-in the search form
+    browser.select_form('#search_form_homepage')
+    browser["q"] = "MechanicalSoup"
+    browser.submit_selected()
+    
+    # Display the results
+    for l in browser.get_current_page().select('a.result__a'):
+        print(l.text, '->', l.attrs['href'])
 
-    parser = argparse.ArgumentParser(description="Login to GitHub.")
-    parser.add_argument("username")
-    args = parser.parse_args()
-
-    args.password = getpass("Please enter your GitHub password: ")
-
-    browser = mechanicalsoup.StatefulBrowser(
-        soup_config={'features': 'lxml'},
-        raise_on_404=True,
-        user_agent='MyBot/0.1: mysite.example.com/bot_info',
-    )
-    # Uncomment for a more verbose output:
-    # browser.set_verbose(2)
-
-    browser.open("https://github.com")
-    browser.follow_link("login")
-    browser.select_form('#login form')
-    browser["login"] = args.username
-    browser["password"] = args.password
-    resp = browser.submit_selected()
-
-    # Uncomment to launch a web browser on the current page:
-    # browser.launch_browser()
-
-    # verify we are now logged in
-    page = browser.get_current_page()
-    messages = page.find("div", class_="flash-messages")
-    if messages:
-        print(messages.text)
-    assert page.select(".logout-form")
-
-    print(page.title.text)
-
-    # verify we remain logged in (thanks to cookies) as we browse the rest of
-    # the site
-    page3 = browser.open("https://github.com/MechanicalSoup/MechanicalSoup")
-    assert page3.soup.select(".logout-form")
+More examples are available in `<examples/>`__.
 
 For an example with a more complex form (checkboxes, radio buttons and
-textareas), read `tests/test_browser.py <tests/test_browser.py>`__
-and `tests/test_form.py <tests/test_form.py>`__.
+textareas), read `<tests/test_browser.py>`__
+and `<tests/test_form.py>`__.
 
 Development
 -----------
