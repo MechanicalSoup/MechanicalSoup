@@ -50,7 +50,7 @@ documentation <http://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.htm
 Example
 -------
 
-From ```example.py`` <example.py>`__, code to log into the GitHub
+From `example.py <example.py>`__, code to log into the GitHub
 website:
 
 .. code:: python
@@ -101,8 +101,8 @@ website:
     assert page3.soup.select(".logout-form")
 
 For an example with a more complex form (checkboxes, radio buttons and
-textareas), read ```tests/test_browser.py`` <tests/test_browser.py>`__
-and ```tests/test_form.py`` <tests/test_form.py>`__.
+textareas), read `tests/test_browser.py <tests/test_browser.py>`__
+and `tests/test_form.py <tests/test_form.py>`__.
 
 Common problems
 ---------------
