@@ -23,3 +23,11 @@ installed::
 
 See also
 https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parser
+
+"ReferenceError: weakly-referenced object no longer exists"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This error can occure within requests' ``session.py`` when called by
+the destructor (``__del__``) of browser. The solution is to
+call :func:`~mechanicalsoup.Browser.close` before the end of life of
+the object.
