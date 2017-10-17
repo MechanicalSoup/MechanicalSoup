@@ -170,14 +170,6 @@ Installation should be as simple as:
 
     python setup.py install
 
-Roadmap
-~~~~~~~
-
--  Draw `Substack-style <http://substack.net/art>`__ readme art (imagine
-   a steaming bowl of cogs and noodles)
--  `Write docs and publish
-   website <https://github.com/MechanicalSoup/MechanicalSoup/issues/6>`__
-
 See also
 --------
 
