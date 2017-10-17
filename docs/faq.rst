@@ -12,16 +12,12 @@ Frequently Asked Questions
 
 Recent versions of BeautifulSoup show a harmless warning to encourage
 you to specify which HTML parser to use. You can do this in
-MechanicalSoup:
-
-::
+MechanicalSoup::
 
     mechanicalsoup.Browser(soup_config={'features':'html.parser'})
 
 Or if you have the parser `lxml <http://lxml.de/installation.html>`__
-installed:
-
-::
+installed::
 
     mechanicalsoup.Browser(soup_config={'features':'lxml'})
 
