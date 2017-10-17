@@ -27,9 +27,9 @@ Contents:
 
    introduction
    tutorial
+   mechanicalsoup
    faq
    external-resources
-   mechanicalsoup
    ChangeLog
 
 Indices and tables
