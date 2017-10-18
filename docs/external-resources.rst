@@ -9,6 +9,9 @@ External libraries
 * BeautifulSoup (HTTP parsing and manipulation):
   https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 
+MechanicalSoup on the web
+-------------------------
+
 * `MechanicalSoup tag on stackoverflow
   <https://stackoverflow.com/questions/tagged/mechanicalsoup>`__
 
