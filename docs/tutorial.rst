@@ -79,13 +79,32 @@ attribute ``action`` whose value is ``"/post"``. Since there's only
 one form in the page, ``browser.select_form()`` would have done the
 trick too.
 
-Now, give a value to fields in the form. For text fields, it's simple:
+Now, give a value to fields in the form. First, what are the available
+fields? You can print a summary of the currently selected form
+with :func:`~mechanicalsoup.Form.print_summary()`::
+
+  >>> browser.get_current_form().print_summary()
+  <input name="custname"/>
+  <input name="custtel" type="tel"/>
+  <input name="custemail" type="email"/>
+  <input name="size" type="radio" value="small"/>
+  <input name="size" type="radio" value="medium"/>
+  <input name="size" type="radio" value="large"/>
+  <input name="topping" type="checkbox" value="bacon"/>
+  <input name="topping" type="checkbox" value="cheese"/>
+  <input name="topping" type="checkbox" value="onion"/>
+  <input name="topping" type="checkbox" value="mushroom"/>
+  <input max="21:00" min="11:00" name="delivery" step="900" type="time"/>
+  <textarea name="comments"></textarea>
+
+For text fields, it's simple:
 just give a value for ``input`` element based on their ``name``
 attribute::
 
   >>> browser["custname"] = "Me"
   >>> browser["custtel"] = "00 00 0001"
   >>> browser["custemail"] = "nobody@example.com"
+  >>> browser["comments"] = "This pizza looks really good :-)"
 
 For radio buttons, well, it's simple too: radio buttons have several
 ``input`` tag with the same ``name`` and different values, just select
@@ -126,6 +145,24 @@ development tools. For example, with Firefox, right-click "Inspect
 Element" on a field will give you everything you need to manipulate
 this field (in particular the ``name`` and ``value`` attributes).
 
+It's also possible to check the content
+with :func:`~mechanicalsoup.Form.print_summary()` (that we already
+used to list the fields)::
+
+  >>> browser.get_current_form().print_summary()
+  <input name="custname" value="Me"/>
+  <input name="custtel" type="tel" value="00 00 0001"/>
+  <input name="custemail" type="email" value="nobody@example.com"/>
+  <input name="size" type="radio" value="small"/>
+  <input checked="" name="size" type="radio" value="medium"/>
+  <input name="size" type="radio" value="large"/>
+  <input checked="" name="topping" type="checkbox" value="bacon"/>
+  <input checked="" name="topping" type="checkbox" value="cheese"/>
+  <input name="topping" type="checkbox" value="onion"/>
+  <input name="topping" type="checkbox" value="mushroom"/>
+  <input max="21:00" min="11:00" name="delivery" step="900" type="time"/>
+  <textarea name="comments">This pizza looks really good :-)</textarea>
+
 Assuming we're satisfied with the content of the form, we can submit
 it (i.e. simulate a click on the sumbit button)::
 
@@ -140,7 +177,7 @@ BeautifulSoup object, but we can still see the text it contains::
     "data": "",
     "files": {},
     "form": {
-      "comments": "",
+      "comments": "This pizza looks really good :-)",
       "custemail": "nobody@example.com",
       "custname": "Me",
       "custtel": "00 00 0001",

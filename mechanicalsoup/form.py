@@ -1,3 +1,5 @@
+from __future__ import print_function
+import copy
 from .utils import LinkNotFoundError
 from bs4 import BeautifulSoup
 
@@ -281,3 +283,18 @@ class Form(object):
             raise LinkNotFoundError(
                 "Specified submit element not found: {0}".format(el)
             )
+
+    def print_summary(self):
+        """Print a summary of the form.
+
+        May help finding which fields need to be filled-in.
+        """
+        for input in self.form.find_all(
+                ("input", "textarea", "select")):
+            input_copy = copy.copy(input)
+            # Text between the opening tag and the closing tag often
+            # contains a lot of spaces that we don't want here.
+            for subtag in input_copy.find_all() + [input_copy]:
+                if subtag.string:
+                    subtag.string = subtag.string.strip()
+            print(input_copy)

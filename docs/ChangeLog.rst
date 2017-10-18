@@ -36,6 +36,10 @@ Main changes:
   - ``set_checkbox`` and ``set_radio`` together deprecate ``check``
     (checkboxes are handled differently by default)
 
+* A new ``Form.print_summary`` method allows you to write
+  ``browser.get_current_form().print_summary()`` to get a summary of the
+  fields you need to fill-in (and which ones are already filled-in).
+
 Bug fixes
 ---------
 
