@@ -55,7 +55,7 @@ https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parser
 "ReferenceError: weakly-referenced object no longer exists"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This error can occure within requests' ``session.py`` when called by
+This error can occur within requests' ``session.py`` when called by
 the destructor (``__del__``) of browser. The solution is to
 call :func:`~mechanicalsoup.Browser.close` before the end of life of
 the object.
@@ -63,7 +63,7 @@ the object.
 How do I get debug information/logs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To unerstand what's going on while running a script, you have two
+To understand what's going on while running a script, you have two
 options:
 
 * Use :func:`~mechanicalsoup.StatefulBrowser.set_debug` to set the
@@ -98,3 +98,23 @@ manipulate the current form with a separate
 variable. :class:`mechanicalsoup.StatefulBrowser` is essentially a
 superset of :class:`mechanicalsoup.Browser`, it's the one you should
 use unless you have a good reason to do otherwise.
+
+How does MechanicalSoup compare to the alternatives?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are other libraries with the same purpose as MechanicalSoup:
+
+* `mechanize <http://wwwsearch.sourceforge.net/mechanize/>`__, an
+  ancestor of MechanicalSoup (getting its name from the Perl mechanize
+  module). It was a great tool, but doesn't support Python 3. It was
+  unmaintained for several years but got a new maintainer in 2017.
+  Note that Mechanize is a much bigger (around 20 times more lines of
+  code!) piece of code than MechanicalSoup (which is small because it
+  delegates most of its work to BeautifulSoup and mechanize).
+
+* `RoboBrowser <https://github.com/jmcarp/robobrowser>`__ is very
+  similar to MechanicalSoup. Both are small libraries built on top of
+  requests and BeautifulSoup. Their API are very similar. Both have an
+  automated testsuite. As of writing, MechanicalSoup is more actively
+  maintained (only 1 really active developer and no activity the last
+  two years for Robobrowser).
