@@ -307,5 +307,52 @@ def test_form_check_uncheck():
     assert "checked" not in form.form.find("input", {"name": "foo"}).attrs
 
 
+page_with_various_fields = '''
+<html>
+  <form method="post">
+    <input name="foo">
+    <textarea name="bar">
+    </textarea>
+    <select name="entree">
+      <option value="tofu" selected="selected">  Tofu Stir Fry </option>
+      <option value="curry">    Red Curry</option>
+      <option value="tempeh">Tempeh Tacos    </option>
+    </select>
+    <fieldset>
+     <legend> Pizza Toppings </legend>
+     <p><label> <input type=checkbox name="topping" value="bacon"> Bacon </label></p>
+     <p><label> <input type=checkbox name="topping" value="cheese" checked>Extra Cheese   </label></p>
+     <p><label> <input type=checkbox name="topping" value="onion" checked> Onion </label></p>
+     <p><label> <input type=checkbox name="topping" value="mushroom"> Mushroom </label></p>
+    </fieldset>
+    <input type="submit" value="Select" />
+  </form>
+</html>
+'''
+def test_form_print_summary(capsys):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(page_with_various_fields,
+                           url="http://example.com/invalid/")
+    browser.select_form("form")
+    browser.get_current_form().print_summary()
+    out, err = capsys.readouterr()
+    # Different versions of bs4 show either <input></input> or
+    # <input/>. Normalize before comparing.
+    out = out.replace('></input>', '/>')
+    assert out == """<input name="foo"/>
+<textarea name="bar"></textarea>
+<select name="entree">
+<option selected="selected" value="tofu">Tofu Stir Fry</option>
+<option value="curry">Red Curry</option>
+<option value="tempeh">Tempeh Tacos</option>
+</select>
+<input name="topping" type="checkbox" value="bacon"/>
+<input checked="" name="topping" type="checkbox" value="cheese"/>
+<input checked="" name="topping" type="checkbox" value="onion"/>
+<input name="topping" type="checkbox" value="mushroom"/>
+<input type="submit" value="Select"/>
+"""
+    assert err == ""
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
