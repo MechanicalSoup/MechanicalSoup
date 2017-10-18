@@ -59,3 +59,29 @@ This error can occure within requests' ``session.py`` when called by
 the destructor (``__del__``) of browser. The solution is to
 call :func:`~mechanicalsoup.Browser.close` before the end of life of
 the object.
+
+How do I get debug information/logs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To unerstand what's going on while running a script, you have two
+options:
+
+* Use :func:`~mechanicalsoup.StatefulBrowser.set_debug` to set the
+  debug level to 1 (show one dot for each page opened, a poor man's
+  progress bar) or 2 (show the URL of each visited page).
+
+* Activate request's logging::
+
+    import requests
+    import logging
+
+    logging.getLogger().setLevel(logging.DEBUG)
+    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log.setLevel(logging.DEBUG)
+    requests_log.propagate = True
+
+  This will display a much more verbose output, including HTTP status
+  code for each page visited. Note that unlike MechanicalSoup's
+  logging system, this includes URL returning a redirect (e.g. HTTP
+  301), that are dealt with automatically by requests and not visible
+  to MechanicalSoup.
