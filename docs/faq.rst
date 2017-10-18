@@ -85,3 +85,16 @@ options:
   logging system, this includes URL returning a redirect (e.g. HTTP
   301), that are dealt with automatically by requests and not visible
   to MechanicalSoup.
+
+Should I use Browser or StatefulBrowser?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Short answer: :class:`mechanicalsoup.StatefulBrowser`.
+
+:class:`mechanicalsoup.Browser` is historically the first class that
+was introduced in Mechanicalsoup. Using it is a bit verbose, as the
+caller needs to store the URL of the currently visited page and
+manipulate the current form with a separate
+variable. :class:`mechanicalsoup.StatefulBrowser` is essentially a
+superset of :class:`mechanicalsoup.Browser`, it's the one you should
+use unless you have a good reason to do otherwise.
