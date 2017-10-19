@@ -251,7 +251,7 @@ class StatefulBrowser(Browser):
         Before raising, if debug is activated, list available links in the
         page and launch a browser.
 
-        :return: Forwarded from :func:`open`.
+        :return: Forwarded from :func:`open_relative`.
         """
         if not hasattr(link, 'attrs') or 'href' not in link.attrs:
             try:
@@ -262,7 +262,7 @@ class StatefulBrowser(Browser):
                     self.list_links()
                     self.launch_browser()
                 raise
-        return self.open(self.absolute_url(link['href']))
+        return self.open_relative(link['href'])
 
     def launch_browser(self):
         """Launch a browser on the page, for debugging purposes."""
