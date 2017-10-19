@@ -26,6 +26,16 @@ Main changes:
 
     pip install -r requirements.txt -r tests/requirements.txt
 
+* The ``Form`` class was restructured and has a new API. The behavior of
+  existing code is unchanged, but a new collection of methods has been
+  added for clarity and consistency with the ``set`` method:
+
+  - ``set_input`` deprecates ``input``
+  - ``set_textarea`` deprecates ``textarea``
+  - ``set_select`` is new
+  - ``set_checkbox`` and ``set_radio`` together deprecate ``check``
+    (checkboxes are handled differently by default)
+
 Bug fixes
 ---------
 
