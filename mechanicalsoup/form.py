@@ -29,6 +29,12 @@ class Form(object):
     def __init__(self, form):
         self.form = form
 
+        # Aliases for backwards compatibility
+        # (Included specifically in __init__ to suppress them in Sphinx docs)
+        self.attach = self.set_input
+        self.input = self.set_input
+        self.textarea = self.set_textarea
+
     def set_input(self, data):
         """Fill-in a set of fields in a form.
 
@@ -275,8 +281,3 @@ class Form(object):
             raise LinkNotFoundError(
                 "Specified submit element not found: {0}".format(el)
             )
-
-    # Aliases for backwards compatibility
-    attach = set_input
-    input = set_input
-    textarea = set_textarea
