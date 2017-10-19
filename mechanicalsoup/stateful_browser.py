@@ -223,7 +223,7 @@ class StatefulBrowser(Browser):
                          if a.text == link_text]
         return all_links
 
-    def find_link(self, url_regex=None, *args, **kwargs):
+    def find_link(self, *args, **kwargs):
         """Find and return a link, as a bs4.element.Tag object.
 
         The search can be refined by specifying any argument that is accepted
@@ -231,7 +231,7 @@ class StatefulBrowser(Browser):
 
         If no link is found, raise :class:`LinkNotFoundError`.
         """
-        links = self.links(url_regex, *args, **kwargs)
+        links = self.links(*args, **kwargs)
         if len(links) == 0:
             raise LinkNotFoundError()
         else:
