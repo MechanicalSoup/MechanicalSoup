@@ -65,6 +65,45 @@ Installation should be as simple as:
 
     python setup.py install
 
+Release Checklist
+-----------------
+
+Releases can be done only by people with sufficient priviledges on
+GitHub and PyPI. Things to do are:
+
+At each release:
+
+- Make sure all changes are documented in ``docs/ChangeLog.rst``
+- Update the version number to $v in
+  ``mechanicalsoup/__version__.py``
+- Remove the ``(in development)`` mention in ``docs/ChangeLog.rst``.
+- git commit -m "Release $v"
+- git tag v$ver
+- git push origin master v$v
+- Visit the `release page on GitHub
+  <https://github.com/MechanicalSoup/MechanicalSoup/releases>`__, copy
+  the relevant section from ``docs/ChangeLog.rst`` to the release
+  page.
+- ``python setup.py sdist upload -r pypi`` or ``twine upload``. This
+  requires a ``~/.pypirc`` with::
+
+    [distutils]
+    index-servers =
+        pypi
+    
+    [pypi]
+    username:<user>
+    password:<password>
+
+- Check on https://pypi.python.org/pypi/MechanicalSoup/
+
+Right after the release:
+
+- Update the version number to a ``x.y.dev`` number in
+  ``mechanicalsoup/__version__.py``
+- Create the ``(in development)`` section in ``docs/ChangeLog.rst``.
+- ``git commit -m "Prepare for next release" && git push``
+
 .. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master
    :target: https://travis-ci.org/MechanicalSoup/MechanicalSoup
 .. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg
