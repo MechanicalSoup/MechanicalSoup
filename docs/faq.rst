@@ -60,6 +60,15 @@ the destructor (``__del__``) of browser. The solution is to
 call :func:`~mechanicalsoup.Browser.close` before the end of life of
 the object.
 
+Alternatively, you may also use the ``with`` statement which closes
+the browser for you::
+
+  def test_with():
+      with mechanicalsoup.StatefulBrowser() as browser:
+          browser.open(url)
+          # ...
+      # implicit call to browser.close() here.
+
 How do I get debug information/logs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

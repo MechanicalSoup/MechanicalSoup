@@ -295,6 +295,11 @@ def test_form_multiple():
     response = browser.submit_selected()
     browser.close()
 
+def test_with():
+    """Test that __enter__/__exit__ properly create/close the browser."""
+    with mechanicalsoup.StatefulBrowser() as browser:
+        assert browser.session is not None
+    assert browser.session is None
 
 if __name__ == '__main__':
     pytest.main(sys.argv)
