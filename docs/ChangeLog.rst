@@ -57,7 +57,7 @@ Internal Changes
 
 * The testsuite has been further improved and reached 100% coverage.
 
-* Tests are now ran against the local version of MechanicalSoup, not
+* Tests are now run against the local version of MechanicalSoup, not
   against the installed version.
 
 Version 0.8
@@ -70,7 +70,7 @@ Main changes:
   `LinkNotFound` exception when encountering a 404 Not Found error.
   This is activated by passing `raise_on_404=True` to the constructor.
   It is disabled by default for backward compatibility, but is highly
-  recommanded.
+  recommended.
 
 * `Browser` now has a `__del__` method that closes the current session
   when the object is deleted.
