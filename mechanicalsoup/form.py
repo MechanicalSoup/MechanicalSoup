@@ -257,10 +257,10 @@ class Form(object):
         self.form.append(control)
         return control
 
-    def choose_submit(self, el):
+    def choose_submit(self, submit):
         """Selects the input (or button) element to use for form submission.
 
-        :param el: The bs4.element.Tag (or just its *name*-attribute) that
+        :param submit: The bs4.element.Tag (or just its *name*-attribute) that
             identifies the submit element to use.
 
         To simulate a normal web browser, only one submit element must be
@@ -282,10 +282,10 @@ class Form(object):
         found = False
         inps = self.form.select('input[type="submit"], button[type="submit"]')
         for inp in inps:
-            if inp == el or inp['name'] == el:
+            if inp == submit or inp['name'] == submit:
                 if found:
                     raise LinkNotFoundError(
-                        "Multiple submit elements match: {0}".format(el)
+                        "Multiple submit elements match: {0}".format(submit)
                     )
                 found = True
                 continue
@@ -294,7 +294,7 @@ class Form(object):
 
         if not found:
             raise LinkNotFoundError(
-                "Specified submit element not found: {0}".format(el)
+                "Specified submit element not found: {0}".format(submit)
             )
 
     def print_summary(self):
