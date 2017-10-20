@@ -53,7 +53,7 @@ Documentation
 
 The full documentation is available on
 http://mechanicalsoup.readthedocs.io/. You may want to jump directly to
-the `automaticaly generated API
+the `automatically generated API
 documentation <http://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.html>`__.
 
 Example
