@@ -16,23 +16,23 @@ warnings.filterwarnings(
 
 
 class Browser(object):
+    """Builds a Browser.
+
+    :param session: Attach a pre-existing requests Session instead of
+        constructing a new one.
+    :param soup_config: Configuration passed to MechanicalSoup to affect
+        the way HTML is parsed.
+    :param requests_adapters: Configuration passed to requests, to affect
+        the way HTTP requests are performed.
+    :param raise_on_404: If True, raise :class:`LinkNotFoundError`
+        when visiting a page triggers a 404 Not Found error.
+    :param user_agent: Set the user agent header to this value.
+
+    See also: :func:`StatefulBrowser`
+    """
 
     def __init__(self, session=None, soup_config=None, requests_adapters=None,
                  raise_on_404=False, user_agent=None):
-        """Builds a Browser.
-
-        :param session: Attach a pre-existing requests Session instead of
-            constructing a new one.
-        :param soup_config: Configuration passed to MechanicalSoup to affect
-            the way HTML is parsed.
-        :param requests_adapters: Configuration passed to requests, to affect
-            the way HTTP requests are performed.
-        :param raise_on_404: If True, raise :class:`LinkNotFoundError`
-            when visiting a page triggers a 404 Not Found error.
-        :param user_agent: Set the user agent header to this value.
-
-        See also: :func:`StatefulBrowser`
-        """
 
         self.__raise_on_404 = raise_on_404
         self.session = session or requests.Session()

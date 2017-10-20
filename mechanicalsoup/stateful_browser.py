@@ -13,37 +13,35 @@ class StatefulBrowser(Browser):
     """An extension of :class:`Browser` that stores the browser's state
     and provides many convenient functions for interacting with HTML elements.
     It is the primary tool in MechanicalSoup for interfacing with websites.
+
+    :param session: Attach a pre-existing requests Session instead of
+        constructing a new one.
+    :param soup_config: Configuration passed to MechanicalSoup to affect
+        the way HTML is parsed.
+    :param requests_adapters: Configuration passed to requests, to affect
+        the way HTTP requests are performed.
+    :param raise_on_404: If True, raise :class:`LinkNotFoundError`
+        when visiting a page triggers a 404 Not Found error.
+    :param user_agent: Set the user agent header to this value.
+
+    All arguments are forwarded to :func:`Browser`.
+
+    Examples ::
+
+        browser = mechanicalsoup.StatefulBrowser(
+            soup_config={'features': 'lxml'},  # Use the lxml HTML parser
+            raise_on_404=True,
+            user_agent='MyBot/0.1: mysite.example.com/bot_info',
+        )
+        browser.open(url)
+        # ...
+        browser.close()
+
+    Once not used anymore, the browser must be closed
+    using :func:`~Browser.close`.
     """
 
     def __init__(self, *args, **kwargs):
-        """Build a StatefulBrowser.
-
-        :param session: Attach a pre-existing requests Session instead of
-            constructing a new one.
-        :param soup_config: Configuration passed to MechanicalSoup to affect
-            the way HTML is parsed.
-        :param requests_adapters: Configuration passed to requests, to affect
-            the way HTTP requests are performed.
-        :param raise_on_404: If True, raise :class:`LinkNotFoundError`
-            when visiting a page triggers a 404 Not Found error.
-        :param user_agent: Set the user agent header to this value.
-
-        All arguments are forwarded to :func:`Browser.__init__`.
-
-        Examples ::
-
-            browser = mechanicalsoup.StatefulBrowser(
-                soup_config={'features': 'lxml'},  # Use the lxml HTML parser
-                raise_on_404=True,
-                user_agent='MyBot/0.1: mysite.example.com/bot_info',
-            )
-            browser.open(url)
-            # ...
-            browser.close()
-
-        Once not used anymore, the browser must be closed
-        using :func:`~Browser.close`.
-        """
         super(StatefulBrowser, self).__init__(*args, **kwargs)
         self.__debug = False
         self.__verbose = 0

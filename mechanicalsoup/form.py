@@ -16,7 +16,11 @@ class InvalidFormMethod(LinkNotFoundError):
 
 
 class Form(object):
-    """The Form class is responsible for preparing HTML forms for submission.
+    """Build a fillable form.
+
+    :param form: A bs4.element.Tag corresponding to an HTML form element.
+
+    The Form class is responsible for preparing HTML forms for submission.
     It handles the following types of elements:
     input (text, checkbox, radio), select, and textarea.
 
@@ -29,9 +33,6 @@ class Form(object):
     """
 
     def __init__(self, form):
-        """Create a Form from a bs4.element.Tag ``form``. The Tag is expected
-        to correspond to an HTML form element.
-        """
         self.form = form
 
         # Aliases for backwards compatibility
