@@ -15,8 +15,7 @@ class StatefulBrowser(Browser):
     It is the primary tool in MechanicalSoup for interfacing with websites.
     """
 
-    def __init__(self, session=None, soup_config=None, requests_adapters=None,
-                 *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """Build a StatefulBrowser.
 
         :param session: Attach a pre-existing requests Session instead of
@@ -45,8 +44,7 @@ class StatefulBrowser(Browser):
         Once not used anymore, the browser must be closed
         using :func:`~Browser.close`.
         """
-        super(StatefulBrowser, self).__init__(
-            session, soup_config, requests_adapters, *args, **kwargs)
+        super(StatefulBrowser, self).__init__(*args, **kwargs)
         self.__debug = False
         self.__verbose = 0
         self.__current_page = None
