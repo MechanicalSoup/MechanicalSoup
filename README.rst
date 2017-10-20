@@ -4,7 +4,7 @@ MechanicalSoup
 Home page
 ---------
 
-http://mechanicalsoup.readthedocs.io/en/latest/
+https://mechanicalsoup.readthedocs.io/en/latest/
 
 Overview
 --------
@@ -22,7 +22,7 @@ Unfortunately, Mechanize is `incompatible with Python 3
 stalled for several years. MechanicalSoup provides a similar API, built on Python
 giants `Requests <http://docs.python-requests.org/en/latest/>`__ (for
 http sessions) and `BeautifulSoup
-<http://www.crummy.com/software/BeautifulSoup/>`__ (for document
+<https://www.crummy.com/software/BeautifulSoup/>`__ (for document
 navigation). Since 2017 it is a project actively maintained by a small
 team including @hemberger and @moy.
 
@@ -54,9 +54,9 @@ Documentation
 -------------
 
 The full documentation is available on
-http://mechanicalsoup.readthedocs.io/. You may want to jump directly to
+https://mechanicalsoup.readthedocs.io/. You may want to jump directly to
 the `automatically generated API
-documentation <http://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.html>`__.
+documentation <https://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.html>`__.
 
 Example
 -------
@@ -103,7 +103,7 @@ Common problems
 ---------------
 
 Read the `FAQ
-<http://mechanicalsoup.readthedocs.io/en/latest/faq.html>`__.
+<https://mechanicalsoup.readthedocs.io/en/latest/faq.html>`__.
 
 See also
 --------
@@ -112,7 +112,7 @@ See also
    library, also based on Requests and BeautifulSoup.
 -  `Hacker News post <https://news.ycombinator.com/item?id=8012103>`__
 -  `Reddit
-   discussion <http://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/>`__
+   discussion <https://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/>`__
 
 .. |Latest Version| image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
    :target: https://pypi.python.org/pypi/MechanicalSoup/
@@ -125,6 +125,6 @@ See also
 .. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master
    :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
-   :target: http://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
+   :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
 .. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.png
    :target: https://gitter.im/MechanicalSoup/Lobby

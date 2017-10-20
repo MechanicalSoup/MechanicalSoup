@@ -72,4 +72,4 @@ Installation should be as simple as:
 .. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master
    :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
-   :target: http://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
+   :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest

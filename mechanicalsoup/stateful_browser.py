@@ -152,7 +152,8 @@ class StatefulBrowser(Browser):
         object. ``selector`` is a string containing a CSS selector.
 
         If the ``selector`` argument is not given, it defaults
-        to "form", so one can call ``browser.select_form()`` to select
+        to "form", so one can
+        call :func:`~mechanicalsoup.Browser.select_form()` to select
         the form if there is only one form in the page.
 
         See also: `.select() method in BeautifulSoup
