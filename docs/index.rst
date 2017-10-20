@@ -13,7 +13,7 @@ MechanicalSoup was created by `M Hickford
 `Mechanize <https://github.com/jjlee/mechanize>`__ library.
 Unfortunately, Mechanize is `incompatible with Python 3
 <https://github.com/jjlee/mechanize/issues/96>`__ and its development
-is inactive. MechanicalSoup provides a similar API, built on Python
+stalled for several years. MechanicalSoup provides a similar API, built on Python
 giants `Requests <http://docs.python-requests.org/en/latest/>`__ (for
 http sessions) and `BeautifulSoup
 <http://www.crummy.com/software/BeautifulSoup/>`__ (for document
