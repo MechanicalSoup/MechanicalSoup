@@ -104,17 +104,17 @@ How does MechanicalSoup compare to the alternatives?
 
 There are other libraries with the same purpose as MechanicalSoup:
 
-* `mechanize <http://wwwsearch.sourceforge.net/mechanize/>`__, an
+* `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`__, is an
   ancestor of MechanicalSoup (getting its name from the Perl mechanize
   module). It was a great tool, but doesn't support Python 3. It was
   unmaintained for several years but got a new maintainer in 2017.
-  Note that Mechanize is a much bigger (around 20 times more lines of
-  code!) piece of code than MechanicalSoup (which is small because it
-  delegates most of its work to BeautifulSoup and mechanize).
+  Note that Mechanize is a much bigger piece of code (around 20 times
+  more lines!) than MechanicalSoup, which is small because it
+  delegates most of its work to BeautifulSoup and requests.
 
 * `RoboBrowser <https://github.com/jmcarp/robobrowser>`__ is very
   similar to MechanicalSoup. Both are small libraries built on top of
-  requests and BeautifulSoup. Their API are very similar. Both have an
+  requests and BeautifulSoup. Their APIs are very similar. Both have an
   automated testsuite. As of writing, MechanicalSoup is more actively
   maintained (only 1 really active developer and no activity the last
-  two years for Robobrowser).
+  two years for RoboBrowser).
