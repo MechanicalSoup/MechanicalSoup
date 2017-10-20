@@ -34,6 +34,7 @@ def test_submit_online():
 
     assert json["headers"]["User-Agent"].startswith('python-requests/')
     assert 'MechanicalSoup' in json["headers"]["User-Agent"]
+    browser.close()
 
 form_html = """
 <form method="post" action="http://httpbin.org/post">
@@ -77,6 +78,7 @@ def test_build_request():
     request = browser._prepare_request(form)
     assert "application/x-www-form-urlencoded" in request.headers[
         "Content-Type"]
+    browser.close()
 
 
 def test_prepare_request_file():
@@ -99,11 +101,13 @@ def test_prepare_request_file():
 
     request = browser._prepare_request(form)
     assert "multipart/form-data" in request.headers["Content-Type"]
+    browser.close()
 
 def test_no_404():
     browser = mechanicalsoup.Browser()
     resp = browser.get("http://httpbin.org/nosuchpage")
     assert resp.status_code == 404
+    browser.close()
 
 def test_404():
     browser = mechanicalsoup.Browser(raise_on_404=True)
@@ -111,6 +115,7 @@ def test_404():
         resp = browser.get("http://httpbin.org/nosuchpage")
     resp = browser.get("http://httpbin.org/")
     assert resp.status_code == 200
+    browser.close()
 
 def test_set_cookiejar():
     """Set cookies locally and test that they are received remotely."""
@@ -123,6 +128,7 @@ def test_set_cookiejar():
     browser.set_cookiejar(jar)
     resp = browser.get("http://httpbin.org/cookies")
     assert resp.json() == {'cookies': {'field': 'value'}}
+    browser.close()
 
 def test_get_cookiejar():
     """Test that cookies set by the remote host update our session."""
@@ -133,12 +139,14 @@ def test_get_cookiejar():
     jar = browser.get_cookiejar()
     assert jar.get('k1') == 'v1'
     assert jar.get('k2') == 'v2'
+    browser.close()
 
 def test_post():
     browser = mechanicalsoup.Browser()
     data = {'color': 'blue', 'colorblind': 'True'}
     resp = browser.post("http://httpbin.org/post", data)
     assert(resp.status_code == 200 and resp.json()['form'] == data)
+    browser.close()
 
 if __name__ == '__main__':
     pytest.main(sys.argv)
