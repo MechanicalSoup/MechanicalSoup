@@ -16,9 +16,24 @@ warnings.filterwarnings(
 
 
 class Browser(object):
+    """Builds a Browser.
+
+    :param session: Attach a pre-existing requests Session instead of
+        constructing a new one.
+    :param soup_config: Configuration passed to MechanicalSoup to affect
+        the way HTML is parsed.
+    :param requests_adapters: Configuration passed to requests, to affect
+        the way HTTP requests are performed.
+    :param raise_on_404: If True, raise :class:`LinkNotFoundError`
+        when visiting a page triggers a 404 Not Found error.
+    :param user_agent: Set the user agent header to this value.
+
+    See also: :func:`StatefulBrowser`
+    """
 
     def __init__(self, session=None, soup_config=None, requests_adapters=None,
                  raise_on_404=False, user_agent=None):
+
         self.__raise_on_404 = raise_on_404
         self.session = session or requests.Session()
 
@@ -32,6 +47,7 @@ class Browser(object):
 
     @staticmethod
     def add_soup(response, soup_config):
+        """Attaches a soup object to a requests response."""
         if "text/html" in response.headers.get("Content-Type", ""):
             response.soup = bs4.BeautifulSoup(
                 response.content, **soup_config)
@@ -39,7 +55,8 @@ class Browser(object):
     def set_cookiejar(self, cookiejar):
         """Replaces the current cookiejar in the requests session. Since the
         session handles cookies automatically without calling this function,
-        only use this when default cookie handling is insufficient."""
+        only use this when default cookie handling is insufficient.
+        """
         self.session.cookies = cookiejar
 
     def get_cookiejar(self):
@@ -47,6 +64,7 @@ class Browser(object):
         return self.session.cookies
 
     def set_user_agent(self, user_agent):
+        """Replaces the current user agent in the requests session headers."""
         # set a default user_agent if not specified
         if user_agent is None:
             requests_ua = requests.utils.default_user_agent()
@@ -56,12 +74,16 @@ class Browser(object):
         self.session.headers['User-agent'] = user_agent
 
     def request(self, *args, **kwargs):
-        """Straightforward wrapper around requests session.request
-        (http://docs.python-requests.org/en/master/api/).
+        """Straightforward wrapper around `requests.Session.request
+        <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
 
         This is a low-level function that should not be called for
-        basic usage (use .get or .post instead). Use it if you need an
-        HTTP verb that mechanicalsoup doesn't manage (e.g. MKCOL) for
+        basic usage (use :func:`get` or :func:`post` instead). Use it if you
+        need an HTTP verb that MechanicalSoup doesn't manage (e.g. MKCOL) for
         example.
         """
         response = self.session.request(*args, **kwargs)
@@ -69,6 +91,13 @@ class Browser(object):
         return response
 
     def get(self, *args, **kwargs):
+        """Straightforward wrapper around `requests.Session.get
+        <http://docs.python-requests.org/en/master/api/#requests.Session.get>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
+        """
         response = self.session.get(*args, **kwargs)
         if self.__raise_on_404 and response.status_code == 404:
             raise LinkNotFoundError()
@@ -76,6 +105,13 @@ class Browser(object):
         return response
 
     def post(self, *args, **kwargs):
+        """Straightforward wrapper around `requests.Session.post
+        <http://docs.python-requests.org/en/master/api/#requests.Session.post>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
+        """
         response = self.session.post(*args, **kwargs)
         Browser.add_soup(response, self.soup_config)
         return response
@@ -151,6 +187,18 @@ class Browser(object):
         return self.session.prepare_request(request)
 
     def submit(self, form, url=None, **kwargs):
+        """Prepares and sends a form request.
+
+        :param form: The filled-out form.
+        :param url: URL of the page the form is on. If the form action is a
+            relative path, then this must be specified.
+        :param \*\*kwargs: Arguments forwarded to `requests.Request
+            <http://docs.python-requests.org/en/master/api/#requests.Request>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
+        """
         if isinstance(form, Form):
             form = form.form
         request = self._prepare_request(form, url, **kwargs)
@@ -159,7 +207,7 @@ class Browser(object):
         return response
 
     def launch_browser(self, soup):
-        """Launch a browser on the page, for debugging purpose."""
+        """Launch a browser on the page, for debugging purposes."""
         with tempfile.NamedTemporaryFile(delete=False) as file:
             file.write(soup.encode())
         webbrowser.open('file://' + file.name)

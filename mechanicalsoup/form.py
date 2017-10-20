@@ -16,7 +16,11 @@ class InvalidFormMethod(LinkNotFoundError):
 
 
 class Form(object):
-    """The Form class is responsible for preparing HTML forms for submission.
+    """Build a fillable form.
+
+    :param form: A bs4.element.Tag corresponding to an HTML form element.
+
+    The Form class is responsible for preparing HTML forms for submission.
     It handles the following types of elements:
     input (text, checkbox, radio), select, and textarea.
 
@@ -232,6 +236,10 @@ class Form(object):
         raise LinkNotFoundError("No valid element named " + name)
 
     def new_control(self, type, name, value, **kwargs):
+        """Add a new input element to the form.
+
+        The arguments set the attributes of the new element.
+        """
         old_input = self.form.find_all('input', {'name': name})
         for old in old_input:
             old.decompose()
@@ -250,21 +258,26 @@ class Form(object):
         return control
 
     def choose_submit(self, el):
-        '''Selects the submit input (or button) element specified by 'el',
-        where 'el' can be either a bs4.element.Tag or just its name attribute.
-        If the element is not found or if multiple elements match, raise a
-        LinkNotFoundError exception.'''
-        # In a normal web browser, when a input[type=submit] is clicked,
-        # all other submits aren't sent. You can use simulate this as
-        # following:
+        """Selects the input (or button) element to use for form submission.
 
-        # page = browser.get(URL)
-        # form_el = page.soup.form
-        # form = Form(form_el)
-        # submit = page.soup.select(SUBMIT_SELECTOR)[0]
-        # form.choose_submit(submit)
-        # url = BASE_DOMAIN + form_el.attrs['action']
-        # return browser.submit(form, url)
+        :param el: The bs4.element.Tag (or just its *name*-attribute) that
+            identifies the submit element to use.
+
+        To simulate a normal web browser, only one submit element must be
+        sent. Therefore, this does not need to be called if there is only
+        one submit element in the form.
+
+        If the element is not found or if multiple elements match, raise a
+        :class:`LinkNotFoundError` exception.
+
+        Example: ::
+
+            browser = mechanicalsoup.StatefulBrowser()
+            browser.open(url)
+            form = browser.select_form()
+            form.choose_submit('form_name_attr')
+            browser.submit_selected()
+        """
 
         found = False
         inps = self.form.select('input[type="submit"], button[type="submit"]')
