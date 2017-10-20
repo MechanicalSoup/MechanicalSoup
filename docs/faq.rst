@@ -66,7 +66,7 @@ How do I get debug information/logs
 To understand what's going on while running a script, you have two
 options:
 
-* Use :func:`~mechanicalsoup.StatefulBrowser.set_debug` to set the
+* Use :func:`~mechanicalsoup.StatefulBrowser.set_verbose` to set the
   debug level to 1 (show one dot for each page opened, a poor man's
   progress bar) or 2 (show the URL of each visited page).
 
