@@ -16,7 +16,7 @@ Main changes:
   @hemberger are now officially administrators of the project in
   addition to @hickford, the original author.
 
-* We now have a documentation: http://mechanicalsoup.readthedocs.io/
+* We now have a documentation: https://mechanicalsoup.readthedocs.io/
 
 * ``StatefulBrowser.select_form`` can now be called without argument,
   and defaults to ``"form"`` in this case.
