@@ -26,6 +26,8 @@ http sessions) and
 document navigation). Since 2017 it is a project actively maintained by
 a small team including @hemberger and @moy.
 
+|Gitter Chat|
+
 Installation
 ------------
 
@@ -124,3 +126,5 @@ See also
    :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: http://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
+.. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.png
+   :target: https://gitter.im/MechanicalSoup/Lobby
