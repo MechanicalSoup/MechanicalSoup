@@ -77,6 +77,10 @@ class Browser(object):
         """Straightforward wrapper around `requests.Session.request
         <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
 
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
+
         This is a low-level function that should not be called for
         basic usage (use :func:`get` or :func:`post` instead). Use it if you
         need an HTTP verb that MechanicalSoup doesn't manage (e.g. MKCOL) for
@@ -89,6 +93,10 @@ class Browser(object):
     def get(self, *args, **kwargs):
         """Straightforward wrapper around `requests.Session.get
         <http://docs.python-requests.org/en/master/api/#requests.Session.get>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
         """
         response = self.session.get(*args, **kwargs)
         if self.__raise_on_404 and response.status_code == 404:
@@ -99,6 +107,10 @@ class Browser(object):
     def post(self, *args, **kwargs):
         """Straightforward wrapper around `requests.Session.post
         <http://docs.python-requests.org/en/master/api/#requests.Session.post>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
         """
         response = self.session.post(*args, **kwargs)
         Browser.add_soup(response, self.soup_config)
@@ -182,6 +194,10 @@ class Browser(object):
             relative path, then this must be specified.
         :param \*\*kwargs: Arguments forwarded to `requests.Request
             <http://docs.python-requests.org/en/master/api/#requests.Request>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
         """
         if isinstance(form, Form):
             form = form.form
