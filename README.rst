@@ -14,17 +14,17 @@ MechanicalSoup automatically stores and sends cookies, follows
 redirects, and can follow links and submit forms. It doesn't do
 Javascript.
 
-MechanicalSoup was created by `M
-Hickford <https://github.com/hickford/>`__, who was a fond user of the
+MechanicalSoup was created by `M Hickford
+<https://github.com/hickford/>`__, who was a fond user of the
 `Mechanize <https://github.com/jjlee/mechanize>`__ library.
-Unfortunately, Mechanize is `incompatible with Python
-3 <https://github.com/jjlee/mechanize/issues/96>`__ and its development
-is inactive. MechanicalSoup provides a similar API, built on Python
+Unfortunately, Mechanize is `incompatible with Python 3
+<https://github.com/jjlee/mechanize/issues/96>`__ and its development
+stalled for several years. MechanicalSoup provides a similar API, built on Python
 giants `Requests <http://docs.python-requests.org/en/latest/>`__ (for
-http sessions) and
-`BeautifulSoup <http://www.crummy.com/software/BeautifulSoup/>`__ (for
-document navigation). Since 2017 it is a project actively maintained by
-a small team including @hemberger and @moy.
+http sessions) and `BeautifulSoup
+<http://www.crummy.com/software/BeautifulSoup/>`__ (for document
+navigation). Since 2017 it is a project actively maintained by a small
+team including @hemberger and @moy.
 
 |Gitter Chat|
 
