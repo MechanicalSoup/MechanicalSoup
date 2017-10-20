@@ -46,8 +46,9 @@ Bug fixes
 * Checking checkboxes with ``browser["name"] = ("val1", "val2")`` now
   unchecks all checkbox except the ones explicitly specified.
 
-* ``StatefulBrowser.submit_selected`` now resets __current_page even
-  when the target of the form is not an HTML page.
+* ``StatefulBrowser.submit_selected`` and ``StatefulBrowser.open`` now
+  reset __current_page to None when the result is not an HTML page.
+  This fixes a bug where __current_page was still the previous page.
 
 * We don't error out anymore when trying to uncheck a box which
   doesn't have a ``checkbox`` attribute.
@@ -59,6 +60,9 @@ Internal Changes
 
 * Tests are now run against the local version of MechanicalSoup, not
   against the installed version.
+
+* ``Browser.add_soup`` will now always attach a *soup*-attribute.
+  If the response is not text/html, then soup is set to None.
 
 Version 0.8
 ===========

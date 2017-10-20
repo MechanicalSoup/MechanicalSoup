@@ -118,8 +118,7 @@ class StatefulBrowser(Browser):
             print(url)
 
         resp = self.get(url, *args, **kwargs)
-        if hasattr(resp, 'soup'):
-            self.__current_page = resp.soup
+        self.__current_page = resp.soup
         self.__current_url = resp.url
         self.__current_form = None
         return resp
@@ -185,10 +184,7 @@ class StatefulBrowser(Browser):
                            url=self.__current_url,
                            *args, **kwargs)
         self.__current_url = resp.url
-        if hasattr(resp, "soup"):
-            self.__current_page = resp.soup
-        else:
-            self.__current_page = None
+        self.__current_page = resp.soup
         self.__current_form = None
         return resp
 

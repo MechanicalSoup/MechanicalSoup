@@ -49,8 +49,9 @@ class Browser(object):
     def add_soup(response, soup_config):
         """Attaches a soup object to a requests response."""
         if "text/html" in response.headers.get("Content-Type", ""):
-            response.soup = bs4.BeautifulSoup(
-                response.content, **soup_config)
+            response.soup = bs4.BeautifulSoup(response.content, **soup_config)
+        else:
+            response.soup = None
 
     def set_cookiejar(self, cookiejar):
         """Replaces the current cookiejar in the requests session. Since the
