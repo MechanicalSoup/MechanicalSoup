@@ -185,17 +185,30 @@ class Form(object):
         :param data: Dict of ``{name: value, ...}``.
             Find the select element whose *name*-attribute is ``name``.
             Then select from among its children the option element whose
-            *value*-attribute is ``value``.
+            *value*-attribute is ``value``. If the select element's
+            *multiple*-attribute is set, then ``value`` can be a list
+            or tuple to select multiple options.
         """
         for (name, value) in data.items():
             select = self.form.find("select", {"name": name})
             if not select:
                 raise InvalidFormMethod("No select named " + name)
+
+            # Deselect all options first
             for option in select.find_all("option"):
                 if "selected" in option.attrs:
                     del option.attrs["selected"]
-            o = select.find("option", {"value": value})
-            o.attrs["selected"] = "selected"
+
+            # Wrap individual values in a 1-element tuple.
+            # If value is a list/tuple, select must be a <select multiple>.
+            if not isinstance(value, list) and not isinstance(value, tuple):
+                value = (value,)
+            elif "multiple" not in select.attrs:
+                raise LinkNotFoundError("Cannot select multiple options!")
+
+            for choice in value:
+                option = select.find("option", {"value": choice})
+                option.attrs["selected"] = "selected"
 
     def __setitem__(self, name, value):
         """Forwards arguments to :func:`~Form.set`. For example,

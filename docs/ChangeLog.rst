@@ -40,6 +40,9 @@ Main changes:
   ``browser.get_current_form().print_summary()`` to get a summary of the
   fields you need to fill-in (and which ones are already filled-in).
 
+* The ``Form`` class now supports selecting multiple options in
+  a ``<select multiple>`` element.
+
 Bug fixes
 ---------
 

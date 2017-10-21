@@ -253,6 +253,41 @@ def test_set_select(option):
     assert(res.status_code == 200 and res.text == 'Success!')
     browser.close()
 
+
+set_select_multiple_form = '''
+<form method="post" action="mock://form.com/post">
+  <select name="instrument" multiple>
+    <option value="piano">Piano</option>
+    <option value="bass">Bass</option>
+    <option value="violin">Violin</option>
+  </select>
+  <input type="submit" value="Select Multiple" />
+</form>
+'''
+
+@pytest.mark.parametrize("options", [
+    pytest.param('bass', id='select one (str)'),
+    pytest.param(('bass',), id='select one (tuple)'),
+    pytest.param(('piano', 'violin'), id='select two'),
+])
+def test_set_select_multiple(options):
+    """Test a <select multiple> element."""
+    # When a browser submits multiple selections, the qsl looks like:
+    #  name=option1&name=option2
+    if not isinstance(options, list) and not isinstance(options, tuple):
+        expected = (('instrument', options),)
+    else:
+        expected = (('instrument', option) for option in options)
+    browser, url = setup_mock_browser(expected_post=expected,
+                                      text=set_select_multiple_form)
+    browser.open(url)
+    form = browser.select_form('form')
+    form.set_select({'instrument': options})
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and res.text == 'Success!')
+    browser.close()
+
+
 page_with_missing_elements = '''
 <html>
   <form method="post">
@@ -294,6 +329,8 @@ def test_form_not_found():
         form.textarea({'bar': 'value', 'foo': 'nosuchval'})
     with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
         form.set_radio({'size': 'tiny'})
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.set_select({'entree': ('no_multiple', 'no_multiple')})
     browser.close()
 
 page_with_radio = '''
