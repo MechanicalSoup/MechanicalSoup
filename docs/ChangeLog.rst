@@ -8,6 +8,10 @@ Version 0.9 (in development)
 Main changes:
 -------------
 
+* We do not rely on MechanicalSoup's default choice of HTML parser.
+  Instead, we now specify ``lxml`` as default. As a consequence, the
+  default setting requires ``lxml`` as dependency.
+
 * Python 2.6 and 3.3 are no longer supported.
 
 * The GitHub URL moved from
