@@ -1,4 +1,3 @@
-import warnings
 import requests
 import bs4
 from six.moves import urllib
@@ -9,11 +8,6 @@ import tempfile
 from .utils import LinkNotFoundError
 from .__version__ import __version__, __title__
 
-# see
-# https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use
-warnings.filterwarnings(
-    "ignore", "No parser was explicitly specified", module="bs4")
-
 
 class Browser(object):
     """Builds a Browser.
@@ -21,7 +15,12 @@ class Browser(object):
     :param session: Attach a pre-existing requests Session instead of
         constructing a new one.
     :param soup_config: Configuration passed to MechanicalSoup to affect
-        the way HTML is parsed.
+        the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
+        If overriden, it is highly recommended to `specify a parser
+        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
+        Otherwise, BeautifulSoup will issue a warning and pick one for
+        you, but the parser it chooses may be different on different
+        machines.
     :param requests_adapters: Configuration passed to requests, to affect
         the way HTTP requests are performed.
     :param raise_on_404: If True, raise :class:`LinkNotFoundError`
@@ -29,9 +28,10 @@ class Browser(object):
     :param user_agent: Set the user agent header to this value.
 
     See also: :func:`StatefulBrowser`
-    """
 
-    def __init__(self, session=None, soup_config=None, requests_adapters=None,
+    """
+    def __init__(self, session=None, soup_config={'features': 'lxml'},
+                 requests_adapters=None,
                  raise_on_404=False, user_agent=None):
 
         self.__raise_on_404 = raise_on_404

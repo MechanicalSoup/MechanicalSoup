@@ -17,7 +17,12 @@ class StatefulBrowser(Browser):
     :param session: Attach a pre-existing requests Session instead of
         constructing a new one.
     :param soup_config: Configuration passed to MechanicalSoup to affect
-        the way HTML is parsed.
+        the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
+        If overriden, it is highly recommended to `specify a parser
+        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
+        Otherwise, BeautifulSoup will issue a warning and pick one for
+        you, but the parser it chooses may be different on different
+        machines.
     :param requests_adapters: Configuration passed to requests, to affect
         the way HTTP requests are performed.
     :param raise_on_404: If True, raise :class:`LinkNotFoundError`
