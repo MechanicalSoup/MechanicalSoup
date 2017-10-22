@@ -130,7 +130,7 @@ class StatefulBrowser(Browser):
         perform any network access. If ``url`` is set, pretend it is the page's
         URL. Useful mainly for testing.
         """
-        soup_config = soup_config or dict()
+        soup_config = soup_config or self.soup_config
         self.__current_page = bs4.BeautifulSoup(
             page_text, **soup_config)
         self.__current_url = url
