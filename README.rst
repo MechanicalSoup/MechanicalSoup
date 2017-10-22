@@ -95,6 +95,7 @@ Development
 
 |Build Status| |Coverage Status|
 |Requirements Status| |Documentation Status|
+|CII Best Practices|
 
 Instructions for building, testing and contributing to MechanicalSoup:
 see `<CONTRIBUTING.rst>`__.
@@ -126,5 +127,7 @@ See also
    :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
+.. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge
+   :target: https://bestpractices.coreinfrastructure.org/projects/1334)
 .. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.png
    :target: https://gitter.im/MechanicalSoup/Lobby
