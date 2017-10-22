@@ -73,7 +73,8 @@ choose_submit_form = '''
   <body>
     <!-- vaguely based on Trac edit-page form -->
     <form id="choose-submit-form" method="post" action="mock://form.com/post">
-      <textarea id="text" class="wikitext trac-resizable" name="text" cols="80" rows="40">
+      <textarea id="text" class="wikitext trac-resizable" name="text"
+        cols="80" rows="40">
       </textarea>
       <div class="field">
         <label>Comment about this change (optional):<br />
@@ -81,8 +82,8 @@ choose_submit_form = '''
         </label>
       </div>
       <div class="buttons">
-        <input type="submit" name="preview" value="Preview Page" /> 
-        <input type="submit" name="diff" value="Review Changes" /> 
+        <input type="submit" name="preview" value="Preview Page" />
+        <input type="submit" name="diff" value="Review Changes" />
         <input type="submit" id="save" name="save" value="Submit changes" />
         <button type="submit" name="cancel" value="Cancel" />
       </div>
@@ -91,10 +92,12 @@ choose_submit_form = '''
 </html>
 '''
 
+
 def setup_mock_browser(expected_post=None, text=choose_submit_form):
     url = 'mock://form.com'
     mock = requests_mock.Adapter()
-    mock.register_uri('GET', url, headers={'Content-Type': 'text/html'}, text=text)
+    mock.register_uri('GET', url, headers={'Content-Type': 'text/html'},
+                      text=text)
     if expected_post is not None:
         def text_callback(request, context):
             # Python 2's parse_qsl doesn't like None argument
@@ -102,8 +105,9 @@ def setup_mock_browser(expected_post=None, text=choose_submit_form):
             assert(set(query) == set(expected_post))
             return 'Success!'
         mock.register_uri('POST', url + '/post', text=text_callback)
-    return mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock}), url
-    browser.close()
+    browser = mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock})
+    return browser, url
+
 
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
@@ -145,6 +149,7 @@ choose_submit_fail_form = '''
 </html>
 '''
 
+
 @pytest.mark.parametrize("select_name", [
     pytest.param({'name': 'does_not_exist', 'fails': True}, id='not found'),
     pytest.param({'name': 'test_submit', 'fails': False}, id='found'),
@@ -170,6 +175,7 @@ choose_submit_multiple_match_form = '''
 </html>
 '''
 
+
 def test_choose_submit_multiple_match():
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page(choose_submit_multiple_match_form)
@@ -191,14 +197,16 @@ submit_form_noaction = '''
 </html>
 '''
 
+
 def test_form_noaction():
     browser, url = setup_mock_browser()
     browser.open_fake_page(submit_form_noaction, url=url)
     form = browser.select_form('#choose-submit-form')
-    browser['text1'] = 'newText1'
+    form['text1'] = 'newText1'
     res = browser.submit_selected()
     assert(res.status_code == 200 and browser.get_url() == url)
     browser.close()
+
 
 submit_form_action = '''
 <html>
@@ -212,11 +220,14 @@ submit_form_action = '''
 </html>
 '''
 
+
 def test_form_action():
     browser, url = setup_mock_browser()
-    browser.open_fake_page(submit_form_action, url="http://example.com/invalid/")
+    # for info about example.com see: https://tools.ietf.org/html/rfc2606
+    browser.open_fake_page(submit_form_action,
+                           url="http://example.com/invalid/")
     form = browser.select_form('#choose-submit-form')
-    browser['text1'] = 'newText1'
+    form['text1'] = 'newText1'
     res = browser.submit_selected()
     assert(res.status_code == 200 and browser.get_url() == url)
     browser.close()
@@ -235,6 +246,7 @@ set_select_form = '''
 </html>
 '''
 
+
 @pytest.mark.parametrize("option", [
     pytest.param({'result': [('entree', 'tofu')], 'default': True},
                  id='default'),
@@ -248,7 +260,7 @@ def test_set_select(option):
     browser.open(url)
     browser.select_form('form')
     if not option['default']:
-      browser[option['result'][0][0]] = option['result'][0][1]
+        browser[option['result'][0][0]] = option['result'][0][1]
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
     browser.close()
@@ -264,6 +276,7 @@ set_select_multiple_form = '''
   <input type="submit" value="Select Multiple" />
 </form>
 '''
+
 
 @pytest.mark.parametrize("options", [
     pytest.param('bass', id='select one (str)'),
@@ -288,34 +301,9 @@ def test_set_select_multiple(options):
     browser.close()
 
 
-page_with_missing_elements = '''
-<html>
-  <form method="post">
-    <input name="foo">
-    <textarea name="bar">
-    </textarea>
-    <select name="entree">
-      <option value="tofu" selected="selected">Tofu Stir Fry</option>
-      <option value="curry">Red Curry</option>
-      <option value="tempeh">Tempeh Tacos</option>
-    </select>
-    <fieldset>
-     <legend> Pizza Toppings </legend>
-     <p><label> <input type=checkbox name="topping" value="bacon"> Bacon </label></p>
-     <p><label> <input type=checkbox name="topping" value="cheese" checked> Extra Cheese </label></p>
-     <p><label> <input type=checkbox name="topping" value="onion" checked> Onion </label></p>
-     <p><label> <input type=checkbox name="topping" value="mushroom"> Mushroom </label></p>
-    </fieldset>
-    <input type=radio name="size" value="small">
-    <input type=radio name="size" value="medium">
-    <input type=radio name="size" value="large">
-    <input type="submit" value="Select" />
-  </form>
-</html>
-'''
 def test_form_not_found():
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open_fake_page(page_with_missing_elements, url="http://example.com/invalid/")
+    browser.open_fake_page(page_with_various_fields)
     form = browser.select_form('form')
     with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
         form.input({'foo': 'bar', 'nosuchname': 'nosuchval'})
@@ -333,6 +321,7 @@ def test_form_not_found():
         form.set_select({'entree': ('no_multiple', 'no_multiple')})
     browser.close()
 
+
 page_with_radio = '''
 <html>
   <form method="post">
@@ -340,6 +329,8 @@ page_with_radio = '''
   </form>
 </html>
 '''
+
+
 def test_form_check_uncheck():
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page(page_with_radio, url="http://example.com/invalid/")
@@ -368,15 +359,24 @@ page_with_various_fields = '''
     </select>
     <fieldset>
      <legend> Pizza Toppings </legend>
-     <p><label> <input type=checkbox name="topping" value="bacon"> Bacon </label></p>
-     <p><label> <input type=checkbox name="topping" value="cheese" checked>Extra Cheese   </label></p>
-     <p><label> <input type=checkbox name="topping" value="onion" checked> Onion </label></p>
-     <p><label> <input type=checkbox name="topping" value="mushroom"> Mushroom </label></p>
+     <p><label> <input type=checkbox name="topping"
+      value="bacon"> Bacon </label></p>
+     <p><label> <input type=checkbox name="topping"
+      value="cheese" checked>Extra Cheese   </label></p>
+     <p><label> <input type=checkbox name="topping"
+      value="onion" checked> Onion </label></p>
+     <p><label> <input type=checkbox name="topping"
+      value="mushroom"> Mushroom </label></p>
     </fieldset>
+    <p><input name="size" type=radio value="small">Small</p>
+    <p><input name="size" type=radio value="medium">Medium</p>
+    <p><input name="size" type=radio value="large">Large</p>
     <input type="submit" value="Select" />
   </form>
 </html>
 '''
+
+
 def test_form_print_summary(capsys):
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page(page_with_various_fields,
@@ -398,9 +398,13 @@ def test_form_print_summary(capsys):
 <input checked="" name="topping" type="checkbox" value="cheese"/>
 <input checked="" name="topping" type="checkbox" value="onion"/>
 <input name="topping" type="checkbox" value="mushroom"/>
+<input name="size" type="radio" value="small"/>
+<input name="size" type="radio" value="medium"/>
+<input name="size" type="radio" value="large"/>
 <input type="submit" value="Select"/>
 """
     assert err == ""
+
 
 if __name__ == '__main__':
     pytest.main(sys.argv)

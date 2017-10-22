@@ -7,16 +7,20 @@ from test_form import setup_mock_browser
 import pytest
 import webbrowser
 
+
 def test_request_forward():
-    browser, url = setup_mock_browser(expected_post=[('var1', 'val1'), ('var2', 'val2')])
-    r = browser.request('POST', url + '/post', data={'var1': 'val1', 'var2': 'val2'})
+    browser, url = setup_mock_browser(expected_post=[('var1', 'val1'),
+                                                     ('var2', 'val2')])
+    r = browser.request('POST', url + '/post', data={'var1': 'val1',
+                                                     'var2': 'val2'})
     assert r.text == 'Success!'
     browser.close()
+
 
 def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.StatefulBrowser()
-    browser.set_user_agent('testing https://github.com/hickford/MechanicalSoup')
+    browser.set_user_agent('testing MechanicalSoup')
     browser.open("http://httpbin.org/")
     for link in browser.links():
         if link["href"] == "/":
@@ -42,11 +46,11 @@ def test_submit_online():
     assert data["comments"] == "Some comment here"
     assert data["nosuchfield"] == "new value"
 
-    assert (json["headers"]["User-Agent"] ==
-            'testing https://github.com/hickford/MechanicalSoup')
+    assert json["headers"]["User-Agent"] == 'testing MechanicalSoup'
     # Ensure we haven't blown away any regular headers
-    assert set(('Content-Length', 'Host', 'Content-Type', 'Connection', 'Accept',
-            'User-Agent', 'Accept-Encoding')).issubset(json["headers"].keys())
+    expected_headers = ('Content-Length', 'Host', 'Content-Type', 'Connection',
+                        'Accept', 'User-Agent', 'Accept-Encoding')
+    assert set(expected_headers).issubset(json["headers"].keys())
     browser.close()
 
 
@@ -56,19 +60,22 @@ def test_no_404():
     assert resp.status_code == 404
     browser.close()
 
+
 def test_404():
     browser = mechanicalsoup.StatefulBrowser(raise_on_404=True)
-    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
         resp = browser.open("http://httpbin.org/nosuchpage")
     resp = browser.open("http://httpbin.org/")
     assert resp.status_code == 200
     browser.close()
+
 
 def test_user_agent():
     browser = mechanicalsoup.StatefulBrowser(user_agent='007')
     resp = browser.open("http://httpbin.org/user-agent")
     assert resp.json() == {'user-agent': '007'}
     browser.close()
+
 
 def test_open_relative():
     # Open an arbitrary httpbin page to set the current URL
@@ -85,6 +92,7 @@ def test_open_relative():
     assert browser.get_url() == "http://httpbin.org/basic-auth/me/123"
     assert resp.json() == {"authenticated": True, "user": "me"}
     browser.close()
+
 
 def test_links():
     browser = mechanicalsoup.StatefulBrowser()
@@ -113,6 +121,7 @@ def test_links():
     assert two_links == BeautifulSoup(html, "lxml").find_all('a')
     browser.close()
 
+
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
         [
@@ -131,12 +140,13 @@ def test_submit_btnName(expected_post):
     '''Tests that the btnName argument chooses the submit button.'''
     browser, url = setup_mock_browser(expected_post=expected_post)
     browser.open(url)
-    form = browser.select_form('#choose-submit-form')
+    browser.select_form('#choose-submit-form')
     browser['text'] = expected_post[2][1]
     browser['comment'] = expected_post[0][1]
-    res = browser.submit_selected(btnName = expected_post[1][0])
+    res = browser.submit_selected(btnName=expected_post[1][0])
     assert(res.status_code == 200 and res.text == 'Success!')
     browser.close()
+
 
 def test_get_set_debug():
     browser = mechanicalsoup.StatefulBrowser()
@@ -145,6 +155,7 @@ def test_get_set_debug():
     browser.set_debug(True)
     assert(browser.get_debug())
     browser.close()
+
 
 def test_list_links(capsys):
     # capsys is a pytest fixture that allows us to inspect the std{err,out}
@@ -160,28 +171,31 @@ def test_list_links(capsys):
     assert out == expected
     browser.close()
 
+
 def test_launch_browser(mocker):
     browser = mechanicalsoup.StatefulBrowser()
     browser.set_debug(True)
     browser.open_fake_page('<html></html>')
     mocker.patch('webbrowser.open')
-    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
         browser.follow_link('nosuchlink')
     # mock.assert_called_once() not available on some versions :-(
     assert webbrowser.open.call_count == 1
     mocker.resetall()
-    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
         browser.select_form('nosuchlink')
     # mock.assert_called_once() not available on some versions :-(
     assert webbrowser.open.call_count == 1
     browser.close()
 
+
 def test_find_link():
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page('<html></html>')
-    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
         browser.find_link('nosuchlink')
     browser.close()
+
 
 def test_verbose(capsys):
     '''Tests that the btnName argument chooses the submit button.'''
@@ -205,11 +219,12 @@ def test_verbose(capsys):
     assert browser.get_verbose() == 2
     browser.close()
 
+
 def test_new_control():
     browser = mechanicalsoup.StatefulBrowser()
     browser.open("http://httpbin.org/forms/post")
     browser.select_form("form")
-    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
         # The control doesn't exist, yet.
         browser["temperature"] = "cold"
     browser["size"] = "large"  # Existing radio
@@ -244,13 +259,15 @@ submit_form_noaction = '''
 </html>
 '''
 
+
 def test_form_noaction():
     browser, url = setup_mock_browser()
     browser.open_fake_page(submit_form_noaction)
-    form = browser.select_form('#choose-submit-form')
+    browser.select_form('#choose-submit-form')
     with pytest.raises(ValueError, message="no URL to submit to"):
-        res = browser.submit_selected()
+        browser.submit_selected()
     browser.close()
+
 
 submit_form_noname = '''
 <html>
@@ -267,12 +284,15 @@ submit_form_noname = '''
 </html>
 '''
 
+
 def test_form_noname():
     browser, url = setup_mock_browser(expected_post=[])
     browser.open_fake_page(submit_form_noname, url=url)
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
+    assert(response.status_code == 200 and response.text == 'Success!')
     browser.close()
+
 
 submit_form_multiple = '''
 <html>
@@ -288,18 +308,23 @@ submit_form_multiple = '''
 </html>
 '''
 
+
 def test_form_multiple():
-    browser, url = setup_mock_browser(expected_post=[('foo', 'tempeh'), ('foo', 'tofu')])
+    browser, url = setup_mock_browser(expected_post=[('foo', 'tempeh'),
+                                                     ('foo', 'tofu')])
     browser.open_fake_page(submit_form_multiple, url=url)
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
+    assert(response.status_code == 200 and response.text == 'Success!')
     browser.close()
+
 
 def test_with():
     """Test that __enter__/__exit__ properly create/close the browser."""
     with mechanicalsoup.StatefulBrowser() as browser:
         assert browser.session is not None
     assert browser.session is None
+
 
 if __name__ == '__main__':
     pytest.main(sys.argv)

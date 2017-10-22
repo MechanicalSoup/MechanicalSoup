@@ -6,6 +6,7 @@ import tempfile
 from requests.cookies import RequestsCookieJar
 import pytest
 
+
 def test_submit_online():
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.Browser()
@@ -36,23 +37,24 @@ def test_submit_online():
     assert 'MechanicalSoup' in json["headers"]["User-Agent"]
     browser.close()
 
+
 form_html = """
 <form method="post" action="http://httpbin.org/post">
 <input name="customer" value="Philip J. Fry"/>
 <input name="telephone" value="555"/>
-<textarea name="comments">freezer</textarea> 
+<textarea name="comments">freezer</textarea>
 <fieldset>
  <legend> Pizza Size </legend>
- <p><label> <input type=radio name=size value="small"> Small </label></p>
- <p><label> <input type=radio name=size value="medium" checked> Medium </label></p>
- <p><label> <input type=radio name=size value="large"> Large </label></p>
+ <p><input type=radio name=size value="small">Small</p>
+ <p><input type=radio name=size value="medium" checked>Medium</p>
+ <p><input type=radio name=size value="large">Large</p>
 </fieldset>
 <fieldset>
  <legend> Pizza Toppings </legend>
- <p><label> <input type=checkbox name="topping" value="bacon"> Bacon </label></p>
- <p><label> <input type=checkbox name="topping" value="cheese" checked> Extra Cheese </label></p>
- <p><label> <input type=checkbox name="topping" value="onion" checked> Onion </label></p>
- <p><label> <input type=checkbox name="topping" value="mushroom"> Mushroom </label></p>
+ <p><input type=checkbox name="topping" value="bacon">Bacon</p>
+ <p><input type=checkbox name="topping" value="cheese" checked>Extra Cheese</p>
+ <p><input type=checkbox name="topping" value="onion" checked>Onion</p>
+ <p><input type=checkbox name="topping" value="mushroom">Mushroom</p>
 </fieldset>
 <input name="pic" type="file">
 <select name="shape">
@@ -103,19 +105,22 @@ def test_prepare_request_file():
     assert "multipart/form-data" in request.headers["Content-Type"]
     browser.close()
 
+
 def test_no_404():
     browser = mechanicalsoup.Browser()
     resp = browser.get("http://httpbin.org/nosuchpage")
     assert resp.status_code == 404
     browser.close()
 
+
 def test_404():
     browser = mechanicalsoup.Browser(raise_on_404=True)
-    with pytest.raises(mechanicalsoup.LinkNotFoundError) as context:
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
         resp = browser.get("http://httpbin.org/nosuchpage")
     resp = browser.get("http://httpbin.org/")
     assert resp.status_code == 200
     browser.close()
+
 
 def test_set_cookiejar():
     """Set cookies locally and test that they are received remotely."""
@@ -130,6 +135,7 @@ def test_set_cookiejar():
     assert resp.json() == {'cookies': {'field': 'value'}}
     browser.close()
 
+
 def test_get_cookiejar():
     """Test that cookies set by the remote host update our session."""
     browser = mechanicalsoup.Browser()
@@ -141,12 +147,14 @@ def test_get_cookiejar():
     assert jar.get('k2') == 'v2'
     browser.close()
 
+
 def test_post():
     browser = mechanicalsoup.Browser()
     data = {'color': 'blue', 'colorblind': 'True'}
     resp = browser.post("http://httpbin.org/post", data)
     assert(resp.status_code == 200 and resp.json()['form'] == data)
     browser.close()
+
 
 if __name__ == '__main__':
     pytest.main(sys.argv)
