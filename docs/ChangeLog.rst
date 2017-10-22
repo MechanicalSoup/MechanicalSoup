@@ -8,7 +8,7 @@ Version 0.9 (in development)
 Main changes:
 -------------
 
-* We do not rely on MechanicalSoup's default choice of HTML parser.
+* We do not rely on BeautifulSoup's default choice of HTML parser.
   Instead, we now specify ``lxml`` as default. As a consequence, the
   default setting requires ``lxml`` as dependency.
 
