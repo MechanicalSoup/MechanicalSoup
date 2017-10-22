@@ -90,7 +90,7 @@ def test_links():
     browser = mechanicalsoup.StatefulBrowser()
     html = '''<a class="bluelink" href="/blue" id="blue_link">A Blue Link</a>
               <a class="redlink" href="/red" id="red_link">A Red Link</a>'''
-    expected = [BeautifulSoup(html).a]
+    expected = [BeautifulSoup(html, "lxml").a]
     browser.open_fake_page(html)
 
     # Test StatefulBrowser.links url_regex argument
@@ -110,7 +110,7 @@ def test_links():
     # Test returning a non-singleton
     two_links = browser.links(id=re.compile('_link'))
     assert len(two_links) == 2
-    assert two_links == BeautifulSoup(html).find_all('a')
+    assert two_links == BeautifulSoup(html, "lxml").find_all('a')
     browser.close()
 
 @pytest.mark.parametrize("expected_post", [

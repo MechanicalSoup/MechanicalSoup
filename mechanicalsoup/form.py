@@ -259,9 +259,12 @@ class Form(object):
         old_textarea = self.form.find_all('textarea', {'name': name})
         for old in old_textarea:
             old.decompose()
-        # We don't have access to the original soup object, so we
-        # instantiate a new BeautifulSoup() to call new_tag().
-        control = BeautifulSoup().new_tag('input')
+        # We don't have access to the original soup object (just the
+        # Tag), so we instantiate a new BeautifulSoup() to call
+        # new_tag(). We're only building the soup object, not parsing
+        # anything, so the parser doesn't matter. Specify the one
+        # included in Python to avoid having dependency issue.
+        control = BeautifulSoup("", "html.parser").new_tag('input')
         control['type'] = type
         control['name'] = name
         control['value'] = value

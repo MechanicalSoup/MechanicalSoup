@@ -63,7 +63,7 @@ form_html = """
 
 
 def test_build_request():
-    form = BeautifulSoup(form_html).form
+    form = BeautifulSoup(form_html, "lxml").form
 
     browser = mechanicalsoup.Browser()
     request = browser._build_request(form)
@@ -82,7 +82,7 @@ def test_build_request():
 
 
 def test_prepare_request_file():
-    form = BeautifulSoup(form_html).form
+    form = BeautifulSoup(form_html, "lxml").form
 
     # create a temporary file for testing file upload
     pic_path = tempfile.mkstemp()[1]

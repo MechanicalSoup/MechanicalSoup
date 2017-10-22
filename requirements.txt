@@ -1,3 +1,4 @@
 requests >= 2.0
 beautifulsoup4
 six >= 1.4
+lxml
