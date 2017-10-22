@@ -1,15 +1,23 @@
 Overall Guidelines
 ------------------
 
-Bug reports, feature suggestions and pull requests welcome. 
+Bug reports, feature suggestions and pull requests welcome (on
+GitHub). Security issues should be reported by email to the core
+developers (emails available in the "Author" field of commits in the
+Git history).
 
-When editing please don't reformat code—this makes diffs and pull requests hard to read.
+When editing please don't reformat code—this makes diffs and pull
+requests hard to read.
+
+Code should be flake8-clean and the test coverage is and should remain
+100%. Add new tests whenever you add new features.
 
 Hints on Development
 --------------------
 
 |Build Status| |Coverage Status|
 |Requirements Status| |Documentation Status|
+|CII Best Practices|
 
 Python version support in the current master branch may differ from the
 latest release in
@@ -112,3 +120,5 @@ Right after the release:
    :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
+.. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge
+   :target: https://bestpractices.coreinfrastructure.org/projects/1334)
