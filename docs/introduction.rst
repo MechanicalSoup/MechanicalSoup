@@ -25,8 +25,8 @@ Installing from source (installs the version in the current working directory)::
   cd MechanicalSoup
   python setup.py install
 
-(In all cases, add ``--user`` option to the ``install`` command to
-install in the current user's home directory)
+(In all cases, add ``--user`` to the ``install`` command to
+install in the current user's home directory.)
 
 Development: see https://github.com/MechanicalSoup/MechanicalSoup
 

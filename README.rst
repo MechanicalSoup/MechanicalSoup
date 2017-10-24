@@ -48,7 +48,8 @@ Installing from source (installs the version in the current working directory)::
 
   python setup.py install
 
-(In both cases, add ``--user`` to install in the current user's home directory)
+(In all cases, add ``--user`` to the ``install`` command to
+install in the current user's home directory.)
 
 
 Documentation
