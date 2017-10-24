@@ -18,7 +18,7 @@ giants `Requests <http://docs.python-requests.org/en/latest/>`__ (for
 http sessions) and `BeautifulSoup
 <http://www.crummy.com/software/BeautifulSoup/>`__ (for document
 navigation). Since 2017 it is a project actively maintained by a small
-team including `@hemberger <https://github.com/hemberger>` and `@moy
+team including `@hemberger <https://github.com/hemberger>`__ and `@moy
 <https://github.com/moy/>`__.
 
 Contents:
