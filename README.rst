@@ -12,7 +12,7 @@ Overview
 A Python library for automating interaction with websites.
 MechanicalSoup automatically stores and sends cookies, follows
 redirects, and can follow links and submit forms. It doesn't do
-Javascript.
+JavaScript.
 
 MechanicalSoup was created by `M Hickford
 <https://github.com/hickford/>`__, who was a fond user of the
@@ -21,7 +21,7 @@ Unfortunately, Mechanize is `incompatible with Python 3
 <https://github.com/jjlee/mechanize/issues/96>`__ and its development
 stalled for several years. MechanicalSoup provides a similar API, built on Python
 giants `Requests <http://docs.python-requests.org/en/latest/>`__ (for
-http sessions) and `BeautifulSoup
+HTTP sessions) and `BeautifulSoup
 <https://www.crummy.com/software/BeautifulSoup/>`__ (for document
 navigation). Since 2017 it is a project actively maintained by a small
 team including `@hemberger <https://github.com/hemberger>`__ and `@moy
@@ -70,18 +70,18 @@ a DuckDuckGo search:
 
     """Example usage of MechanicalSoup to get the results from
     DuckDuckGo."""
-    
+
     import mechanicalsoup
-    
+
     # Connect to duckduckgo
     browser = mechanicalsoup.StatefulBrowser()
     browser.open("https://duckduckgo.com/")
-    
+
     # Fill-in the search form
     browser.select_form('#search_form_homepage')
     browser["q"] = "MechanicalSoup"
     browser.submit_selected()
-    
+
     # Display the results
     for l in browser.get_current_page().select('a.result__a'):
         print(l.text, '->', l.attrs['href'])
@@ -131,5 +131,5 @@ See also
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
 .. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge
    :target: https://bestpractices.coreinfrastructure.org/projects/1334)
-.. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.png
+.. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.svg
    :target: https://gitter.im/MechanicalSoup/Lobby
