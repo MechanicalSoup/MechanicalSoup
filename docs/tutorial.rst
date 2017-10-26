@@ -164,7 +164,7 @@ used to list the fields)::
   <textarea name="comments">This pizza looks really good :-)</textarea>
 
 Assuming we're satisfied with the content of the form, we can submit
-it (i.e. simulate a click on the sumbit button)::
+it (i.e. simulate a click on the submit button)::
 
   >>> response = browser.submit_selected()
 
