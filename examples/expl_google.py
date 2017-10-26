@@ -11,8 +11,8 @@ browser["q"] = "MechanicalSoup"
 browser.submit_selected(btnName="btnG")
 
 # Display links
-for l in browser.links():
-    target = l.attrs['href']
+for link in browser.links():
+    target = link.attrs['href']
     # Filter-out unrelated links and extract actual URL from Google's
     # click-tracking.
     if (target.startswith('/url?') and not

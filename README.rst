@@ -83,8 +83,8 @@ a DuckDuckGo search:
     browser.submit_selected()
 
     # Display the results
-    for l in browser.get_current_page().select('a.result__a'):
-        print(l.text, '->', l.attrs['href'])
+    for link in browser.get_current_page().select('a.result__a'):
+        print(link.text, '->', link.attrs['href'])
 
 More examples are available in `<examples/>`__.
 
