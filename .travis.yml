@@ -12,6 +12,8 @@ python:
 install:
   - pip install --upgrade pytest # needed for cases where there is already an old pytest installed
   - pip install pytest-cov       # needed for the codecov uploader
+before_script:
+  - ./wait-for-httpbin.sh
 script:
   - python setup.py test
 after_success:
