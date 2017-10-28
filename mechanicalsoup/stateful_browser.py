@@ -147,31 +147,32 @@ class StatefulBrowser(Browser):
         """
         return self.open(self.absolute_url(url), *args, **kwargs)
 
-    def select_form(self, selector="form", *args, **kwargs):
+    def select_form(self, selector="form", nr=0):
         """Select a form in the current page.
+
+        :param selector: CSS selector to identify the form to select.
+            If not specified, ``selector`` defaults to "form", which is
+            useful if, e.g., there is only one form on the page.
+            For ``selector`` syntax, see the `.select() method in BeautifulSoup
+            <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors>`__.
+        :param nr: A zero-based index specifying which form among those that
+            match ``selector`` will be selected. Useful when one or more forms
+            have the same attributes as the form you want to select, and its
+            position on the page is the only way to uniquely identify it.
+            Default is the first matching form (``nr=0``).
 
         :return: The selected form as a soup object. It can also be
             retrieved later with :func:`get_current_form`.
-
-        Arguments are the same as the select() method for a soup
-        object. ``selector`` is a string containing a CSS selector.
-
-        If the ``selector`` argument is not given, it defaults
-        to "form", so one can
-        call :func:`~mechanicalsoup.Browser.select_form()` to select
-        the form if there is only one form in the page.
-
-        See also: `.select() method in BeautifulSoup
-        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors>`__
         """
-        found_forms = self.__current_page.select(selector, *args, **kwargs)
-        if len(found_forms) < 1:
+        # nr is a 0-based index for consistency with mechanize
+        found_forms = self.__current_page.select(selector, limit=nr + 1)
+        if len(found_forms) != nr + 1:
             if self.__debug:
-                print('select_form failed for', *args)
+                print('select_form failed for', selector)
                 self.launch_browser()
             raise LinkNotFoundError()
 
-        self.__current_form = Form(found_forms[0])
+        self.__current_form = Form(found_forms[-1])
         return self.__current_form
 
     def submit_selected(self, btnName=None, *args, **kwargs):

@@ -326,5 +326,20 @@ def test_with():
     assert browser.session is None
 
 
+def test_select_form_nr():
+    """Test the nr option of select_form."""
+    forms = """<form id="a"></form><form id="b"></form><form id="c"></form>"""
+    with mechanicalsoup.StatefulBrowser() as browser:
+        browser.open_fake_page(forms)
+        form = browser.select_form()
+        assert form.form['id'] == "a"
+        form = browser.select_form(nr=1)
+        assert form.form['id'] == "b"
+        form = browser.select_form(nr=2)
+        assert form.form['id'] == "c"
+        with pytest.raises(mechanicalsoup.LinkNotFoundError):
+            browser.select_form(nr=3)
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)

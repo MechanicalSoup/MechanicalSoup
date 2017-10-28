@@ -23,7 +23,9 @@ Main changes:
 * We now have a documentation: https://mechanicalsoup.readthedocs.io/
 
 * ``StatefulBrowser.select_form`` can now be called without argument,
-  and defaults to ``"form"`` in this case.
+  and defaults to ``"form"`` in this case. It also has a new argument,
+  ``nr`` (defaults to 0), which can be used to specify the index of
+  the form to select if multiple forms match the selection criteria.
 
 * We now use requirement files. You can install the dependencies of
   Mechanicalsoup with e.g.::
