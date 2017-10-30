@@ -113,7 +113,7 @@ How does MechanicalSoup compare to the alternatives?
 
 There are other libraries with the same purpose as MechanicalSoup:
 
-* `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`__, is an
+* `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`__ is an
   ancestor of MechanicalSoup (getting its name from the Perl mechanize
   module). It was a great tool, but doesn't support Python 3. It was
   unmaintained for several years but got a new maintainer in 2017.
@@ -129,12 +129,12 @@ There are other libraries with the same purpose as MechanicalSoup:
   two years for RoboBrowser).
 
 * `Selenium <http://selenium-python.readthedocs.io/>`__ is a much
-  heavier solution: it launches a real web-browser (Firefox,
+  heavier solution: it launches a real web browser (Firefox,
   Chrome, ...) and controls it with inter-process communication.
   Selenium is the right solution if you want to test that a website
-  works properly with various browser (e.g. is the Javascript code
-  you're writting compatible with all major browser on the market?),
-  and it generally useful when you need JavaScript support.
-  Interacting with a simple website usually does not need such
-  heaviness, and then MechanicalSoup is a simple, light and yet
-  efficient alternative.
+  works properly with various browsers (e.g. is the JavaScript code
+  you're writing compatible with all major browsers on the market?),
+  and is generally useful when you need JavaScript support.
+  Though MechanicalSoup does not support JavaScript, it also does not
+  have the overhead of a real web browser, which makes it a simple and
+  efficient solution for basic website interactions.
