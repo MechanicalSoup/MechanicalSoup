@@ -127,3 +127,14 @@ There are other libraries with the same purpose as MechanicalSoup:
   automated testsuite. As of writing, MechanicalSoup is more actively
   maintained (only 1 really active developer and no activity the last
   two years for RoboBrowser).
+
+* `Selenium <http://selenium-python.readthedocs.io/>`__ is a much
+  heavier solution: it launches a real web-browser (Firefox,
+  Chrome, ...) and controls it with inter-process communication.
+  Selenium is the right solution if you want to test that a website
+  works properly with various browser (e.g. is the Javascript code
+  you're writting compatible with all major browser on the market?),
+  and it generally useful when you need JavaScript support.
+  Interacting with a simple website usually does not need such
+  heaviness, and then MechanicalSoup is a simple, light and yet
+  efficient alternative.
