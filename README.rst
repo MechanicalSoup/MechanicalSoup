@@ -4,7 +4,7 @@ MechanicalSoup
 Home page
 ---------
 
-https://mechanicalsoup.readthedocs.io/en/latest/
+https://mechanicalsoup.readthedocs.io/
 
 Overview
 --------
