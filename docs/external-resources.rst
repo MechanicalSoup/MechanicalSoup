@@ -6,7 +6,7 @@ External libraries
 
 * Requests (HTTP layer): http://docs.python-requests.org/en/master/
 
-* BeautifulSoup (HTTP parsing and manipulation):
+* BeautifulSoup (HTML parsing and manipulation):
   https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 
 MechanicalSoup on the web
