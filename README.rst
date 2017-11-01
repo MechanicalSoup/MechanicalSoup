@@ -108,14 +108,6 @@ Common problems
 Read the `FAQ
 <https://mechanicalsoup.readthedocs.io/en/latest/faq.html>`__.
 
-See also
---------
-
--  `RoboBrowser <https://github.com/jmcarp/robobrowser>`__: a similar
-   library, also based on Requests and BeautifulSoup.
--  `Hacker News post <https://news.ycombinator.com/item?id=8012103>`__
--  `Reddit
-   discussion <https://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/>`__
 
 .. |Latest Version| image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
    :target: https://pypi.python.org/pypi/MechanicalSoup/

@@ -18,6 +18,13 @@ MechanicalSoup on the web
 * `MechanicalSoup on Gitter
   <https://gitter.im/MechanicalSoup/Lobby>`__
 
+* News archive:
+
+  * `opensource.com blog <https://opensource.com/resources/python/web-scraper-crawler>`__
+  * `Hacker News post <https://news.ycombinator.com/item?id=8012103>`__
+  * `Reddit
+    discussion <https://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/>`__
+
 Projects using MechanicalSoup
 -----------------------------
 
