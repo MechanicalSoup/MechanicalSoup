@@ -1,3 +1,4 @@
+import tempfile
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 import mechanicalsoup
 import sys
@@ -316,6 +317,33 @@ def test_form_multiple():
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
     assert(response.status_code == 200 and response.text == 'Success!')
+    browser.close()
+
+
+def test_upload_file():
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open("http://httpbin.org/forms/post")
+
+    # Create two temporary files to upload
+    def make_file(content):
+        path = tempfile.mkstemp()[1]
+        with open(path, "w") as f:
+            f.write(content)
+        return path
+    path1, path2 = (make_file(content) for content in
+                    ("first file content", "second file content"))
+
+    # The form doesn't have a type=file field, but the target action
+    # does show it => add the fields ourselves.
+    browser.select_form()
+    browser.new_control("file", "first", path1)
+    browser.new_control("file", "second", "")
+    browser["second"] = path2
+    browser.get_current_form().print_summary()
+    response = browser.submit_selected()
+    files = response.json()["files"]
+    assert files["first"] == "first file content"
+    assert files["second"] == "second file content"
     browser.close()
 
 

@@ -237,6 +237,14 @@ class Form(object):
             form.set("password", password)
             form.set("eula-checkbox", True)
 
+        Example: uploading a file through a ``<input type="file"
+        name="tagname">`` field (provide the path to the local file,
+        and its content will be uploaded):
+
+        .. code-block:: python
+
+            form.set("tagname") = path_to_local_file
+
         """
         for func in ("checkbox", "radio", "input", "textarea", "select"):
             try:
