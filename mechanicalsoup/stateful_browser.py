@@ -16,7 +16,7 @@ class StatefulBrowser(Browser):
 
     :param session: Attach a pre-existing requests Session instead of
         constructing a new one.
-    :param soup_config: Configuration passed to MechanicalSoup to affect
+    :param soup_config: Configuration passed to BeautifulSoup to affect
         the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
         If overriden, it is highly recommended to `specify a parser
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
@@ -85,7 +85,9 @@ class StatefulBrowser(Browser):
         return self.__current_url
 
     def get_current_form(self):
-        """Get the currently selected form. See :func:`select_form`."""
+        """Get the currently selected form as a :class:`Form` object.
+        See :func:`select_form`.
+        """
         return self.__current_form
 
     def __setitem__(self, name, value):

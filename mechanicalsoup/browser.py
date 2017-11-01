@@ -14,7 +14,7 @@ class Browser(object):
 
     :param session: Attach a pre-existing requests Session instead of
         constructing a new one.
-    :param soup_config: Configuration passed to MechanicalSoup to affect
+    :param soup_config: Configuration passed to BeautifulSoup to affect
         the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
         If overriden, it is highly recommended to `specify a parser
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
@@ -57,6 +57,10 @@ class Browser(object):
         """Replaces the current cookiejar in the requests session. Since the
         session handles cookies automatically without calling this function,
         only use this when default cookie handling is insufficient.
+
+        :param cookiejar: Any `cookielib.CookieJar
+          <https://docs.python.org/2/library/cookielib.html#cookielib.CookieJar>`__
+          compatible object.
         """
         self.session.cookies = cookiejar
 
