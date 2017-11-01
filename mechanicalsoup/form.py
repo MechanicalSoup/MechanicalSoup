@@ -226,7 +226,8 @@ class Form(object):
         :func:`~Form.set_textarea`,
         :func:`~Form.set_select`.
         If none of these methods find a matching element, then if ``force``
-        is True, a new element will be added using :func:`~Form.new_control`.
+        is True, a new element (``<input type="text" ...>``) will be
+        added using :func:`~Form.new_control`.
 
         Example: filling-in a login/password form with EULA checkbox
 
@@ -244,7 +245,7 @@ class Form(object):
             except InvalidFormMethod:
                 pass
         if force:
-            self.new_control('input', name, value=value)
+            self.new_control('text', name, value=value)
             return
         raise LinkNotFoundError("No valid element named " + name)
 
