@@ -2,15 +2,15 @@
 Release Notes
 =============
 
-Version 0.9 (in development)
-============================
+Version 0.9
+===========
 
 Main changes:
 -------------
 
 * We do not rely on BeautifulSoup's default choice of HTML parser.
   Instead, we now specify ``lxml`` as default. As a consequence, the
-  default setting requires ``lxml`` as dependency.
+  default setting requires ``lxml`` as a dependency.
 
 * Python 2.6 and 3.3 are no longer supported.
 
@@ -20,7 +20,9 @@ Main changes:
   @hemberger are now officially administrators of the project in
   addition to @hickford, the original author.
 
-* We now have a documentation: https://mechanicalsoup.readthedocs.io/
+* We now have a documentation site: https://mechanicalsoup.readthedocs.io/.
+  The API is now fully documented, and we have included a tutorial,
+  several more code examples, and a FAQ.
 
 * ``StatefulBrowser.select_form`` can now be called without argument,
   and defaults to ``"form"`` in this case. It also has a new argument,
@@ -28,7 +30,7 @@ Main changes:
   the form to select if multiple forms match the selection criteria.
 
 * We now use requirement files. You can install the dependencies of
-  Mechanicalsoup with e.g.::
+  MechanicalSoup with e.g.::
 
     pip install -r requirements.txt -r tests/requirements.txt
 
@@ -62,7 +64,9 @@ Bug fixes
 * We don't error out anymore when trying to uncheck a box which
   doesn't have a ``checkbox`` attribute.
 
-Internal Changes
+* ``Form.new_control`` now correctly overrides existing elements.
+
+Internal changes
 ----------------
 
 * The testsuite has been further improved and reached 100% coverage.
@@ -72,6 +76,9 @@ Internal Changes
 
 * ``Browser.add_soup`` will now always attach a *soup*-attribute.
   If the response is not text/html, then soup is set to None.
+
+* ``Form.set(force=True)`` creates an ``<input type=text ...>``
+  element instead of an ``<input type=input ...>``.
 
 Version 0.8
 ===========
