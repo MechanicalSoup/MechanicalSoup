@@ -107,7 +107,7 @@ At each release:
 
 Right after the release:
 
-- Update the version number to a ``x.y.dev`` number in
+- Update the version number to a ``x.y.z-dev`` number in
   ``mechanicalsoup/__version__.py``
 - Create the ``(in development)`` section in ``docs/ChangeLog.rst``.
 - ``git commit -m "Prepare for next release" && git push``

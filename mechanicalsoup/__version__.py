@@ -1,5 +1,5 @@
 __title__ = 'MechanicalSoup'
 __description__ = 'A Python library for automating interaction with websites'
 __url__ = 'http://mechanicalsoup.readthedocs.io/'
-__version__ = '0.9.0'
+__version__ = '1.0.0-dev'
 __license__ = 'MIT'
