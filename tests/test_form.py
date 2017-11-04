@@ -361,5 +361,23 @@ def test_form_print_summary(capsys):
     assert err == ""
 
 
+def test_issue158():
+    issue158_form = '''
+<form method="post" action="mock://form.com/post">
+  <input name="box" type="hidden" value="0"/>
+  <input checked="checked" name="box" type="checkbox" value="1"/>
+  <input type="submit" value="Submit" />
+</form>
+'''
+    expected_post = (('box', '0'), ('box', '1'))
+    browser, url = setup_mock_browser(expected_post=expected_post,
+                                      text=issue158_form)
+    browser.open(url)
+    browser.select_form()
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and res.text == 'Success!')
+    browser.close()
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)

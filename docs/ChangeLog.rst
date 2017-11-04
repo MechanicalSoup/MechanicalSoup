@@ -5,6 +5,16 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
+Bug fixes:
+----------
+
+* Improve consistency of query string construction between MechanicalSoup
+  and web browsers in edge cases where form elements have duplicate names.
+  This only affects duplicate-named ``input`` elements that don't have a
+  *type* and ``textarea`` elements; all values will show up in the query
+  string instead of just the last.
+  See `#158 <https://github.com/MechanicalSoup/MechanicalSoup/issues/158>`__.
+
 Version 0.9
 ===========
 

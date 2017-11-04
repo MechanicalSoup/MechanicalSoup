@@ -70,9 +70,9 @@ def test_build_request():
     browser = mechanicalsoup.Browser()
     request = browser._build_request(form)
 
-    assert request.data["customer"] == "Philip J. Fry"
-    assert request.data["telephone"] == "555"
-    assert request.data["comments"] == "freezer"
+    assert request.data["customer"] == ["Philip J. Fry"]
+    assert request.data["telephone"] == ["555"]
+    assert request.data["comments"] == ["freezer"]
     assert request.data["size"] == "medium"
     assert request.data["topping"] == ["cheese", "onion"]
     assert request.data["shape"] == "square"
