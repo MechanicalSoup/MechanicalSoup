@@ -1,12 +1,8 @@
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 import mechanicalsoup
+from utils import setup_mock_browser
 import sys
-import requests_mock
 import pytest
-try:
-    from urllib.parse import parse_qsl
-except ImportError:
-    from urlparse import parse_qsl
 
 
 def test_submit_online():
@@ -66,47 +62,6 @@ def test_submit_set():
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"
     browser.close()
-
-
-choose_submit_form = '''
-<html>
-  <body>
-    <!-- vaguely based on Trac edit-page form -->
-    <form id="choose-submit-form" method="post" action="mock://form.com/post">
-      <textarea id="text" class="wikitext trac-resizable" name="text"
-        cols="80" rows="40">
-      </textarea>
-      <div class="field">
-        <label>Comment about this change (optional):<br />
-          <input id="comment" type="text" name="comment" size="80" value="" />
-        </label>
-      </div>
-      <div class="buttons">
-        <input type="submit" name="preview" value="Preview Page" />
-        <input type="submit" name="diff" value="Review Changes" />
-        <input type="submit" id="save" name="save" value="Submit changes" />
-        <button type="submit" name="cancel" value="Cancel" />
-      </div>
-    </form>
-  </body>
-</html>
-'''
-
-
-def setup_mock_browser(expected_post=None, text=choose_submit_form):
-    url = 'mock://form.com'
-    mock = requests_mock.Adapter()
-    mock.register_uri('GET', url, headers={'Content-Type': 'text/html'},
-                      text=text)
-    if expected_post is not None:
-        def text_callback(request, context):
-            # Python 2's parse_qsl doesn't like None argument
-            query = parse_qsl(request.text) if request.text else ()
-            assert(set(query) == set(expected_post))
-            return 'Success!'
-        mock.register_uri('POST', url + '/post', text=text_callback)
-    browser = mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock})
-    return browser, url
 
 
 @pytest.mark.parametrize("expected_post", [

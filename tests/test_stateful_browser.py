@@ -4,7 +4,7 @@ import mechanicalsoup
 import sys
 import re
 from bs4 import BeautifulSoup
-from test_form import setup_mock_browser
+from utils import setup_mock_browser
 import pytest
 import webbrowser
 
