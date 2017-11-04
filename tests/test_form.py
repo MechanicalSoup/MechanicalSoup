@@ -235,9 +235,9 @@ def test_set_select_multiple(options):
     # When a browser submits multiple selections, the qsl looks like:
     #  name=option1&name=option2
     if not isinstance(options, list) and not isinstance(options, tuple):
-        expected = (('instrument', options),)
+        expected = [('instrument', options)]
     else:
-        expected = (('instrument', option) for option in options)
+        expected = [('instrument', option) for option in options]
     browser, url = setup_mock_browser(expected_post=expected,
                                       text=set_select_multiple_form)
     browser.open(url)
