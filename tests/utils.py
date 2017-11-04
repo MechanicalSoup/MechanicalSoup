@@ -61,8 +61,8 @@ def mock_get(mocked_adapter, url, reply, content_type='text/html', **kwargs):
 def mock_post(mocked_adapter, url, expected, reply='Success!'):
     def text_callback(request, context):
         # Python 2's parse_qsl doesn't like None argument
-        query = parse_qsl(request.text) if request.text else ()
-        assert (set(query) == set(expected))
+        query = parse_qsl(request.text) if request.text else []
+        assert (query == expected)
         return reply
 
     mocked_adapter.register_uri('POST', url, text=text_callback)

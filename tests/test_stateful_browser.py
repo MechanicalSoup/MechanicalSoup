@@ -17,10 +17,9 @@ import webbrowser
 
 
 def test_request_forward():
-    browser, url = setup_mock_browser(expected_post=[('var1', 'val1'),
-                                                     ('var2', 'val2')])
-    r = browser.request('POST', url + '/post', data={'var1': 'val1',
-                                                     'var2': 'val2'})
+    data = [('var1', 'val1'), ('var2', 'val2')]
+    browser, url = setup_mock_browser(expected_post=data)
+    r = browser.request('POST', url + '/post', data=data)
     assert r.text == 'Success!'
 
 
@@ -302,8 +301,8 @@ submit_form_multiple = '''
 
 
 def test_form_multiple():
-    browser, url = setup_mock_browser(expected_post=[('foo', 'tempeh'),
-                                                     ('foo', 'tofu')])
+    browser, url = setup_mock_browser(expected_post=[('foo', 'tofu'),
+                                                     ('foo', 'tempeh')])
     browser.open_fake_page(submit_form_multiple, url=url)
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
