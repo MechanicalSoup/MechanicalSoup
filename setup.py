@@ -18,7 +18,7 @@ def read(fname, URL):
         readme = readme.decode('utf8')
     # turn relative links into absolute ones
     readme = re.sub(r'`<([^>]*)>`__',
-                    r'`\1 <' + URL + r"/\1/blob/master/>`__",
+                    r'`\1 <' + URL + r"/blob/master/\1>`__",
                     readme)
     return readme
 
@@ -37,7 +37,7 @@ setup(
     version=about['__version__'],
 
     description=about['__description__'],
-    long_description=read('README.rst', about['__url__']),
+    long_description=read('README.rst', about['__github_url__']),
     url=about['__url__'],
 
     license=about['__license__'],
