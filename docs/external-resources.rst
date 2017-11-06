@@ -28,8 +28,10 @@ MechanicalSoup on the web
 Projects using MechanicalSoup
 -----------------------------
 
-These projects use MechanicalSoup for web scrapping. You may want to
+These projects use MechanicalSoup for web scraping. You may want to
 look at their source code for real-life examples.
 
 * `Chamilo Tools <https://gitlab.com/chamilotools/chamilotools>`__
+* `gmusicapi <https://github.com/simon-weber/gmusicapi>`__: an unofficial API
+  for Google Play Music
 * *TODO: Add your favorite tool here ...*
