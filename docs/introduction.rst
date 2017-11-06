@@ -5,8 +5,9 @@ Introduction
 
 PyPy and PyPy3 are also supported (and tested against).
 
-Find MechanicalSoup on Python Package Index (Pypi):
-https://pypi.python.org/pypi/MechanicalSoup/
+Find MechanicalSoup on `Python Package Index (Pypi)
+<https://pypi.python.org/pypi/MechanicalSoup/>`__ and follow the
+development on `GitHub <https://github.com/MechanicalSoup/MechanicalSoup>`__.
 
 Installation
 ------------
@@ -27,8 +28,6 @@ Installing from source (installs the version in the current working directory)::
 
 (In all cases, add ``--user`` to the ``install`` command to
 install in the current user's home directory.)
-
-Development: see https://github.com/MechanicalSoup/MechanicalSoup
 
 Example code: https://github.com/MechanicalSoup/MechanicalSoup/tree/master/examples/
 
