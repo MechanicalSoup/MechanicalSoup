@@ -103,7 +103,8 @@ At each release:
     username:<user>
     password:<password>
 
-- Check on https://pypi.python.org/pypi/MechanicalSoup/
+- Check on https://pypi.python.org/pypi/MechanicalSoup/, and verify
+  installation from PyPI with `pip install --no-cache-dir mechanicalsoup`.
 
 Right after the release:
 
