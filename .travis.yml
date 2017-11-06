@@ -13,10 +13,13 @@ python:
 install:
   - pip install --upgrade pytest # needed for cases where there is already an old pytest installed
   - pip install pytest-cov       # needed for the codecov uploader
+  - pip install -r requirements.txt -r tests/requirements.txt
 before_script:
   - ./tests/wait-for-httpbin.sh
 script:
-  - python setup.py test
+  # Do not perform flake8 checks in pypy environments (see issue #146)
+  - if [[ $TRAVIS_PYTHON_VERSION == pypy* ]]; then pytest -o 'flake8-ignore=*.py ALL'; fi
+  - if [[ $TRAVIS_PYTHON_VERSION != pypy* ]]; then pytest; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
 
