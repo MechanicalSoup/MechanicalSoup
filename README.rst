@@ -40,7 +40,7 @@ Download and install the latest released version from `PyPI <https://pypi.python
 
   pip install MechanicalSoup
 
-Download and install the development version from GitHub::
+Download and install the development version from `GitHub <https://github.com/MechanicalSoup/MechanicalSoup>`__::
 
   pip install git+https://github.com/MechanicalSoup/MechanicalSoup
 
