@@ -1,5 +1,6 @@
 pytest
 pytest-cov
 pytest-flake8
+pytest-httpbin
 pytest-mock
 requests_mock
