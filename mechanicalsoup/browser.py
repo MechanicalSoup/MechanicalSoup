@@ -143,9 +143,9 @@ class Browser(object):
                 # web browsers use empty string for inputs with missing values
                 value = input.get("value", "")
 
-            if input.get("type") == "checkbox":
-                data.setdefault(name, []).append(value)
-
+            if input.get("type") == "radio":
+                # Uses the last checked radio (only one should be checked)
+                data[name] = value
             elif input.get("type") == "file":
                 # read http://www.cs.tut.fi/~jkorpela/forms/file.html
                 # in web browsers, file upload only happens if the form"s (or
@@ -156,15 +156,14 @@ class Browser(object):
                 if isinstance(value, string_types):
                     value = open(value, "rb")
                 files[name] = value
-
             else:
-                data[name] = value
+                data.setdefault(name, []).append(value)
 
         for textarea in form.select("textarea"):
             name = textarea.get("name")
             if not name:
                 continue
-            data[name] = textarea.text
+            data.setdefault(name, []).append(textarea.text)
 
         for select in form.select("select"):
             name = select.get("name")
