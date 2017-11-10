@@ -121,7 +121,7 @@ class Browser(object):
         Browser.add_soup(response, self.soup_config)
         return response
 
-    def _build_request(self, form, url=None, **kwargs):
+    def _request(self, form, url=None, **kwargs):
         method = str(form.get("method", "get"))
         action = form.get("action")
         url = urllib.parse.urljoin(url, action)
@@ -185,11 +185,7 @@ class Browser(object):
         else:
             kwargs["data"] = data
 
-        return requests.Request(method, url, files=files, **kwargs)
-
-    def _prepare_request(self, form, url=None, **kwargs):
-        request = self._build_request(form, url, **kwargs)
-        return self.session.prepare_request(request)
+        return self.session.request(method, url, files=files, **kwargs)
 
     def submit(self, form, url=None, **kwargs):
         """Prepares and sends a form request.
@@ -197,8 +193,8 @@ class Browser(object):
         :param form: The filled-out form.
         :param url: URL of the page the form is on. If the form action is a
             relative path, then this must be specified.
-        :param \*\*kwargs: Arguments forwarded to `requests.Request
-            <http://docs.python-requests.org/en/master/api/#requests.Request>`__.
+        :param \*\*kwargs: Arguments forwarded to `requests.Session.request
+            <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
 
         :return: `requests.Response
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
@@ -206,8 +202,7 @@ class Browser(object):
         """
         if isinstance(form, Form):
             form = form.form
-        request = self._prepare_request(form, url, **kwargs)
-        response = self.session.send(request)
+        response = self._request(form, url, **kwargs)
         Browser.add_soup(response, self.soup_config)
         return response
 

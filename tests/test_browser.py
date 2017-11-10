@@ -64,26 +64,26 @@ form_html = """
 """
 
 
-def test_build_request():
+def test__request():
     form = BeautifulSoup(form_html, "lxml").form
 
     browser = mechanicalsoup.Browser()
-    request = browser._build_request(form)
+    response = browser._request(form)
 
-    assert request.data["customer"] == "Philip J. Fry"
-    assert request.data["telephone"] == "555"
-    assert request.data["comments"] == "freezer"
-    assert request.data["size"] == "medium"
-    assert request.data["topping"] == ["cheese", "onion"]
-    assert request.data["shape"] == "square"
+    data = response.json()['form']
+    assert data["customer"] == "Philip J. Fry"
+    assert data["telephone"] == "555"
+    assert data["comments"] == "freezer"
+    assert data["size"] == "medium"
+    assert data["topping"] == ["cheese", "onion"]
+    assert data["shape"] == "square"
 
-    request = browser._prepare_request(form)
-    assert "application/x-www-form-urlencoded" in request.headers[
+    assert "application/x-www-form-urlencoded" in response.request.headers[
         "Content-Type"]
     browser.close()
 
 
-def test_prepare_request_file():
+def test__request_file():
     form = BeautifulSoup(form_html, "lxml").form
 
     # create a temporary file for testing file upload
@@ -94,15 +94,16 @@ def test_prepare_request_file():
     form.find("input", {"name": "pic"})["value"] = pic_path
 
     browser = mechanicalsoup.Browser()
-    request = browser._build_request(form)
+    response = browser._request(form)
 
-    assert request.files
-    assert request.files["pic"]
-    assert request.files["pic"].read() == ":-)".encode("utf8")
-    assert "pic" not in request.data
+    # Check that only "files" includes a "pic" keyword in the response
+    for key, value in response.json().items():
+        if key == "files":
+            assert value["pic"] == ":-)"
+        else:
+            assert (value is None) or ("pic" not in value)
 
-    request = browser._prepare_request(form)
-    assert "multipart/form-data" in request.headers["Content-Type"]
+    assert "multipart/form-data" in response.request.headers["Content-Type"]
     browser.close()
 
 
