@@ -5,6 +5,19 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
+Main changes:
+-------------
+* ``Browser.submit`` and ``StatefulBrowser.submit_selected`` accept a larger
+  number of keyword arguments. Arguments are forwarded to
+  `requests.Session.request <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
+  [`#166 <https://github.com/MechanicalSoup/MechanicalSoup/pull/166>`__]
+
+Internal changes:
+-----------------
+* Private methods ``Browser._build_request`` and ``Browser._prepare_request``
+  have been replaced by a single method ``Browser._request``.
+  [`#166 <https://github.com/MechanicalSoup/MechanicalSoup/pull/166>`__]
+
 Version 0.9
 ===========
 
