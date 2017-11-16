@@ -207,7 +207,10 @@ class Browser(object):
         return response
 
     def launch_browser(self, soup):
-        """Launch a browser on the page, for debugging purposes."""
+        """Launch a browser to display a page, for debugging purposes.
+
+        :param: soup: Page contents to display, supplied as a bs4 soup object.
+        """
         with tempfile.NamedTemporaryFile(delete=False) as file:
             file.write(soup.encode())
         webbrowser.open('file://' + file.name)
