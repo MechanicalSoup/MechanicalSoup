@@ -265,6 +265,12 @@ class StatefulBrowser(Browser):
                 raise
         return self.open_relative(link['href'])
 
-    def launch_browser(self):
-        """Launch a browser on the page, for debugging purposes."""
-        super(StatefulBrowser, self).launch_browser(self.get_current_page())
+    def launch_browser(self, soup=None):
+        """Launch a browser to display a page, for debugging purposes.
+
+        :param: soup: Page contents to display, supplied as a bs4 soup object.
+            Defaults to the current page of the ``StatefulBrowser`` instance.
+        """
+        if soup is None:
+            soup = self.get_current_page()
+        super(StatefulBrowser, self).launch_browser(soup)
