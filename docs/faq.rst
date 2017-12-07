@@ -68,6 +68,11 @@ the browser for you::
           browser.open(url)
           # ...
       # implicit call to browser.close() here.
+	  
+This problem is fixed in MechanicalSoup 1.0, so this is only required
+for compatibility with older versions. Code using new versions can let
+the ``browser`` variable go out of scope and let the garbage collector
+close it properly.
 
 This problem is fixed in MechanicalSoup 1.0, so this is only required
 for compatibility with older versions. Code using new versions can let
