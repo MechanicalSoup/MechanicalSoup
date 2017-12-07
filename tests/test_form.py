@@ -5,10 +5,10 @@ import sys
 import pytest
 
 
-def test_submit_online():
+def test_submit_online(httpbin):
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.Browser()
-    page = browser.get("http://httpbin.org/forms/post")
+    page = browser.get(httpbin + "/forms/post")
     form = mechanicalsoup.Form(page.soup.form)
 
     input_data = {"custname": "Philip J. Fry"}
@@ -36,10 +36,10 @@ def test_submit_online():
     assert data["comments"] == "freezer"
 
 
-def test_submit_set():
+def test_submit_set(httpbin):
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.Browser()
-    page = browser.get("http://httpbin.org/forms/post")
+    page = browser.get(httpbin + "/forms/post")
     form = mechanicalsoup.Form(page.soup.form)
 
     form["custname"] = "Philip J. Fry"
