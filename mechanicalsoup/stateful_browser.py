@@ -42,7 +42,7 @@ class StatefulBrowser(Browser):
         # ...
         browser.close()
 
-    Once not used anymore, the browser must be closed
+    Once not used anymore, the browser can be closed
     using :func:`~Browser.close`.
     """
 

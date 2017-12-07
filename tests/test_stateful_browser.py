@@ -15,7 +15,6 @@ def test_request_forward():
     r = browser.request('POST', url + '/post', data={'var1': 'val1',
                                                      'var2': 'val2'})
     assert r.text == 'Success!'
-    browser.close()
 
 
 def test_submit_online():
@@ -52,14 +51,12 @@ def test_submit_online():
     expected_headers = ('Content-Length', 'Host', 'Content-Type', 'Connection',
                         'Accept', 'User-Agent', 'Accept-Encoding')
     assert set(expected_headers).issubset(json["headers"].keys())
-    browser.close()
 
 
 def test_no_404():
     browser = mechanicalsoup.StatefulBrowser()
     resp = browser.open("http://httpbin.org/nosuchpage")
     assert resp.status_code == 404
-    browser.close()
 
 
 def test_404():
@@ -68,14 +65,12 @@ def test_404():
         resp = browser.open("http://httpbin.org/nosuchpage")
     resp = browser.open("http://httpbin.org/")
     assert resp.status_code == 200
-    browser.close()
 
 
 def test_user_agent():
     browser = mechanicalsoup.StatefulBrowser(user_agent='007')
     resp = browser.open("http://httpbin.org/user-agent")
     assert resp.json() == {'user-agent': '007'}
-    browser.close()
 
 
 def test_open_relative():
@@ -92,7 +87,6 @@ def test_open_relative():
     resp = browser.open_relative("/basic-auth/me/123", auth=('me', '123'))
     assert browser.get_url() == "http://httpbin.org/basic-auth/me/123"
     assert resp.json() == {"authenticated": True, "user": "me"}
-    browser.close()
 
 
 def test_links():
@@ -120,7 +114,6 @@ def test_links():
     two_links = browser.links(id=re.compile('_link'))
     assert len(two_links) == 2
     assert two_links == BeautifulSoup(html, "lxml").find_all('a')
-    browser.close()
 
 
 @pytest.mark.parametrize("expected_post", [
@@ -146,7 +139,6 @@ def test_submit_btnName(expected_post):
     browser['comment'] = expected_post[0][1]
     res = browser.submit_selected(btnName=expected_post[1][0])
     assert(res.status_code == 200 and res.text == 'Success!')
-    browser.close()
 
 
 def test_get_set_debug():
@@ -155,7 +147,6 @@ def test_get_set_debug():
     assert(not browser.get_debug())
     browser.set_debug(True)
     assert(browser.get_debug())
-    browser.close()
 
 
 def test_list_links(capsys):
@@ -170,7 +161,6 @@ def test_list_links(capsys):
     out, err = capsys.readouterr()
     expected = 'Links in the current page:{0}'.format(links)
     assert out == expected
-    browser.close()
 
 
 def test_launch_browser(mocker):
@@ -187,7 +177,6 @@ def test_launch_browser(mocker):
         browser.select_form('nosuchlink')
     # mock.assert_called_once() not available on some versions :-(
     assert webbrowser.open.call_count == 1
-    browser.close()
 
 
 def test_find_link():
@@ -195,7 +184,6 @@ def test_find_link():
     browser.open_fake_page('<html></html>')
     with pytest.raises(mechanicalsoup.LinkNotFoundError):
         browser.find_link('nosuchlink')
-    browser.close()
 
 
 def test_verbose(capsys):
@@ -218,7 +206,6 @@ def test_verbose(capsys):
     assert out == "mock://form.com\n"
     assert err == ""
     assert browser.get_verbose() == 2
-    browser.close()
 
 
 def test_new_control():
@@ -245,7 +232,6 @@ def test_new_control():
     assert data["size"] == "Sooo big !"
     assert data["comments"] == "This is an override comment"
     assert data["foo"] == "valval"
-    browser.close()
 
 
 submit_form_noaction = '''
@@ -267,7 +253,6 @@ def test_form_noaction():
     browser.select_form('#choose-submit-form')
     with pytest.raises(ValueError, message="no URL to submit to"):
         browser.submit_selected()
-    browser.close()
 
 
 submit_form_noname = '''
@@ -292,7 +277,6 @@ def test_form_noname():
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
     assert(response.status_code == 200 and response.text == 'Success!')
-    browser.close()
 
 
 submit_form_multiple = '''
@@ -317,7 +301,6 @@ def test_form_multiple():
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
     assert(response.status_code == 200 and response.text == 'Success!')
-    browser.close()
 
 
 def test_upload_file():
@@ -344,7 +327,6 @@ def test_upload_file():
     files = response.json()["files"]
     assert files["first"] == "first file content"
     assert files["second"] == "second file content"
-    browser.close()
 
 
 def test_with():
