@@ -264,6 +264,27 @@ class StatefulBrowser(Browser):
                 raise
         return self.open_relative(link['href'])
 
+    def download_link(self, filename, *args, **kwargs):
+        """Downloads the contents of a link to a file. The browser state
+        will not change when calling this function.
+
+        :param filename: Filesystem path where the page contents will be
+            downloaded.
+        :param \*args, \*\*kwargs: Arguments forwarded to :func:`follow_link`.
+            These specify a link to the page whose contents you want to
+            download.
+        """
+        # Store the current browser state
+        previous_state = self.__state
+        resp = self.follow_link(*args, **kwargs)
+
+        # Restore the previous browser state
+        self.__state = previous_state
+
+        # Save the response content to file
+        with open(filename, 'wb') as f:
+            f.write(resp.content)
+
     def launch_browser(self, soup=None):
         """Launch a browser to display a page, for debugging purposes.
 
