@@ -9,6 +9,13 @@ import re
 import bs4
 
 
+class _BrowserState:
+    def __init__(self, page=None, url=None, form=None):
+        self.page = page
+        self.url = url
+        self.form = form
+
+
 class StatefulBrowser(Browser):
     """An extension of :class:`Browser` that stores the browser's state
     and provides many convenient functions for interacting with HTML elements.
@@ -50,9 +57,7 @@ class StatefulBrowser(Browser):
         super(StatefulBrowser, self).__init__(*args, **kwargs)
         self.__debug = False
         self.__verbose = 0
-        self.__current_page = None
-        self.__current_url = None
-        self.__current_form = None
+        self.__state = _BrowserState()
 
     def set_debug(self, debug):
         """Set the debug mode (off by default).
@@ -82,13 +87,13 @@ class StatefulBrowser(Browser):
 
     def get_url(self):
         """Get the URL of the currently visited page."""
-        return self.__current_url
+        return self.__state.url
 
     def get_current_form(self):
         """Get the currently selected form as a :class:`Form` object.
         See :func:`select_form`.
         """
-        return self.__current_form
+        return self.__state.form
 
     def __setitem__(self, name, value):
         """Call item assignment on the currently selected form.
@@ -102,7 +107,7 @@ class StatefulBrowser(Browser):
 
     def get_current_page(self):
         """Get the current page as a soup object."""
-        return self.__current_page
+        return self.__state.page
 
     def absolute_url(self, url):
         """Return the absolute URL made from the current URL and ``url``.
@@ -110,7 +115,7 @@ class StatefulBrowser(Browser):
         ``url``, as in the `.urljoin() method of urllib.parse
         <https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urljoin>`__.
         """
-        return urllib.parse.urljoin(self.__current_url, url)
+        return urllib.parse.urljoin(self.get_url(), url)
 
     def open(self, url, *args, **kwargs):
         """Open the URL and store the Browser's state in this object.
@@ -125,9 +130,7 @@ class StatefulBrowser(Browser):
             print(url)
 
         resp = self.get(url, *args, **kwargs)
-        self.__current_page = resp.soup
-        self.__current_url = resp.url
-        self.__current_form = None
+        self.__state = _BrowserState(page=resp.soup, url=resp.url)
         return resp
 
     def open_fake_page(self, page_text, url=None, soup_config=None):
@@ -138,10 +141,9 @@ class StatefulBrowser(Browser):
         URL. Useful mainly for testing.
         """
         soup_config = soup_config or self.soup_config
-        self.__current_page = bs4.BeautifulSoup(
-            page_text, **soup_config)
-        self.__current_url = url
-        self.__current_form = None
+        self.__state = _BrowserState(
+            page=bs4.BeautifulSoup(page_text, **soup_config),
+            url=url)
 
     def open_relative(self, url, *args, **kwargs):
         """Like :func:`open`, but ``url`` can be relative to the currently
@@ -167,15 +169,15 @@ class StatefulBrowser(Browser):
             retrieved later with :func:`get_current_form`.
         """
         # nr is a 0-based index for consistency with mechanize
-        found_forms = self.__current_page.select(selector, limit=nr + 1)
+        found_forms = self.get_current_page().select(selector, limit=nr + 1)
         if len(found_forms) != nr + 1:
             if self.__debug:
                 print('select_form failed for', selector)
                 self.launch_browser()
             raise LinkNotFoundError()
 
-        self.__current_form = Form(found_forms[-1])
-        return self.__current_form
+        self.__state.form = Form(found_forms[-1])
+        return self.get_current_form()
 
     def submit_selected(self, btnName=None, *args, **kwargs):
         """Submit the form that was selected with :func:`select_form`.
@@ -189,12 +191,9 @@ class StatefulBrowser(Browser):
         if btnName is not None:
             self.get_current_form().choose_submit(btnName)
 
-        resp = self.submit(self.__current_form,
-                           url=self.__current_url,
+        resp = self.submit(self.__state.form, url=self.__state.url,
                            *args, **kwargs)
-        self.__current_url = resp.url
-        self.__current_page = resp.soup
-        self.__current_form = None
+        self.__state = _BrowserState(page=resp.soup, url=resp.url)
         return resp
 
     def list_links(self, *args, **kwargs):
