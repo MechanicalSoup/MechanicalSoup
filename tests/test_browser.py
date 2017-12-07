@@ -7,10 +7,10 @@ from requests.cookies import RequestsCookieJar
 import pytest
 
 
-def test_submit_online():
+def test_submit_online(httpbin):
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.Browser()
-    page = browser.get("http://httpbin.org/forms/post")
+    page = browser.get(httpbin + "/forms/post")
     form = page.soup.form
 
     form.find("input", {"name": "custname"})["value"] = "Philip J. Fry"
@@ -104,21 +104,21 @@ def test__request_file():
     assert "multipart/form-data" in response.request.headers["Content-Type"]
 
 
-def test_no_404():
+def test_no_404(httpbin):
     browser = mechanicalsoup.Browser()
-    resp = browser.get("http://httpbin.org/nosuchpage")
+    resp = browser.get(httpbin + "/nosuchpage")
     assert resp.status_code == 404
 
 
-def test_404():
+def test_404(httpbin):
     browser = mechanicalsoup.Browser(raise_on_404=True)
     with pytest.raises(mechanicalsoup.LinkNotFoundError):
-        resp = browser.get("http://httpbin.org/nosuchpage")
-    resp = browser.get("http://httpbin.org/")
+        resp = browser.get(httpbin + "/nosuchpage")
+    resp = browser.get(httpbin.url)
     assert resp.status_code == 200
 
 
-def test_set_cookiejar():
+def test_set_cookiejar(httpbin):
     """Set cookies locally and test that they are received remotely."""
     # construct a phony cookiejar and attach it to the session
     jar = RequestsCookieJar()
@@ -127,14 +127,14 @@ def test_set_cookiejar():
 
     browser = mechanicalsoup.Browser()
     browser.set_cookiejar(jar)
-    resp = browser.get("http://httpbin.org/cookies")
+    resp = browser.get(httpbin + "/cookies")
     assert resp.json() == {'cookies': {'field': 'value'}}
 
 
-def test_get_cookiejar():
+def test_get_cookiejar(httpbin):
     """Test that cookies set by the remote host update our session."""
     browser = mechanicalsoup.Browser()
-    resp = browser.get("http://httpbin.org/cookies/set?k1=v1&k2=v2")
+    resp = browser.get(httpbin + "/cookies/set?k1=v1&k2=v2")
     assert resp.json() == {'cookies': {'k1': 'v1', 'k2': 'v2'}}
 
     jar = browser.get_cookiejar()
@@ -142,10 +142,10 @@ def test_get_cookiejar():
     assert jar.get('k2') == 'v2'
 
 
-def test_post():
+def test_post(httpbin):
     browser = mechanicalsoup.Browser()
     data = {'color': 'blue', 'colorblind': 'True'}
-    resp = browser.post("http://httpbin.org/post", data)
+    resp = browser.post(httpbin + "/post", data)
     assert(resp.status_code == 200 and resp.json()['form'] == data)
 
 

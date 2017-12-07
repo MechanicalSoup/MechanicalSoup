@@ -50,3 +50,13 @@ def setup_mock_browser(expected_post=None, text=choose_submit_form):
 
     browser = mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock})
     return browser, url
+
+
+class HttpbinRemote:
+    """Drop-in replacement for pytest-httpbin's httpbin fixture
+    that uses the remote httpbin server instead of a local one."""
+    def __init__(self):
+        self.url = "http://httpbin.org"
+
+    def __add__(self, x):
+        return self.url + x

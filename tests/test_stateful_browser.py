@@ -17,17 +17,17 @@ def test_request_forward():
     assert r.text == 'Success!'
 
 
-def test_submit_online():
+def test_submit_online(httpbin):
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.StatefulBrowser()
     browser.set_user_agent('testing MechanicalSoup')
-    browser.open("http://httpbin.org/")
+    browser.open(httpbin.url)
     for link in browser.links():
         if link["href"] == "/":
             browser.follow_link(link)
             break
     browser.follow_link("forms/post")
-    assert browser.get_url() == "http://httpbin.org/forms/post"
+    assert browser.get_url() == httpbin + "/forms/post"
     browser.select_form("form")
     browser["custname"] = "Customer Name Here"
     browser["size"] = "medium"
@@ -53,39 +53,39 @@ def test_submit_online():
     assert set(expected_headers).issubset(json["headers"].keys())
 
 
-def test_no_404():
+def test_no_404(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
-    resp = browser.open("http://httpbin.org/nosuchpage")
+    resp = browser.open(httpbin + "/nosuchpage")
     assert resp.status_code == 404
 
 
-def test_404():
+def test_404(httpbin):
     browser = mechanicalsoup.StatefulBrowser(raise_on_404=True)
     with pytest.raises(mechanicalsoup.LinkNotFoundError):
-        resp = browser.open("http://httpbin.org/nosuchpage")
-    resp = browser.open("http://httpbin.org/")
+        resp = browser.open(httpbin + "/nosuchpage")
+    resp = browser.open(httpbin.url)
     assert resp.status_code == 200
 
 
-def test_user_agent():
+def test_user_agent(httpbin):
     browser = mechanicalsoup.StatefulBrowser(user_agent='007')
-    resp = browser.open("http://httpbin.org/user-agent")
+    resp = browser.open(httpbin + "/user-agent")
     assert resp.json() == {'user-agent': '007'}
 
 
-def test_open_relative():
+def test_open_relative(httpbin):
     # Open an arbitrary httpbin page to set the current URL
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open("http://httpbin.org/html")
+    browser.open(httpbin + "/html")
 
     # Open a relative page and make sure remote host and browser agree on URL
     resp = browser.open_relative("/get")
-    assert resp.json()['url'] == "http://httpbin.org/get"
-    assert browser.get_url() == "http://httpbin.org/get"
+    assert resp.json()['url'] == httpbin + "/get"
+    assert browser.get_url() == httpbin + "/get"
 
     # Test passing additional kwargs to the session
     resp = browser.open_relative("/basic-auth/me/123", auth=('me', '123'))
-    assert browser.get_url() == "http://httpbin.org/basic-auth/me/123"
+    assert browser.get_url() == httpbin + "/basic-auth/me/123"
     assert resp.json() == {"authenticated": True, "user": "me"}
 
 
@@ -303,9 +303,9 @@ def test_form_multiple():
     assert(response.status_code == 200 and response.text == 'Success!')
 
 
-def test_upload_file():
+def test_upload_file(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open("http://httpbin.org/forms/post")
+    browser.open(httpbin + "/forms/post")
 
     # Create two temporary files to upload
     def make_file(content):
