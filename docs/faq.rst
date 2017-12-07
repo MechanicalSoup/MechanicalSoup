@@ -68,6 +68,8 @@ the browser for you::
           browser.open(url)
           # ...
       # implicit call to browser.close() here.
+	  
+This problem has been fixed in the next release, and this will no longer be required.
 
 How do I get debug information/logs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

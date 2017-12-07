@@ -34,7 +34,6 @@ def test_submit_online():
     assert data["size"] == "medium"
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"
-    browser.close()
 
 
 def test_submit_set():
@@ -61,7 +60,6 @@ def test_submit_set():
     assert data["size"] == "medium"
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"
-    browser.close()
 
 
 @pytest.mark.parametrize("expected_post", [
@@ -93,7 +91,6 @@ def test_choose_submit(expected_post):
     form.choose_submit(expected_post[1][0])
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
-    browser.close()
 
 
 choose_submit_fail_form = '''
@@ -118,7 +115,6 @@ def test_choose_submit_fail(select_name):
             form.choose_submit(select_name['name'])
     else:
         form.choose_submit(select_name['name'])
-    browser.close()
 
 
 choose_submit_multiple_match_form = '''
@@ -137,7 +133,6 @@ def test_choose_submit_multiple_match():
     form = browser.select_form('#choose-submit-form')
     with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
         form.choose_submit('test_submit')
-    browser.close()
 
 
 submit_form_noaction = '''
@@ -160,7 +155,6 @@ def test_form_noaction():
     form['text1'] = 'newText1'
     res = browser.submit_selected()
     assert(res.status_code == 200 and browser.get_url() == url)
-    browser.close()
 
 
 submit_form_action = '''
@@ -185,7 +179,6 @@ def test_form_action():
     form['text1'] = 'newText1'
     res = browser.submit_selected()
     assert(res.status_code == 200 and browser.get_url() == url)
-    browser.close()
 
 
 set_select_form = '''
@@ -218,7 +211,6 @@ def test_set_select(option):
         browser[option['result'][0][0]] = option['result'][0][1]
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
-    browser.close()
 
 
 set_select_multiple_form = '''
@@ -253,7 +245,6 @@ def test_set_select_multiple(options):
     form.set_select({'instrument': options})
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
-    browser.close()
 
 
 def test_form_not_found():
@@ -274,7 +265,6 @@ def test_form_not_found():
         form.set_radio({'size': 'tiny'})
     with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
         form.set_select({'entree': ('no_multiple', 'no_multiple')})
-    browser.close()
 
 
 page_with_radio = '''
@@ -298,7 +288,6 @@ def test_form_check_uncheck():
     # Test explicit unchecking (skipping the call to Form.uncheck_all)
     form.set_checkbox({"foo": False}, uncheck_other_boxes=False)
     assert "checked" not in form.form.find("input", {"name": "foo"}).attrs
-    browser.close()
 
 
 page_with_various_fields = '''

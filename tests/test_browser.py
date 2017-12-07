@@ -35,7 +35,6 @@ def test_submit_online():
 
     assert json["headers"]["User-Agent"].startswith('python-requests/')
     assert 'MechanicalSoup' in json["headers"]["User-Agent"]
-    browser.close()
 
 
 form_html = """
@@ -80,7 +79,6 @@ def test__request():
 
     assert "application/x-www-form-urlencoded" in response.request.headers[
         "Content-Type"]
-    browser.close()
 
 
 def test__request_file():
@@ -104,14 +102,12 @@ def test__request_file():
             assert (value is None) or ("pic" not in value)
 
     assert "multipart/form-data" in response.request.headers["Content-Type"]
-    browser.close()
 
 
 def test_no_404():
     browser = mechanicalsoup.Browser()
     resp = browser.get("http://httpbin.org/nosuchpage")
     assert resp.status_code == 404
-    browser.close()
 
 
 def test_404():
@@ -120,7 +116,6 @@ def test_404():
         resp = browser.get("http://httpbin.org/nosuchpage")
     resp = browser.get("http://httpbin.org/")
     assert resp.status_code == 200
-    browser.close()
 
 
 def test_set_cookiejar():
@@ -134,7 +129,6 @@ def test_set_cookiejar():
     browser.set_cookiejar(jar)
     resp = browser.get("http://httpbin.org/cookies")
     assert resp.json() == {'cookies': {'field': 'value'}}
-    browser.close()
 
 
 def test_get_cookiejar():
@@ -146,7 +140,6 @@ def test_get_cookiejar():
     jar = browser.get_cookiejar()
     assert jar.get('k1') == 'v1'
     assert jar.get('k2') == 'v2'
-    browser.close()
 
 
 def test_post():
@@ -154,7 +147,6 @@ def test_post():
     data = {'color': 'blue', 'colorblind': 'True'}
     resp = browser.post("http://httpbin.org/post", data)
     assert(resp.status_code == 200 and resp.json()['form'] == data)
-    browser.close()
 
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ import webbrowser
 import tempfile
 from .utils import LinkNotFoundError
 from .__version__ import __version__, __title__
+import weakref
 
 
 class Browser(object):
@@ -36,6 +37,8 @@ class Browser(object):
 
         self.__raise_on_404 = raise_on_404
         self.session = session or requests.Session()
+
+        self._finalize = weakref.finalize(self.session, self.close)
 
         self.set_user_agent(user_agent)
 
@@ -223,7 +226,7 @@ class Browser(object):
             self.session = None
 
     def __del__(self):
-        self.close()
+        self._finalize()
 
     def __enter__(self):
         return self
