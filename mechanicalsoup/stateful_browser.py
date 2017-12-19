@@ -204,17 +204,29 @@ class StatefulBrowser(Browser):
         for l in self.links(*args, **kwargs):
             print("    ", l)
 
-    def links(self, url_regex=None, link_text=None, *args, **kwargs):
+    def links(self, *args, **kwargs):
         """Return links in the page, as a list of bs4.element.Tag objects.
 
         To return links matching specific criteria, specify ``url_regex``
         to match the *href*-attribute, or ``link_text`` to match the
-        *text*-attribute of the Tag. All other arguments are forwarded to
-        the `.find_all() method in BeautifulSoup
+        *text*-attribute of the Tag. All other keyword arguments are
+        forwarded to the `.find_all() method in BeautifulSoup
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#find-all>`__.
         """
+
+        url_regex = link_text = None
+
+        if 'url_regex' in kwargs:
+            url_regex = kwargs['url_regex']
+            del kwargs['url_regex']
+
+        if 'link_text' in kwargs:
+            link_text = kwargs['link_text']
+            del kwargs['link_text']
+
         all_links = self.get_current_page().find_all(
-            'a', href=True, *args, **kwargs)
+            name='a', href=True, **kwargs)
+
         if url_regex is not None:
             all_links = [a for a in all_links
                          if re.search(url_regex, a['href'])]
@@ -237,7 +249,7 @@ class StatefulBrowser(Browser):
         else:
             return links[0]
 
-    def follow_link(self, link=None, *args, **kwargs):
+    def follow_link(self, link=None, headers=None, *args, **kwargs):
         """Follow a link.
 
         If ``link`` is a bs4.element.Tag (i.e. from a previous call to
@@ -254,15 +266,26 @@ class StatefulBrowser(Browser):
         :return: Forwarded from :func:`open_relative`.
         """
         if not hasattr(link, 'attrs') or 'href' not in link.attrs:
+
+            # Check if "link" parameter should be treated as "url_regex"
+            # but reject obtaining it from both places.
+            if link and 'url_regex' in kwargs:
+                raise ValueError('link parameter can not be treated as '
+                                 'url_regex because url_regex is already '
+                                 'present in keyword arguments')
+            else:
+                kwargs['url_regex'] = link
+
             try:
-                link = self.find_link(link, *args, **kwargs)
+                link = self.find_link(*args, **kwargs)
             except LinkNotFoundError:
                 if self.get_debug():
                     print('follow_link failed for', link)
                     self.list_links()
                     self.launch_browser()
                 raise
-        return self.open_relative(link['href'])
+        headers = headers or {}
+        return self.open_relative(link['href'], headers=headers)
 
     def launch_browser(self, soup=None):
         """Launch a browser to display a page, for debugging purposes.
