@@ -307,7 +307,8 @@ class Form(object):
         found = False
         inps = self.form.select('input[type="submit"], button[type="submit"]')
         for inp in inps:
-            if inp == submit or inp['name'] == submit:
+            if inp == submit or (inp.has_attr('name') and
+                                 inp['name'] == submit):
                 if found:
                     raise LinkNotFoundError(
                         "Multiple submit elements match: {0}".format(submit)
