@@ -295,8 +295,8 @@ submit_form_multiple = '''
 
 
 def test_form_multiple():
-    browser, url = setup_mock_browser(expected_post=[('foo', 'tempeh'),
-                                                     ('foo', 'tofu')])
+    browser, url = setup_mock_browser(expected_post=[('foo', 'tofu'),
+                                                     ('foo', 'tempeh')])
     browser.open_fake_page(submit_form_multiple, url=url)
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()

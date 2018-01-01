@@ -44,7 +44,7 @@ def setup_mock_browser(expected_post=None, text=choose_submit_form):
         def text_callback(request, context):
             # Python 2's parse_qsl doesn't like None argument
             query = parse_qsl(request.text) if request.text else ()
-            assert(set(query) == set(expected_post))
+            assert list(query) == list(expected_post)
             return 'Success!'
         mock.register_uri('POST', url + '/post', text=text_callback)
 
