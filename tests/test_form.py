@@ -350,5 +350,21 @@ def test_form_print_summary(capsys):
     assert err == ""
 
 
+def test_issue180():
+    """Test that a KeyError is not raised when Form.choose_submit is called
+    on a form where a submit element is missing its name-attribute."""
+    browser = mechanicalsoup.StatefulBrowser()
+    html = '''
+<form>
+  <input type="submit" value="Invalid" />
+  <input type="submit" name="valid" value="Valid" />
+</form>
+'''
+    browser.open_fake_page(html)
+    form = browser.select_form()
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        form.choose_submit('not_found')
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
