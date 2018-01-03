@@ -191,6 +191,13 @@ class StatefulBrowser(Browser):
         if btnName is not None:
             self.get_current_form().choose_submit(btnName)
 
+        referer = self.get_url()
+        if referer is not None:
+            if 'headers' in kwargs:
+                kwargs['headers']['Referer'] = referer
+            else:
+                kwargs['headers'] = {'Referer': referer}
+
         resp = self.submit(self.__state.form, url=self.__state.url,
                            *args, **kwargs)
         self.__state = _BrowserState(page=resp.soup, url=resp.url)

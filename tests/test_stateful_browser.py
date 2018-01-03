@@ -361,5 +361,46 @@ def test_referer_follow_link(httpbin):
     assert actual_ref == expected_ref
 
 
+submit_form_headers = '''
+<html>
+  <body>
+    <form method="get" action="{}" id="choose-submit-form">
+      <input type="text" name="text1" value="someValue1" />
+      <input type="text" name="text2" value="someValue2" />
+      <input type="submit" name="save" />
+    </form>
+  </body>
+</html>
+'''
+
+
+def test_referer_submit(httpbin):
+    browser = mechanicalsoup.StatefulBrowser()
+    ref = "https://example.com/my-referer"
+    page = submit_form_headers.format(httpbin.url + "/headers")
+    browser.open_fake_page(page, url=ref)
+    browser.select_form()
+    response = browser.submit_selected()
+    headers = response.json()["headers"]
+    referer = headers["Referer"]
+    actual_ref = re.sub('/*$', '', referer)
+    assert actual_ref == ref
+
+
+def test_referer_submit_headers(httpbin):
+    browser = mechanicalsoup.StatefulBrowser()
+    ref = "https://example.com/my-referer"
+    page = submit_form_headers.format(httpbin.url + "/headers")
+    browser.open_fake_page(page, url=ref)
+    browser.select_form()
+    response = browser.submit_selected(
+        headers={'X-Test-Header': 'x-test-value'})
+    headers = response.json()["headers"]
+    referer = headers["Referer"]
+    actual_ref = re.sub('/*$', '', referer)
+    assert actual_ref == ref
+    assert headers['X-Test-Header'] == 'x-test-value'
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
