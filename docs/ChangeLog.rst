@@ -7,6 +7,9 @@ Version 1.0 (in development)
 
 Main changes:
 -------------
+* ``StatefulBrowser.follow_link`` now sets the ``Referer:`` HTTP
+  header to the page from which the link is followed.
+
 * ``Browser.submit`` and ``StatefulBrowser.submit_selected`` accept a larger
   number of keyword arguments. Arguments are forwarded to
   `requests.Session.request <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
