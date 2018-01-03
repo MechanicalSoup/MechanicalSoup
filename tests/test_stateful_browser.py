@@ -1,3 +1,4 @@
+import os
 import tempfile
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 import mechanicalsoup
@@ -349,6 +350,23 @@ def test_select_form_nr():
         assert form.form['id'] == "c"
         with pytest.raises(mechanicalsoup.LinkNotFoundError):
             browser.select_form(nr=3)
+
+
+def test_download_link(httpbin):
+    """Test downloading the contents of a link to file."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open(httpbin.url)
+    tmpfile = tempfile.NamedTemporaryFile()
+    current_url = browser.get_url()
+    current_page = browser.get_current_page()
+    browser.download_link(tmpfile.name, link='image/png')
+
+    # Check that the browser state has not changed
+    assert browser.get_url() == current_url
+    assert browser.get_current_page() == current_page
+
+    # Check that the file was downloaded
+    assert os.path.isfile(tmpfile.name)
 
 
 if __name__ == '__main__':

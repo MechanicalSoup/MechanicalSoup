@@ -237,7 +237,7 @@ class StatefulBrowser(Browser):
         else:
             return links[0]
 
-    def follow_link(self, link=None, *args, **kwargs):
+    def follow_link(self, link=None, return_url_only=False, *args, **kwargs):
         """Follow a link.
 
         If ``link`` is a bs4.element.Tag (i.e. from a previous call to
@@ -262,7 +262,30 @@ class StatefulBrowser(Browser):
                     self.list_links()
                     self.launch_browser()
                 raise
-        return self.open_relative(link['href'])
+        url = link['href']
+        if return_url_only:
+            return self.absolute_url(url)
+        else:
+            return self.open_relative(url)
+
+    def download_link(self, filename, *args, **kwargs):
+        """Downloads the contents of a link to a file. The browser state
+        will not change when calling this function.
+
+        :param filename: Filesystem path where the page contents will be
+            downloaded.
+        :param \*args, \*\*kwargs: Arguments forwarded to :func:`follow_link`.
+            These specify a link to the page whose contents you want to
+            download.
+        """
+        url = self.follow_link(return_url_only=True, *args, **kwargs)
+        response = self.session.get(url)
+        if self.raise_on_404 and response.status_code == 404:
+            raise LinkNotFoundError()
+
+        # Save the response content to file
+        with open(filename, 'wb') as f:
+            f.write(response.content)
 
     def launch_browser(self, soup=None):
         """Launch a browser to display a page, for debugging purposes.

@@ -12,6 +12,10 @@ Main changes:
   `requests.Session.request <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
   [`#166 <https://github.com/MechanicalSoup/MechanicalSoup/pull/166>`__]
 
+* Added method ``StatefulBrowser.download_link``, which will download the
+  contents of a link to a file without changing the state of the browser.
+  [`#170 <https://github.com/MechanicalSoup/MechanicalSoup/issues/170`__]
+
 Internal changes:
 -----------------
 * Private methods ``Browser._build_request`` and ``Browser._prepare_request``
