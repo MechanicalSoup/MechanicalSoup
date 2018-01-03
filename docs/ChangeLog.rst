@@ -7,8 +7,9 @@ Version 1.0 (in development)
 
 Main changes:
 -------------
-* ``StatefulBrowser.follow_link`` and
-  ``StatefulBrowser.submit_selected()`` now sets the ``Referer:`` HTTP
+* ``StatefulBrowser.follow_link``,
+  ``StatefulBrowser.submit_selected()`` and the new
+  ``StatefulBrowser.download_link`` now sets the ``Referer:`` HTTP
   header to the page from which the link is followed.
 
 * ``Browser.submit`` and ``StatefulBrowser.submit_selected`` accept a larger

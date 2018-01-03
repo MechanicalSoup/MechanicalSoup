@@ -316,7 +316,11 @@ class StatefulBrowser(Browser):
         """
         link = self._find_link_internal(link, args, kwargs)
         url = self.absolute_url(link['href'])
-        response = self.session.get(url)
+        referer = self.get_url()
+        headers = dict()
+        if referer is not None:
+            headers["Referer"] = referer
+        response = self.session.get(url, headers=headers)
         if self.raise_on_404 and response.status_code == 404:
             raise LinkNotFoundError()
 

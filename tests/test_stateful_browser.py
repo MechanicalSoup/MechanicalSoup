@@ -1,5 +1,6 @@
 import os
 import tempfile
+import json
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 import mechanicalsoup
 import sys
@@ -507,6 +508,28 @@ def test_download_link_404(httpbin):
 
     # Check that the file was not downloaded
     assert not os.path.exists(tmpfile)
+
+
+def test_download_link_referer(httpbin):
+    """Test downloading the contents of a link to file."""
+    browser = mechanicalsoup.StatefulBrowser()
+    ref = httpbin + "/my-referer"
+    browser.open_fake_page('<a href="/headers">Link</a>',
+                           url=ref)
+    tmpfile = tempfile.NamedTemporaryFile()
+    current_url = browser.get_url()
+    current_page = browser.get_current_page()
+    browser.download_link(file=tmpfile.name, link_text='Link')
+
+    # Check that the browser state has not changed
+    assert browser.get_url() == current_url
+    assert browser.get_current_page() == current_page
+
+    # Check that the file was downloaded
+    with open(tmpfile.name) as f:
+        json_data = json.load(f)
+    headers = json_data["headers"]
+    assert headers["Referer"] == ref
 
 
 if __name__ == '__main__':
