@@ -35,7 +35,7 @@ class Browser(object):
                  requests_adapters=None,
                  raise_on_404=False, user_agent=None):
 
-        self.__raise_on_404 = raise_on_404
+        self.raise_on_404 = raise_on_404
         self.session = session or requests.Session()
 
         if hasattr(weakref, 'finalize'):
@@ -112,7 +112,7 @@ class Browser(object):
             object with a *soup*-attribute added by :func:`add_soup`.
         """
         response = self.session.get(*args, **kwargs)
-        if self.__raise_on_404 and response.status_code == 404:
+        if self.raise_on_404 and response.status_code == 404:
             raise LinkNotFoundError()
         Browser.add_soup(response, self.soup_config)
         return response
