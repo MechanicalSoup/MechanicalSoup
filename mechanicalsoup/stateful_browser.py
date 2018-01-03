@@ -237,7 +237,7 @@ class StatefulBrowser(Browser):
         else:
             return links[0]
 
-    def follow_link(self, link=None, *args, **kwargs):
+    def follow_link(self, link=None, return_url_only=False, *args, **kwargs):
         """Follow a link.
 
         If ``link`` is a bs4.element.Tag (i.e. from a previous call to
@@ -262,7 +262,11 @@ class StatefulBrowser(Browser):
                     self.list_links()
                     self.launch_browser()
                 raise
-        return self.open_relative(link['href'])
+        url = link['href']
+        if return_url_only:
+            return self.absolute_url(url)
+        else:
+            return self.open_relative(url)
 
     def download_link(self, filename, *args, **kwargs):
         """Downloads the contents of a link to a file. The browser state
