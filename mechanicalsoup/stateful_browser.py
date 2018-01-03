@@ -278,16 +278,14 @@ class StatefulBrowser(Browser):
             These specify a link to the page whose contents you want to
             download.
         """
-        # Store the current browser state
-        previous_state = self.__state
-        resp = self.follow_link(*args, **kwargs)
-
-        # Restore the previous browser state
-        self.__state = previous_state
+        url = self.follow_link(return_url_only=True, *args, **kwargs)
+        response = self.session.get(url)
+        if self.raise_on_404 and response.status_code == 404:
+            raise LinkNotFoundError()
 
         # Save the response content to file
         with open(filename, 'wb') as f:
-            f.write(resp.content)
+            f.write(response.content)
 
     def launch_browser(self, soup=None):
         """Launch a browser to display a page, for debugging purposes.
