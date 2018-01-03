@@ -262,7 +262,13 @@ class StatefulBrowser(Browser):
                     self.list_links()
                     self.launch_browser()
                 raise
-        return self.open_relative(link['href'])
+
+        referer = self.get_url()
+        request_kwargs = dict()
+        if referer is not None:
+            request_kwargs['headers'] = {'Referer': referer}
+
+        return self.open_relative(link['href'], **request_kwargs)
 
     def launch_browser(self, soup=None):
         """Launch a browser to display a page, for debugging purposes.

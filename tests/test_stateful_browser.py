@@ -351,5 +351,15 @@ def test_select_form_nr():
             browser.select_form(nr=3)
 
 
+def test_referer_follow_link(httpbin):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open(httpbin.url)
+    response = browser.follow_link("/headers")
+    referer = response.json()["headers"]["Referer"]
+    actual_ref = re.sub('/*$', '', referer)
+    expected_ref = re.sub('/*$', '', httpbin.url)
+    assert actual_ref == expected_ref
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
