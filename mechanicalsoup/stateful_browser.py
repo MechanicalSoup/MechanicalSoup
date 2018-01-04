@@ -298,6 +298,35 @@ class StatefulBrowser(Browser):
 
         return self.open_relative(link['href'], **request_kwargs)
 
+    def download_link(self, link=None, file=None, *args, **kwargs):
+        """Downloads the contents of a link to a file. This function behaves
+        similarly to :func:`follow_link`, but the browser state will
+        not change when calling this function.
+
+        :param file: Filesystem path where the page contents will be
+            downloaded. If the file already exists, it will be overwritten.
+
+        Other arguments are the same as :func:`follow_link` (``link``
+        can either be a bs4.element.Tag or a URL regex, other
+        arguments are forwarded to :func:`find_link`).
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object.
+        """
+        link = self._find_link_internal(link, args, kwargs)
+        url = self.absolute_url(link['href'])
+        response = self.session.get(url)
+        if self.raise_on_404 and response.status_code == 404:
+            raise LinkNotFoundError()
+
+        # Save the response content to file
+        if file is not None:
+            with open(file, 'wb') as f:
+                f.write(response.content)
+
+        return response
+
     def launch_browser(self, soup=None):
         """Launch a browser to display a page, for debugging purposes.
 
