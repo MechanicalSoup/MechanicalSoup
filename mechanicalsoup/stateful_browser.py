@@ -60,6 +60,12 @@ class StatefulBrowser(Browser):
         self.__verbose = 0
         self.__state = _BrowserState()
 
+        # Aliases for backwards compatibility
+        # (Included specifically in __init__ to suppress them in Sphinx docs)
+        self.get_current_page = lambda: self.page
+        self.get_current_form = lambda: self.form
+        self.get_url = lambda: self.url
+
     def set_debug(self, debug):
         """Set the debug mode (off by default).
 
@@ -86,11 +92,18 @@ class StatefulBrowser(Browser):
         """Get the verbosity level. See :func:`set_verbose()`."""
         return self.__verbose
 
-    def get_url(self):
+    @property
+    def page(self):
+        """Get the current page as a soup object."""
+        return self.__state.page
+
+    @property
+    def url(self):
         """Get the URL of the currently visited page."""
         return self.__state.url
 
-    def get_current_form(self):
+    @property
+    def form(self):
         """Get the currently selected form as a :class:`Form` object.
         See :func:`select_form`.
         """
@@ -105,10 +118,6 @@ class StatefulBrowser(Browser):
     def new_control(self, type, name, value, **kwargs):
         """Call :func:`Form.new_control` on the currently selected form."""
         return self.get_current_form().new_control(type, name, value, **kwargs)
-
-    def get_current_page(self):
-        """Get the current page as a soup object."""
-        return self.__state.page
 
     def absolute_url(self, url):
         """Return the absolute URL made from the current URL and ``url``.
