@@ -94,15 +94,21 @@ class StatefulBrowser(Browser):
         """Get the current page as a soup object."""
         return self.__state.page
 
+    page = property(get_page)
+
     def get_url(self):
         """Get the URL of the currently visited page."""
         return self.__state.url
+
+    url = property(get_url)
 
     def get_selected_form(self):
         """Get the currently selected form as a :class:`Form` object.
         See :func:`select_form`.
         """
         return self.__state.form
+
+    form = property(get_selected_form)
 
     def __setitem__(self, name, value):
         """Call item assignment on the currently selected form.

@@ -19,6 +19,16 @@ def test_request_forward():
     assert r.text == 'Success!'
 
 
+def test_properties():
+    """Check that properties return the same value as the getter."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page('<form></form>', url="http://example.com")
+    assert browser.page == browser.get_page()
+    assert browser.url == browser.get_url()
+    browser.select_form()
+    assert browser.form == browser.get_selected_form()
+
+
 def test_submit_online(httpbin):
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.StatefulBrowser()
