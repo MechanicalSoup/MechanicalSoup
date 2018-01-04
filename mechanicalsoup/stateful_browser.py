@@ -63,7 +63,9 @@ class StatefulBrowser(Browser):
         # Aliases for backwards compatibility
         # (Included specifically in __init__ to suppress them in Sphinx docs)
         self.get_current_page = lambda: self.page
-        self.get_current_form = lambda: self.form
+        # Almost same as self.form, but don't raise an error if no
+        # form was selected for backward compatibility.
+        self.get_current_form = lambda: self.__state.form
         self.get_url = lambda: self.url
 
     def set_debug(self, debug):
@@ -107,6 +109,8 @@ class StatefulBrowser(Browser):
         """Get the currently selected form as a :class:`Form` object.
         See :func:`select_form`.
         """
+        if self.__state.form is None:
+            raise AttributeError("No form has been selected yet on this page.")
         return self.__state.form
 
     def __setitem__(self, name, value):
