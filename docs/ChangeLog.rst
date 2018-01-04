@@ -11,6 +11,23 @@ Version 0.12
 Main changes:
 -------------
 
+* ``StatefulBrowser`` methods ``get_current_page``,
+  ``get_current_form`` and ``get_url`` have been deprecated in favor
+  of ``page``, ``form`` and ``url`` properties (e.g. the new
+  ``x.page`` is equivalent to the now deprecated
+  ``x.get_current_page()``) [`#175
+  <https://github.com/MechanicalSoup/MechanicalSoup/issues/175`__]
+
+* ``StatefulBrowser.form`` will raise an ``AttributeError`` instead of
+  returning ``None`` if no form has been selected yet. Note that
+  ``StatefulBrowser.get_current_form()`` still returns ``None`` for
+  backward compatibility.
+
+* Added ability to submit a form without updating `StatefulBrowser` internal
+  state. This means you get a response from the form submission, but your
+  browser "stays" on the same page. Useful for handling forms that result in
+  a download of a file or opening a new window.
+
 * Changes in official python version support: added 3.7 and dropped 3.4.
 
 * Added ability to submit a form without updating ``StatefulBrowser`` internal
