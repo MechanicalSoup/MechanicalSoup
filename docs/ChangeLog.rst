@@ -12,6 +12,16 @@ Main changes:
   ``StatefulBrowser.download_link`` now sets the ``Referer:`` HTTP
   header to the page from which the link is followed.
 
+* ``StatefulBrowser`` methods ``get_current_page`` and ``get_current_form``
+  have been deprecated in favor of ``get_page`` and ``get_selected_form``
+  respectively. However, you can now access the browser state more conveniently
+  with attributes ``page`` (calls ``get_current_page()``), ``form`` (calls
+  ``get_selected_form()``), and ``url`` (calls ``get_url()``).
+  [`#175 <https://github.com/MechanicalSoup/MechanicalSoup/issues/175`__]
+
+* ``StatefulBrowser.get_selected_form`` will now raise an ``AttributeError``
+  istead of returning ``None`` if no form has been selected yet.
+
 * ``Browser.submit`` and ``StatefulBrowser.submit_selected`` accept a larger
   number of keyword arguments. Arguments are forwarded to
   `requests.Session.request <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
