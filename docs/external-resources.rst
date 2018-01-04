@@ -34,4 +34,6 @@ look at their source code for real-life examples.
 * `Chamilo Tools <https://gitlab.com/chamilotools/chamilotools>`__
 * `gmusicapi <https://github.com/simon-weber/gmusicapi>`__: an unofficial API
   for Google Play Music
+* `PatZilla <https://github.com/ip-tools/ip-navigator>`__: Patent information
+  research for humans
 * *TODO: Add your favorite tool here ...*
