@@ -244,6 +244,36 @@ class StatefulBrowser(Browser):
         else:
             return links[0]
 
+    def _find_link_internal(self, link, args, kwargs):
+        """Wrapper around find_link that deals with convenience special-cases:
+
+        * If ``link`` has an *href*-attribute, then return it. If not,
+          consider it as a ``url_regex`` argument.
+
+        * If searching for the link fails and debug is active, launch
+          a browser.
+        """
+        if hasattr(link, 'attrs') and 'href' in link.attrs:
+            return link
+
+        # Check if "link" parameter should be treated as "url_regex"
+        # but reject obtaining it from both places.
+        if link and 'url_regex' in kwargs:
+            raise ValueError('link parameter cannot be treated as '
+                             'url_regex because url_regex is already '
+                             'present in keyword arguments')
+        else:
+            kwargs['url_regex'] = link
+
+        try:
+            return self.find_link(*args, **kwargs)
+        except LinkNotFoundError:
+            if self.get_debug():
+                print('find_link failed for', kwargs)
+                self.list_links()
+                self.launch_browser()
+            raise
+
     def follow_link(self, link=None, *args, **kwargs):
         """Follow a link.
 
@@ -260,16 +290,7 @@ class StatefulBrowser(Browser):
 
         :return: Forwarded from :func:`open_relative`.
         """
-        if not hasattr(link, 'attrs') or 'href' not in link.attrs:
-            try:
-                link = self.find_link(link, *args, **kwargs)
-            except LinkNotFoundError:
-                if self.get_debug():
-                    print('follow_link failed for', link)
-                    self.list_links()
-                    self.launch_browser()
-                raise
-
+        link = self._find_link_internal(link, args, kwargs)
         referer = self.get_url()
         request_kwargs = dict()
         if referer is not None:

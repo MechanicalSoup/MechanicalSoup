@@ -402,5 +402,26 @@ def test_referer_submit_headers(httpbin):
     assert headers['X-Test-Header'] == 'x-test-value'
 
 
+def test_link_arg_text(httpbin):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
+    browser.follow_link(link_text='Link')
+    assert browser.get_url() == httpbin + '/get'
+
+
+def test_link_arg_regex(httpbin):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
+    browser.follow_link(url_regex='.*')
+    assert browser.get_url() == httpbin + '/get'
+
+
+def test_link_arg_multiregex(httpbin):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
+    with pytest.raises(ValueError, match="link parameter cannot be .*"):
+        browser.follow_link('foo', url_regex='bar')
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
