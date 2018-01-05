@@ -153,6 +153,27 @@ class StatefulBrowser(Browser):
         """
         return self.open(self.absolute_url(url), *args, **kwargs)
 
+    def refresh(self):
+        """Reload the current page with the same request as originally done.
+        Any change (`select_form`, or any value filled-in in the form) made to
+        the current page before refresh is discarded.
+
+        :raise ValueError: Raised if no refreshable page is loaded, e.g., when
+            using the shallow ``Browser`` wrapper functions.
+
+        :return: Response of the request."""
+        old_request = self.__state.request
+        if old_request is None:
+            raise ValueError('The current page is not refreshable. Either no '
+                             'page is opened or low-level browser methods '
+                             'were used to do so')
+
+        resp = self.session.send(old_request)
+        Browser.add_soup(resp, self.soup_config)
+        self.__state = _BrowserState(page=resp.soup, url=resp.url,
+                                     request=resp.request)
+        return resp
+
     def select_form(self, selector="form", nr=0):
         """Select a form in the current page.
 
