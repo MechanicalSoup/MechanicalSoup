@@ -10,10 +10,11 @@ import bs4
 
 
 class _BrowserState:
-    def __init__(self, page=None, url=None, form=None):
+    def __init__(self, page=None, url=None, form=None, request=None):
         self.page = page
         self.url = url
         self.form = form
+        self.request = request
 
 
 class StatefulBrowser(Browser):
@@ -130,7 +131,8 @@ class StatefulBrowser(Browser):
             print(url)
 
         resp = self.get(url, *args, **kwargs)
-        self.__state = _BrowserState(page=resp.soup, url=resp.url)
+        self.__state = _BrowserState(page=resp.soup, url=resp.url,
+                                     request=resp.request)
         return resp
 
     def open_fake_page(self, page_text, url=None, soup_config=None):
@@ -200,7 +202,8 @@ class StatefulBrowser(Browser):
 
         resp = self.submit(self.__state.form, url=self.__state.url,
                            *args, **kwargs)
-        self.__state = _BrowserState(page=resp.soup, url=resp.url)
+        self.__state = _BrowserState(page=resp.soup, url=resp.url,
+                                     request=resp.request)
         return resp
 
     def list_links(self, *args, **kwargs):
