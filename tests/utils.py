@@ -52,9 +52,10 @@ def prepare_mock_browser(scheme='mock'):
     return browser, mock
 
 
-def mock_get(mocked_adapter, url, reply, content_type='text/html'):
+def mock_get(mocked_adapter, url, reply, content_type='text/html', **kwargs):
     headers = {'Content-Type': content_type}
-    mocked_adapter.register_uri('GET', url, headers=headers, text=reply)
+    mocked_adapter.register_uri('GET', url, headers=headers, text=reply,
+                                **kwargs)
 
 
 def mock_post(mocked_adapter, url, expected, reply='Success!'):

@@ -6,7 +6,7 @@ import mechanicalsoup
 import sys
 import re
 from bs4 import BeautifulSoup
-from utils import setup_mock_browser
+from utils import setup_mock_browser, prepare_mock_browser, mock_get
 import pytest
 import webbrowser
 
@@ -530,6 +530,78 @@ def test_download_link_referer(httpbin):
         json_data = json.load(f)
     headers = json_data["headers"]
     assert headers["Referer"] == ref
+
+
+def test_refresh_open():
+    url = 'mock://example.com'
+    initial_page = BeautifulSoup('<p>Fake empty page</p>', 'lxml')
+    reload_page = BeautifulSoup('<p>Fake reloaded page</p>', 'lxml')
+
+    browser, adapter = prepare_mock_browser()
+    mock_get(adapter, url=url, reply=str(initial_page))
+    browser.open(url)
+    mock_get(adapter, url=url, reply=str(reload_page),
+             additional_matcher=lambda r: 'Referer' not in r.headers)
+
+    browser.refresh()
+
+    assert browser.get_url() == url
+    assert browser.get_current_page() == reload_page
+
+
+def test_refresh_follow_link():
+    url = 'mock://example.com'
+    follow_url = 'mock://example.com/followed'
+    initial_content = '<a href="{url}">Link</a>'.format(url=follow_url)
+    initial_page = BeautifulSoup(initial_content, 'lxml')
+    reload_page = BeautifulSoup('<p>Fake reloaded page</p>', 'lxml')
+
+    browser, adapter = prepare_mock_browser()
+    mock_get(adapter, url=url, reply=str(initial_page))
+    mock_get(adapter, url=follow_url, reply=str(initial_page))
+    browser.open(url)
+    browser.follow_link()
+    refer_header = {'Referer': url}
+    mock_get(adapter, url=follow_url, reply=str(reload_page),
+             request_headers=refer_header)
+
+    browser.refresh()
+
+    assert browser.get_url() == follow_url
+    assert browser.get_current_page() == reload_page
+
+
+def test_refresh_form_not_retained():
+    url = 'mock://example.com'
+    initial_content = '<form>Here comes the form</form>'
+    initial_page = BeautifulSoup(initial_content, 'lxml')
+    reload_page = BeautifulSoup('<p>Fake reloaded page</p>', 'lxml')
+
+    browser, adapter = prepare_mock_browser()
+    mock_get(adapter, url=url, reply=str(initial_page))
+    browser.open(url)
+    browser.select_form()
+    mock_get(adapter, url=url, reply=str(reload_page),
+             additional_matcher=lambda r: 'Referer' not in r.headers)
+
+    browser.refresh()
+
+    assert browser.get_url() == url
+    assert browser.get_current_page() == reload_page
+    assert browser.get_current_form() is None
+
+
+def test_refresh_error():
+    browser = mechanicalsoup.StatefulBrowser()
+
+    # Test no page
+    with pytest.raises(ValueError):
+        browser.refresh()
+
+    # Test fake page
+    with pytest.raises(ValueError):
+        browser.open_fake_page('<p>Fake empty page</p>', url='http://fake.com')
+        browser.refresh()
 
 
 if __name__ == '__main__':
