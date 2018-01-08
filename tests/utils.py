@@ -36,20 +36,35 @@ choose_submit_form = '''
 
 def setup_mock_browser(expected_post=None, text=choose_submit_form):
     url = 'mock://form.com'
-    mock = requests_mock.Adapter()
-    mock.register_uri('GET', url, headers={'Content-Type': 'text/html'},
-                      text=text)
+    browser, mock = prepare_mock_browser()
+    mock_get(mock, url, text)
 
     if expected_post is not None:
-        def text_callback(request, context):
-            # Python 2's parse_qsl doesn't like None argument
-            query = parse_qsl(request.text) if request.text else ()
-            assert(set(query) == set(expected_post))
-            return 'Success!'
-        mock.register_uri('POST', url + '/post', text=text_callback)
+        mock_post(mock, url + '/post', expected_post)
 
-    browser = mechanicalsoup.StatefulBrowser(requests_adapters={'mock': mock})
     return browser, url
+
+
+def prepare_mock_browser(scheme='mock'):
+    mock = requests_mock.Adapter()
+    browser = mechanicalsoup.StatefulBrowser(requests_adapters={scheme: mock})
+
+    return browser, mock
+
+
+def mock_get(mocked_adapter, url, reply, content_type='text/html'):
+    headers = {'Content-Type': content_type}
+    mocked_adapter.register_uri('GET', url, headers=headers, text=reply)
+
+
+def mock_post(mocked_adapter, url, expected, reply='Success!'):
+    def text_callback(request, context):
+        # Python 2's parse_qsl doesn't like None argument
+        query = parse_qsl(request.text) if request.text else ()
+        assert (set(query) == set(expected))
+        return reply
+
+    mocked_adapter.register_uri('POST', url, text=text_callback)
 
 
 class HttpbinRemote:
