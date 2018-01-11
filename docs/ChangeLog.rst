@@ -7,6 +7,9 @@ Version 1.0 (in development)
 
 Main changes:
 -------------
+* Added ``StatefulBrowser.refresh()`` to reload the current page with the same request.
+  [`#188 <https://github.com/MechanicalSoup/MechanicalSoup/issues/188>`__]
+
 * ``StatefulBrowser.follow_link``,
   ``StatefulBrowser.submit_selected()`` and the new
   ``StatefulBrowser.download_link`` now sets the ``Referer:`` HTTP
@@ -26,6 +29,8 @@ Internal changes:
 * Private methods ``Browser._build_request`` and ``Browser._prepare_request``
   have been replaced by a single method ``Browser._request``.
   [`#166 <https://github.com/MechanicalSoup/MechanicalSoup/pull/166>`__]
+
+* ``_BrowserState`` was extended to store the last sent request.
 
 Version 0.9
 ===========
