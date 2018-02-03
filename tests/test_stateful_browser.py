@@ -353,6 +353,18 @@ def test_select_form_nr():
             browser.select_form(nr=3)
 
 
+def test_select_form_tag_object():
+    """Test tag object as selector parameter type"""
+    forms = """<form id="a"></form><form id="b"></form><p></p>"""
+    soup = BeautifulSoup(forms, "lxml")
+    with mechanicalsoup.StatefulBrowser() as browser:
+        browser.open_fake_page(forms)
+        form = browser.select_form(soup.find("form", {"id": "b"}))
+        assert form.form['id'] == "b"
+        with pytest.raises(mechanicalsoup.LinkNotFoundError):
+            browser.select_form(soup.find("p"))
+
+
 def test_referer_follow_link(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
     browser.open(httpbin.url)
