@@ -193,23 +193,20 @@ class StatefulBrowser(Browser):
             retrieved later with :func:`get_current_form`.
         """
         if isinstance(selector, bs4.element.Tag):
-            if selector.name == "form":
-                self.__state.form = Form(selector)
-                return self.get_current_form()
-            else:
+            if selector.name != "form":
                 raise LinkNotFoundError()
+            self.__state.form = Form(selector)
         else:
             # nr is a 0-based index for consistency with mechanize
             found_forms = self.get_current_page().select(selector,
                                                          limit=nr + 1)
+            if len(found_forms) != nr + 1:
+                if self.__debug:
+                    print('select_form failed for', selector)
+                    self.launch_browser()
+                raise LinkNotFoundError()
+            self.__state.form = Form(found_forms[-1])
 
-        if len(found_forms) != nr + 1:
-            if self.__debug:
-                print('select_form failed for', selector)
-                self.launch_browser()
-            raise LinkNotFoundError()
-
-        self.__state.form = Form(found_forms[-1])
         return self.get_current_form()
 
     def submit_selected(self, btnName=None, *args, **kwargs):
