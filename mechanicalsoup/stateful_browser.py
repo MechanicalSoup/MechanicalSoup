@@ -322,12 +322,11 @@ class StatefulBrowser(Browser):
         :return: Forwarded from :func:`open_relative`.
         """
         link = self._find_link_internal(link, args, kwargs)
-        referer = self.get_url()
-        request_kwargs = dict()
-        if referer is not None:
-            request_kwargs['headers'] = {'Referer': referer}
 
-        return self.open_relative(link['href'], **request_kwargs)
+        referer = self.get_url()
+        headers = {'Referer': referer} if referer else None
+
+        return self.open_relative(link['href'], headers=headers)
 
     def download_link(self, link=None, file=None, *args, **kwargs):
         """Downloads the contents of a link to a file. This function behaves
@@ -347,10 +346,10 @@ class StatefulBrowser(Browser):
         """
         link = self._find_link_internal(link, args, kwargs)
         url = self.absolute_url(link['href'])
+
         referer = self.get_url()
-        headers = dict()
-        if referer is not None:
-            headers["Referer"] = referer
+        headers = {'Referer': referer} if referer else None
+
         response = self.session.get(url, headers=headers)
         if self.raise_on_404 and response.status_code == 404:
             raise LinkNotFoundError()
