@@ -177,7 +177,8 @@ class StatefulBrowser(Browser):
     def select_form(self, selector="form", nr=0):
         """Select a form in the current page.
 
-        :param selector: CSS selector to identify the form to select.
+        :param selector: CSS selector or a bs4.element.Tag object to identify
+            the form to select.
             If not specified, ``selector`` defaults to "form", which is
             useful if, e.g., there is only one form on the page.
             For ``selector`` syntax, see the `.select() method in BeautifulSoup
@@ -191,8 +192,17 @@ class StatefulBrowser(Browser):
         :return: The selected form as a soup object. It can also be
             retrieved later with :func:`get_current_form`.
         """
-        # nr is a 0-based index for consistency with mechanize
-        found_forms = self.get_current_page().select(selector, limit=nr + 1)
+        if isinstance(selector, bs4.element.Tag):
+            if selector.name == "form":
+                self.__state.form = Form(selector)
+                return self.get_current_form()
+            else:
+                raise LinkNotFoundError()
+        else:
+            # nr is a 0-based index for consistency with mechanize
+            found_forms = self.get_current_page().select(selector,
+                                                         limit=nr + 1)
+
         if len(found_forms) != nr + 1:
             if self.__debug:
                 print('select_form failed for', selector)
