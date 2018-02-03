@@ -14,23 +14,32 @@ Main changes:
   ``StatefulBrowser.submit_selected()`` and the new
   ``StatefulBrowser.download_link`` now sets the ``Referer:`` HTTP
   header to the page from which the link is followed.
+  [`#179 <https://github.com/MechanicalSoup/MechanicalSoup/issues/179>`__]
+
+* Added method ``StatefulBrowser.download_link``, which will download the
+  contents of a link to a file without changing the state of the browser.
+  [`#170 <https://github.com/MechanicalSoup/MechanicalSoup/issues/170>`__]
+
+* The ``selector`` argument of ``Browser.select_form`` can now be a
+  `bs4.element.Tag <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#tag>`__
+  in addition to a CSS selector.
+  [`#169 <https://github.com/MechanicalSoup/MechanicalSoup/issues/169>`__]
 
 * ``Browser.submit`` and ``StatefulBrowser.submit_selected`` accept a larger
   number of keyword arguments. Arguments are forwarded to
   `requests.Session.request <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
   [`#166 <https://github.com/MechanicalSoup/MechanicalSoup/pull/166>`__]
 
-* Added method ``StatefulBrowser.download_link``, which will download the
-  contents of a link to a file without changing the state of the browser.
-  [`#170 <https://github.com/MechanicalSoup/MechanicalSoup/issues/170>`__]
-
 Internal changes:
 -----------------
+
+* ``StatefulBrowser.choose_submit`` will now ignore input elements that are
+  missing a name-attribute instead of raising a ``KeyError``.
+  [`#180 <https://github.com/MechanicalSoup/MechanicalSoup/issues/180>`__]
+
 * Private methods ``Browser._build_request`` and ``Browser._prepare_request``
   have been replaced by a single method ``Browser._request``.
   [`#166 <https://github.com/MechanicalSoup/MechanicalSoup/pull/166>`__]
-
-* ``_BrowserState`` was extended to store the last sent request.
 
 Version 0.9
 ===========
