@@ -2,8 +2,8 @@
 Release Notes
 =============
 
-Version 1.0 (in development)
-============================
+Version 0.10
+============
 
 Main changes:
 -------------
