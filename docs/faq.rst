@@ -52,28 +52,6 @@ installed::
 See also
 https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parser
 
-"ReferenceError: weakly-referenced object no longer exists"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This error can occur within requests' ``session.py`` when called by
-the destructor (``__del__``) of browser. The solution is to
-call :func:`~mechanicalsoup.Browser.close` before the end of life of
-the object.
-
-Alternatively, you may also use the ``with`` statement which closes
-the browser for you::
-
-  def test_with():
-      with mechanicalsoup.StatefulBrowser() as browser:
-          browser.open(url)
-          # ...
-      # implicit call to browser.close() here.
-
-This problem is fixed in MechanicalSoup 0.10, so this is only required
-for compatibility with older versions. Code using new versions can let
-the ``browser`` variable go out of scope and let the garbage collector
-close it properly.
-
 How do I get debug information/logs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -143,3 +121,25 @@ There are other libraries with the same purpose as MechanicalSoup:
   Though MechanicalSoup does not support JavaScript, it also does not
   have the overhead of a real web browser, which makes it a simple and
   efficient solution for basic website interactions.
+
+"ReferenceError: weakly-referenced object no longer exists"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This error can occur within requests' ``session.py`` when called by
+the destructor (``__del__``) of browser. The solution is to
+call :func:`~mechanicalsoup.Browser.close` before the end of life of
+the object.
+
+Alternatively, you may also use the ``with`` statement which closes
+the browser for you::
+
+  def test_with():
+      with mechanicalsoup.StatefulBrowser() as browser:
+          browser.open(url)
+          # ...
+      # implicit call to browser.close() here.
+
+This problem is fixed in MechanicalSoup 0.10, so this is only required
+for compatibility with older versions. Code using new versions can let
+the ``browser`` variable go out of scope and let the garbage collector
+close it properly.
