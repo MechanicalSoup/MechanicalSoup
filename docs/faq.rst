@@ -38,16 +38,21 @@ like:
     different virtual environment, it may use a different parser and
     behave differently.
 
-Recent versions of BeautifulSoup show a harmless warning to encourage
-you to specify which HTML parser to use. You can do this in
-MechanicalSoup::
+Some versions of BeautifulSoup show a harmless warning to encourage
+you to specify which HTML parser to use. In MechanicalSoup 0.9, the
+default parser is set by MechanicalSoup, so you shouldn't get the
+error anymore (or you should upgrade) unless you specified a
+non-standard `soup_config` argument to the browser's constructor.
 
-    mechanicalsoup.Browser(soup_config={'features':'html.parser'})
+If you specify a `soup_config` argument, you should include the parser
+to use, like::
 
-Or if you have the parser `lxml <http://lxml.de/installation.html>`__
-installed::
+    mechanicalsoup.StatufulBrowser(soup_config={'features': 'lxml', '...': '...'})
 
-    mechanicalsoup.Browser(soup_config={'features':'lxml'})
+Or if you don't have the parser `lxml
+<http://lxml.de/installation.html>`__ installed::
+
+    mechanicalsoup.StatefulBrowser(soup_config={'features': 'parser.html', ...})
 
 See also
 https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parser
