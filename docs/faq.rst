@@ -29,34 +29,6 @@ like:
 * If the website is specifically designed to interact with humans,
   please don't go against the will of the website's owner.
 
-"No parser was explicitly specified"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    UserWarning: No parser was explicitly specified, so I'm using the
-    best available HTML parser for this system ("lxml"). This usually
-    isn't a problem, but if you run this code on another system, or in a
-    different virtual environment, it may use a different parser and
-    behave differently.
-
-Some versions of BeautifulSoup show a harmless warning to encourage
-you to specify which HTML parser to use. In MechanicalSoup 0.9, the
-default parser is set by MechanicalSoup, so you shouldn't get the
-error anymore (or you should upgrade) unless you specified a
-non-standard `soup_config` argument to the browser's constructor.
-
-If you specify a `soup_config` argument, you should include the parser
-to use, like::
-
-    mechanicalsoup.StatufulBrowser(soup_config={'features': 'lxml', '...': '...'})
-
-Or if you don't have the parser `lxml
-<http://lxml.de/installation.html>`__ installed::
-
-    mechanicalsoup.StatefulBrowser(soup_config={'features': 'parser.html', ...})
-
-See also
-https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parser
-
 How do I get debug information/logs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -126,6 +98,34 @@ There are other libraries with the same purpose as MechanicalSoup:
   Though MechanicalSoup does not support JavaScript, it also does not
   have the overhead of a real web browser, which makes it a simple and
   efficient solution for basic website interactions.
+
+"No parser was explicitly specified"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    UserWarning: No parser was explicitly specified, so I'm using the
+    best available HTML parser for this system ("lxml"). This usually
+    isn't a problem, but if you run this code on another system, or in a
+    different virtual environment, it may use a different parser and
+    behave differently.
+
+Some versions of BeautifulSoup show a harmless warning to encourage
+you to specify which HTML parser to use. In MechanicalSoup 0.9, the
+default parser is set by MechanicalSoup, so you shouldn't get the
+error anymore (or you should upgrade) unless you specified a
+non-standard `soup_config` argument to the browser's constructor.
+
+If you specify a `soup_config` argument, you should include the parser
+to use, like::
+
+    mechanicalsoup.StatufulBrowser(soup_config={'features': 'lxml', '...': '...'})
+
+Or if you don't have the parser `lxml
+<http://lxml.de/installation.html>`__ installed::
+
+    mechanicalsoup.StatefulBrowser(soup_config={'features': 'parser.html', ...})
+
+See also
+https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parser
 
 "ReferenceError: weakly-referenced object no longer exists"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
