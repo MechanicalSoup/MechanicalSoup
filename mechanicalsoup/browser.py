@@ -56,7 +56,10 @@ class Browser(object):
     @staticmethod
     def add_soup(response, soup_config):
         """Attaches a soup object to a requests response."""
-        if "text/html" in response.headers.get("Content-Type", ""):
+        text = response.text.lstrip()
+        if ("text/html" in response.headers.get("Content-Type", "") 
+                or text.startswith('<html') 
+                or text.startswith('<!DOCTYPE')):
             response.soup = bs4.BeautifulSoup(response.content, **soup_config)
         else:
             response.soup = None
