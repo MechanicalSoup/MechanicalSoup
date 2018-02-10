@@ -136,7 +136,7 @@ class Browser(object):
         if url is None:  # This happens when both `action` and `url` are None.
             raise ValueError('no URL to submit to')
 
-        # read http://www.w3.org/TR/html5/forms.html
+        # read https://www.w3.org/TR/html52/sec-forms.html
         data = kwargs.pop("data", dict())
         files = kwargs.pop("files", dict())
 
