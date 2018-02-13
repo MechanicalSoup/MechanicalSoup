@@ -52,15 +52,20 @@ class Browser(object):
                 self.session.mount(adaptee, adapter)
 
         self.soup_config = soup_config or dict()
-    
+
+    @staticmethod
     def __looks_like_html(response):
-        text = response.text.lstrip()
-        return text.startswith('<html') or text.startswith('<!DOCTYPE')
+        """Guesses entity type when Content-Type header is missing.
+        Since Content-Type is not strictly required, some servers leave it out.
+        """
+        text = response.text.lstrip().lower()
+        return text.startswith('<html') or text.startswith('<!doctype')
 
     @staticmethod
     def add_soup(response, soup_config):
         """Attaches a soup object to a requests response."""
-        if "text/html" in response.headers.get("Content-Type", "") or __looks_like_html(response):
+        if ("text/html" in response.headers.get("Content-Type", "")
+                or Browser.__looks_like_html(response)):
             response.soup = bs4.BeautifulSoup(response.content, **soup_config)
         else:
             response.soup = None
