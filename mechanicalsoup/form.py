@@ -307,11 +307,19 @@ class Form(object):
             browser.submit_selected()
         """
 
+        submit = (
+            submit or
+            self.form.select_one('input[type="submit"]') or
+            self.form.select_one('button[type="submit"]')
+        )
+
         found = False
-        inps = self.form.select('input[type="submit"], button[type="submit"]')
+        inps = self.form.select('input[type="submit"], button')
         for inp in inps:
-            if inp == submit or (inp.has_attr('name') and
-                                 inp['name'] == submit):
+            if inp.get('type', "").lower() not in ("button", "reset") and (
+                inp == submit or (inp.has_attr('name') and
+                                  inp['name'] == submit)
+            ):
                 if found:
                     raise LinkNotFoundError(
                         "Multiple submit elements match: {0}".format(submit)
