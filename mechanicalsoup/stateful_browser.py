@@ -218,8 +218,7 @@ class StatefulBrowser(Browser):
         to :func:`Form.choose_submit` on the current form to choose between
         them. All other arguments are forwarded to :func:`Browser.submit`.
         """
-        if btnName is not None:
-            self.get_current_form().choose_submit(btnName)
+        self.get_current_form().choose_submit(btnName)
 
         referer = self.get_url()
         if referer is not None:
