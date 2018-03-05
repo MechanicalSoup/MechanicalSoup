@@ -9,7 +9,7 @@ python:
   - 3.5
   - 3.6
   - pypy
-  - pypy3
+  - pypy3-5.9.0
 install:
   - pip install --upgrade pytest # needed for cases where there is already an old pytest installed
   - pip install pytest-cov       # needed for the codecov uploader
