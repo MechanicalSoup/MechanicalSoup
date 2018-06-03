@@ -68,6 +68,8 @@ variable. :class:`mechanicalsoup.StatefulBrowser` is essentially a
 superset of :class:`mechanicalsoup.Browser`, it's the one you should
 use unless you have a good reason to do otherwise.
 
+.. _label-alternatives:
+
 How does MechanicalSoup compare to the alternatives?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -98,6 +100,27 @@ There are other libraries with the same purpose as MechanicalSoup:
   Though MechanicalSoup does not support JavaScript, it also does not
   have the overhead of a real web browser, which makes it a simple and
   efficient solution for basic website interactions.
+
+Form submission has no effect or fails
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you believe you are using MechanicalSoup correctly, but form submission
+still does not behave the way you expect, the likely explanation is that
+the page uses JavaScript to dynamically generate response content when
+you submit the form in a real browser. A common symptom is when form
+elements are missing required attributes (e.g. if `form` is missing the
+`action` attribute or an `input` is missing the `name` attribute).
+
+In such cases, you typically have two options:
+
+1. If you know what content the server expects to receive from form
+   submission, then you can use MechanicalSoup to manually add that content
+   using, i.e., :func:`~mechanicalsoup.Form.new_control`. This is unlikely
+   to be a reliable solution unless you are testing a website that you own.
+
+2. Use a tool that supports JavaScript, like
+   `Selenium <http://selenium-python.readthedocs.io/>`__.
+   See :ref:`label-alternatives` for more information.
 
 "No parser was explicitly specified"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
