@@ -228,7 +228,7 @@ class Browser(object):
 
         :param: soup: Page contents to display, supplied as a bs4 soup object.
         """
-        with tempfile.NamedTemporaryFile(delete=False) as file:
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.html') as file:
             file.write(soup.encode())
         webbrowser.open('file://' + file.name)
 
