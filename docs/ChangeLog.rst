@@ -5,6 +5,16 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
+Bug fixes
+---------
+
+* **Breaking Change:** :class:`~mechanicalsoup.LinkNotFoundError` now derives
+  from ``Exception`` instead of ``BaseException``. While this will bring the
+  behavior in line with most people's expectations, it may affect the behavior
+  of your code if you were heavily relying on this implementation detail in
+  your exception handling.
+  [`#203 <https://github.com/MechanicalSoup/MechanicalSoup/issues/203>`__]
+
 Version 0.10
 ============
 
