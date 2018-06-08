@@ -1,4 +1,4 @@
-class LinkNotFoundError(BaseException):
+class LinkNotFoundError(Exception):
     """Exception raised when mechanicalsoup fails to find something.
 
     This happens in situations like (non-exhaustive list):
