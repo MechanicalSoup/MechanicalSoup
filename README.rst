@@ -98,6 +98,8 @@ Development
 |Build Status| |Coverage Status|
 |Requirements Status| |Documentation Status|
 |CII Best Practices|
+|LGTM Alerts|
+|LGTM Grade|
 
 Instructions for building, testing and contributing to MechanicalSoup:
 see `<CONTRIBUTING.rst>`__.
@@ -122,6 +124,10 @@ Read the `FAQ
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
 .. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge
-   :target: https://bestpractices.coreinfrastructure.org/projects/1334)
+   :target: https://bestpractices.coreinfrastructure.org/projects/1334
 .. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.svg
    :target: https://gitter.im/MechanicalSoup/Lobby
+.. |LGTM Alerts| image:: https://img.shields.io/lgtm/alerts/g/MechanicalSoup/MechanicalSoup.svg
+   :target: https://lgtm.com/projects/g/MechanicalSoup/MechanicalSoup/
+.. |LGTM Grade| image:: https://img.shields.io/lgtm/grade/python/g/MechanicalSoup/MechanicalSoup.svg
+   :target: https://lgtm.com/projects/g/MechanicalSoup/MechanicalSoup/
