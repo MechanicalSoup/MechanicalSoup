@@ -6,7 +6,12 @@ import mechanicalsoup
 import sys
 import re
 from bs4 import BeautifulSoup
-from utils import setup_mock_browser, prepare_mock_browser, mock_get
+from utils import (
+    setup_mock_browser,
+    prepare_mock_browser,
+    mock_get,
+    open_legacy_httpbin
+)
 import pytest
 import webbrowser
 
@@ -367,11 +372,12 @@ def test_select_form_tag_object():
 
 def test_referer_follow_link(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open(httpbin.url)
+    open_legacy_httpbin(browser, httpbin)
+    start_url = browser.get_url()
     response = browser.follow_link("/headers")
     referer = response.json()["headers"]["Referer"]
     actual_ref = re.sub('/*$', '', referer)
-    expected_ref = re.sub('/*$', '', httpbin.url)
+    expected_ref = re.sub('/*$', '', start_url)
     assert actual_ref == expected_ref
 
 
@@ -445,7 +451,7 @@ def file_get_contents(filename):
 def test_download_link(httpbin):
     """Test downloading the contents of a link to file."""
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open(httpbin.url)
+    open_legacy_httpbin(browser, httpbin)
     tmpdir = tempfile.mkdtemp()
     tmpfile = tmpdir + '/nosuchfile.png'
     current_url = browser.get_url()
@@ -466,7 +472,7 @@ def test_download_link(httpbin):
 def test_download_link_nofile(httpbin):
     """Test downloading the contents of a link without saving it."""
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open(httpbin.url)
+    open_legacy_httpbin(browser, httpbin)
     current_url = browser.get_url()
     current_page = browser.get_current_page()
     response = browser.download_link(link='image/png')
@@ -482,7 +488,7 @@ def test_download_link_nofile(httpbin):
 def test_download_link_to_existing_file(httpbin):
     """Test downloading the contents of a link to an existing file."""
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open(httpbin.url)
+    open_legacy_httpbin(browser, httpbin)
     tmpdir = tempfile.mkdtemp()
     tmpfile = tmpdir + '/existing.png'
     with open(tmpfile, "w") as f:

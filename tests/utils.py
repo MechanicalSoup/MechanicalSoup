@@ -76,3 +76,20 @@ class HttpbinRemote:
 
     def __add__(self, x):
         return self.url + x
+
+
+def open_legacy_httpbin(browser, httpbin):
+    """Opens the start page of httpbin (given as a fixture). Tries the
+    legacy page (available only on recent versions of httpbin), and if
+    it fails fall back to the main page (which is JavaScript-only in
+    recent versions of httpbin hence usable for us only on old
+    versions).
+    """
+    try:
+        response = browser.open(httpbin + "/legacy")
+        if response.status_code == 404:
+            # The line above may or may not have raised the expection
+            # depending on raise_on_404. Raise it unconditionally now.
+            raise mechanicalsoup.LinkNotFoundError()
+    except mechanicalsoup.LinkNotFoundError:
+        browser.open(httpbin.url)
