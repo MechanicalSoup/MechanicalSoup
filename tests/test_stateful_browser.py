@@ -210,9 +210,9 @@ def test_verbose(capsys):
     assert browser.get_verbose() == 2
 
 
-def test_new_control():
+def test_new_control(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open("http://httpbin.org/forms/post")
+    browser.open(httpbin + "/forms/post")
     browser.select_form("form")
     with pytest.raises(mechanicalsoup.LinkNotFoundError):
         # The control doesn't exist, yet.

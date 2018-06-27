@@ -37,33 +37,33 @@ def test_submit_online(httpbin):
     assert 'MechanicalSoup' in json["headers"]["User-Agent"]
 
 
-form_html = """
-<form method="post" action="http://httpbin.org/post">
-<input name="customer" value="Philip J. Fry"/>
-<input name="telephone" value="555"/>
-<textarea name="comments">freezer</textarea>
-<fieldset>
- <legend> Pizza Size </legend>
- <p><input type=radio name=size value="small">Small</p>
- <p><input type=radio name=size value="medium" checked>Medium</p>
- <p><input type=radio name=size value="large">Large</p>
-</fieldset>
-<fieldset>
- <legend> Pizza Toppings </legend>
- <p><input type=checkbox name="topping" value="bacon">Bacon</p>
- <p><input type=checkbox name="topping" value="cheese" checked>Extra Cheese</p>
- <p><input type=checkbox name="topping" value="onion" checked>Onion</p>
- <p><input type=checkbox name="topping" value="mushroom">Mushroom</p>
-</fieldset>
-<input name="pic" type="file">
-<select name="shape">
- <option value="round">Round</option>
- <option value="square" selected>Square</option>
-</select>
-"""
+def test__request(httpbin):
+    form_html = """
+    <form method="post" action="{}/post">
+      <input name="customer" value="Philip J. Fry"/>
+      <input name="telephone" value="555"/>
+      <textarea name="comments">freezer</textarea>
+      <fieldset>
+        <legend> Pizza Size </legend>
+        <p><input type=radio name=size value="small">Small</p>
+        <p><input type=radio name=size value="medium" checked>Medium</p>
+        <p><input type=radio name=size value="large">Large</p>
+      </fieldset>
+      <fieldset>
+        <legend> Pizza Toppings </legend>
+        <p><input type=checkbox name="topping" value="bacon" checked>Bacon</p>
+        <p><input type=checkbox name="topping" value="cheese">Extra Cheese</p>
+        <p><input type=checkbox name="topping" value="onion" checked>Onion</p>
+        <p><input type=checkbox name="topping" value="mushroom">Mushroom</p>
+      </fieldset>
+      <input name="pic" type="file">
+      <select name="shape">
+        <option value="round">Round</option>
+        <option value="square" selected>Square</option>
+      </select>
+    </form>
+    """.format(httpbin.url)
 
-
-def test__request():
     form = BeautifulSoup(form_html, "lxml").form
 
     browser = mechanicalsoup.Browser()
@@ -74,14 +74,19 @@ def test__request():
     assert data["telephone"] == "555"
     assert data["comments"] == "freezer"
     assert data["size"] == "medium"
-    assert data["topping"] == ["cheese", "onion"]
+    assert data["topping"] == ["bacon", "onion"]
     assert data["shape"] == "square"
 
     assert "application/x-www-form-urlencoded" in response.request.headers[
         "Content-Type"]
 
 
-def test__request_file():
+def test__request_file(httpbin):
+    form_html = """
+    <form method="post" action="{}/post">
+      <input name="pic" type="file" />
+    </form>
+    """.format(httpbin.url)
     form = BeautifulSoup(form_html, "lxml").form
 
     # create a temporary file for testing file upload
