@@ -139,6 +139,7 @@ class Browser(object):
         return response
 
     def _request(self, form, url=None, **kwargs):
+        """Extract input data from the form to pass to a Requests session."""
         method = str(form.get("method", "get"))
         action = form.get("action")
         url = urllib.parse.urljoin(url, action)
@@ -149,53 +150,54 @@ class Browser(object):
         data = kwargs.pop("data", dict())
         files = kwargs.pop("files", dict())
 
-        for input in form.select("input[name], button[name]"):
-            name = input.get("name")
+        # Use a list of 2-tuples to better reflect the behavior of browser QSL.
+        # Requests also retains order when encoding form data in 2-tuple lists.
+        data = [(k, v) for k, v in data.items()]
 
-            if input.get("type") in ("radio", "checkbox"):
-                if "checked" not in input.attrs:
-                    continue
-                value = input.get("value", "on")
-            else:
-                # web browsers use empty string for inputs with missing values
-                value = input.get("value", "")
+        # Process form tags in the order that they appear on the page,
+        # skipping those tags that do not have a name-attribute.
+        selector = ",".join("{}[name]".format(i) for i in
+                            ("input", "button", "textarea", "select"))
+        for tag in form.select(selector):
+            name = tag.get("name")  # name-attribute of tag
 
-            if input.get("type") == "checkbox":
-                data.setdefault(name, []).append(value)
+            if tag.name in ("input", "button"):
+                if tag.get("type") in ("radio", "checkbox"):
+                    if "checked" not in tag.attrs:
+                        continue
+                    value = tag.get("value", "on")
+                else:
+                    # browsers use empty string for inputs with missing values
+                    value = tag.get("value", "")
 
-            elif input.get("type") == "file":
-                # read http://www.cs.tut.fi/~jkorpela/forms/file.html
-                # in web browsers, file upload only happens if the form"s (or
-                # submit button"s) enctype attribute is set to
-                # "multipart/form-data". we don"t care, simplify.
-                if not value:
-                    continue
-                if isinstance(value, string_types):
-                    value = open(value, "rb")
-                files[name] = value
+                if tag.get("type") == "file":
+                    # read http://www.cs.tut.fi/~jkorpela/forms/file.html
+                    # in browsers, file upload only happens if the form
+                    # (or submit button) enctype attribute is set to
+                    # "multipart/form-data". We don't care, simplify.
+                    if not value:
+                        continue
+                    if isinstance(value, string_types):
+                        value = open(value, "rb")
+                    files[name] = value
+                else:
+                    data.append((name, value))
 
-            else:
-                data[name] = value
+            elif tag.name == "textarea":
+                data.append((name, tag.text))
 
-        for textarea in form.select("textarea"):
-            name = textarea.get("name")
-            if not name:
-                continue
-            data[name] = textarea.text
-
-        for select in form.select("select"):
-            name = select.get("name")
-            if not name:
-                continue
-            multiple = "multiple" in select.attrs
-            values = []
-            for i, option in enumerate(select.select("option")):
-                if (i == 0 and not multiple) or "selected" in option.attrs:
-                    values.append(option.get("value", ""))
-            if multiple:
-                data[name] = values
-            elif values:
-                data[name] = values[-1]
+            elif tag.name == "select":
+                multiple = "multiple" in tag.attrs
+                values = []
+                for i, option in enumerate(tag.select("option")):
+                    if (i == 0 and not multiple) or "selected" in option.attrs:
+                        values.append(option.get("value", ""))
+                if multiple:
+                    for value in values:
+                        data.append((name, value))
+                elif values:
+                    # Selects the first option if none are selected
+                    data.append((name, values[-1]))
 
         if method.lower() == "get":
             kwargs["params"] = data
