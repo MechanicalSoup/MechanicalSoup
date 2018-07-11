@@ -366,5 +366,26 @@ def test_issue180():
         form.choose_submit('not_found')
 
 
+def test_issue158():
+    """Test that form elements are processed in their order on the page
+    and that elements with duplicate name-attributes are not clobbered."""
+    issue158_form = '''
+<form method="post" action="mock://form.com/post">
+  <input name="box" type="hidden" value="1"/>
+  <input checked="checked" name="box" type="checkbox" value="2"/>
+  <input name="box" type="hidden" value="0"/>
+  <input type="submit" value="Submit" />
+</form>
+'''
+    expected_post = [('box', '1'), ('box', '2'), ('box', '0')]
+    browser, url = setup_mock_browser(expected_post=expected_post,
+                                      text=issue158_form)
+    browser.open(url)
+    browser.select_form()
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and res.text == 'Success!')
+    browser.close()
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
