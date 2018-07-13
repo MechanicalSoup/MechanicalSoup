@@ -187,17 +187,19 @@ class Browser(object):
                 data.append((name, tag.text))
 
             elif tag.name == "select":
-                multiple = "multiple" in tag.attrs
-                values = []
-                for i, option in enumerate(tag.select("option")):
-                    if (i == 0 and not multiple) or "selected" in option.attrs:
-                        values.append(option.get("value", ""))
-                if multiple:
-                    for value in values:
+                options = tag.select("option")
+                selected_values = [i.get("value", "") for i in options
+                                   if "selected" in i.attrs]
+                if "multiple" in tag.attrs:
+                    for value in selected_values:
                         data.append((name, value))
-                elif values:
+                elif selected_values:
+                    # A standard select element only allows one option to be
+                    # selected, but browsers pick last if somehow multiple.
+                    data.append((name, selected_values[-1]))
+                elif options:
                     # Selects the first option if none are selected
-                    data.append((name, values[-1]))
+                    data.append((name, options[0].get("value", "")))
 
         if method.lower() == "get":
             kwargs["params"] = data
