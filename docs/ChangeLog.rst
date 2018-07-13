@@ -15,6 +15,12 @@ Bug fixes
   your exception handling.
   [`#203 <https://github.com/MechanicalSoup/MechanicalSoup/issues/203>`__]
 
+* Improve consistency of query string construction between MechanicalSoup
+  and web browsers in edge cases where form elements have duplicate name
+  attributes. This prevents errors in valid use cases, and also makes
+  MechanicalSoup more tolerant of invalid HTML.
+  [`#158 <https://github.com/MechanicalSoup/MechanicalSoup/issues/158>`__]
+
 Version 0.10
 ============
 
