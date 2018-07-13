@@ -109,6 +109,23 @@ def test__request_file(httpbin):
     assert "multipart/form-data" in response.request.headers["Content-Type"]
 
 
+def test__request_select_none(httpbin):
+    """Make sure that a <select> with no options selected
+    submits the first option, as it does in a browser."""
+    form_html = """
+    <form method="post" action={}/post>
+      <select name="shape">
+        <option value="round">Round</option>
+        <option value="square">Square</option>
+      </select>
+    </form>""".format(httpbin.url)
+
+    form = BeautifulSoup(form_html, "lxml").form
+    browser = mechanicalsoup.Browser()
+    response = browser._request(form)
+    assert response.json()['form'] == {'shape': 'round'}
+
+
 def test_no_404(httpbin):
     browser = mechanicalsoup.Browser()
     resp = browser.get(httpbin + "/nosuchpage")
