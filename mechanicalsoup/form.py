@@ -34,6 +34,7 @@ class Form(object):
 
     def __init__(self, form):
         self.form = form
+        self._submit_chosen = False
 
         # Aliases for backwards compatibility
         # (Included specifically in __init__ to suppress them in Sphinx docs)
@@ -286,7 +287,8 @@ class Form(object):
         """Selects the input (or button) element to use for form submission.
 
         :param submit: The bs4.element.Tag (or just its *name*-attribute) that
-            identifies the submit element to use.
+            identifies the submit element to use. If ``None``, will choose the
+            first valid submit element in the form, if one exists.
 
         To simulate a normal web browser, only one submit element must be
         sent. Therefore, this does not need to be called if there is only
@@ -303,33 +305,41 @@ class Form(object):
             form.choose_submit('form_name_attr')
             browser.submit_selected()
         """
+        # Since choose_submit is destructive, it doesn't make sense to call
+        # this method twice unless no submit is specified.
+        if self._submit_chosen:
+            if submit is None:
+                return
+            else:
+                raise Exception('Submit already chosen. Cannot change submit!')
 
-        submit = (
-            submit or
-            self.form.select_one('input[type="submit"]') or
-            self.form.select_one('button[type="submit"]')
-        )
+        # All buttons NOT of type (button,reset) are valid submits
+        inps = [i for i in self.form.select('input[type="submit"], button')
+                if i.get('type', '') not in ('button', 'reset')]
+
+        # If no submit specified, choose the first one
+        if submit is None and inps:
+            submit = inps[0]
 
         found = False
-        inps = self.form.select('input[type="submit"], button')
         for inp in inps:
-            if inp.get('type', "").lower() not in ("button", "reset") and (
-                inp == submit or (inp.has_attr('name') and
-                                  inp['name'] == submit)
-            ):
+            if inp == submit or (inp.has_attr('name') and
+                                 inp['name'] == submit):
                 if found:
                     raise LinkNotFoundError(
                         "Multiple submit elements match: {0}".format(submit)
                     )
                 found = True
-                continue
+            else:
+                # Delete any non-matching element's name so that it will be
+                # omitted from the submitted form data.
+                del inp['name']
 
-            del inp['name']
-
-        if not found:
+        if not found and submit is not None:
             raise LinkNotFoundError(
                 "Specified submit element not found: {0}".format(submit)
             )
+        self._submit_chosen = True
 
     def print_summary(self):
         """Print a summary of the form.
