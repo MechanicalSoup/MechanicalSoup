@@ -33,6 +33,9 @@ class Form(object):
     """
 
     def __init__(self, form):
+        if form.name != 'form':
+            raise LinkNotFoundError('Must construct a Form from a form '
+                                    'element, not {}'.format(form.name))
         self.form = form
 
         # Aliases for backwards compatibility
