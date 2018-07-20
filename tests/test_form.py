@@ -148,6 +148,21 @@ def test_choose_submit_fail(select_name):
         form.choose_submit(select_name['name'])
 
 
+def test_choose_submit_twice():
+    """Test that calling choose_submit twice fails."""
+    text = '''
+    <form>
+      <input type="submit" name="test1" value="Test1" />
+      <input type="submit" name="test2" value="Test2" />
+    </form>
+    '''
+    form = mechanicalsoup.Form(bs4.BeautifulSoup(text, 'lxml'))
+    form.choose_submit('test1')
+    expected_msg = 'Submit already chosen. Cannot change submit!'
+    with pytest.raises(Exception, match=expected_msg):
+        form.choose_submit('test2')
+
+
 choose_submit_multiple_match_form = '''
 <html>
   <form id="choose-submit-form">
@@ -418,6 +433,29 @@ def test_issue158():
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
     browser.close()
+
+
+@pytest.mark.parametrize("expected_post", [
+    pytest.param([('sub2', 'val2')], id='submit button'),
+    pytest.param([('sub4', 'val4')], id='typeless button'),
+    pytest.param([('sub5', 'val5')], id='submit input'),
+])
+def test_choose_submit_buttons(expected_post):
+    """Buttons of type reset and button are not valid submits"""
+    text = """
+    <form method="post" action="mock://form.com/post">
+      <button type="button" name="sub1" value="val1">Val1</button>
+      <button type="submit" name="sub2" value="val2">Val2</button>
+      <button type="reset" name="sub3" value="val3">Val3</button>
+      <button name="sub4" value="val4">Val4</button>
+      <input type="submit" name="sub5" value="val5">
+    </form>
+    """
+    browser, url = setup_mock_browser(expected_post=expected_post, text=text)
+    browser.open(url)
+    browser.select_form()
+    res = browser.submit_selected(btnName=expected_post[0][0])
+    assert res.status_code == 200 and res.text == 'Success!'
 
 
 if __name__ == '__main__':

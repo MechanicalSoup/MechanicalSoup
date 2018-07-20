@@ -161,7 +161,7 @@ class Browser(object):
         for tag in form.select(selector):
             name = tag.get("name")  # name-attribute of tag
 
-            if tag.name in ("input", "button"):
+            if tag.name == "input":
                 if tag.get("type") in ("radio", "checkbox"):
                     if "checked" not in tag.attrs:
                         continue
@@ -182,6 +182,12 @@ class Browser(object):
                     files[name] = value
                 else:
                     data.append((name, value))
+
+            elif tag.name == "button":
+                if tag.get("type", "") in ("button", "reset"):
+                    continue
+                else:
+                    data.append((name, tag.get("value", "")))
 
             elif tag.name == "textarea":
                 data.append((name, tag.text))
