@@ -336,6 +336,7 @@ page_with_various_fields = '''
     <p><input name="size" type=radio value="small">Small</p>
     <p><input name="size" type=radio value="medium">Medium</p>
     <p><input name="size" type=radio value="large">Large</p>
+    <button name="action"  value="cancel">Cancel</button>
     <input type="submit" value="Select" />
   </form>
 </html>
@@ -366,6 +367,7 @@ def test_form_print_summary(capsys):
 <input name="size" type="radio" value="small"/>
 <input name="size" type="radio" value="medium"/>
 <input name="size" type="radio" value="large"/>
+<button name="action" value="cancel">Cancel</button>
 <input type="submit" value="Select"/>
 """
     assert err == ""

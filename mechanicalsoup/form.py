@@ -329,7 +329,7 @@ class Form(object):
         May help finding which fields need to be filled-in.
         """
         for input in self.form.find_all(
-                ("input", "textarea", "select")):
+                ("input", "textarea", "select", "button")):
             input_copy = copy.copy(input)
             # Text between the opening tag and the closing tag often
             # contains a lot of spaces that we don't want here.
