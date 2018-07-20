@@ -193,8 +193,6 @@ class StatefulBrowser(Browser):
             retrieved later with :func:`get_current_form`.
         """
         if isinstance(selector, bs4.element.Tag):
-            if selector.name != "form":
-                raise LinkNotFoundError()
             self.__state.form = Form(selector)
         else:
             # nr is a 0-based index for consistency with mechanize

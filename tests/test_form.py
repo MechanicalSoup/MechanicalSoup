@@ -1,8 +1,18 @@
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 import mechanicalsoup
+import bs4
 from utils import setup_mock_browser
 import sys
 import pytest
+
+
+def test_construct_form_fail():
+    """Form objects must be constructed from form html elements."""
+    soup = bs4.BeautifulSoup('<notform>This is not a form</notform>', 'lxml')
+    tag = soup.find('notform')
+    assert isinstance(tag, bs4.element.Tag)
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
+        mechanicalsoup.Form(tag)
 
 
 def test_submit_online(httpbin):
