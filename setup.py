@@ -1,7 +1,9 @@
-from setuptools import setup  # Always prefer setuptools over distutils
+import re
+import sys
 from codecs import open  # To use a consistent encoding
 from os import path
-import re
+
+from setuptools import setup  # Always prefer setuptools over distutils
 
 
 def requirements_from_file(filename):
@@ -29,6 +31,11 @@ about = {}
 with open(path.join(here, 'mechanicalsoup', '__version__.py'),
           'r', 'utf-8') as f:
     exec(f.read(), about)
+
+# Don't install pytest-runner on every setup.py run, just for tests.
+# See https://pypi.org/project/pytest-runner/#conditional-requirement
+needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+pytest_runner = ['pytest-runner'] if needs_pytest else []
 
 setup(
     name=about['__title__'],
@@ -62,6 +69,6 @@ setup(
     # "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=requirements_from_file('requirements.txt'),
-    setup_requires=['pytest-runner'],
+    setup_requires=pytest_runner,
     tests_require=requirements_from_file('tests/requirements.txt'),
 )
