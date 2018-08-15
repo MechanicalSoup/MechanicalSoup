@@ -119,7 +119,7 @@ At each release:
     password = <password>
 
     [pypi]
-    repository = https://pypi.python.org/pypi
+    repository = https://upload.pypi.org/legacy/
     username = <username>
     password = <password>
 
