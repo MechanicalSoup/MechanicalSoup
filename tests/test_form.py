@@ -156,7 +156,8 @@ def test_choose_submit_twice():
       <input type="submit" name="test2" value="Test2" />
     </form>
     '''
-    form = mechanicalsoup.Form(bs4.BeautifulSoup(text, 'lxml'))
+    soup = bs4.BeautifulSoup(text, 'lxml')
+    form = mechanicalsoup.Form(soup.form)
     form.choose_submit('test1')
     expected_msg = 'Submit already chosen. Cannot change submit!'
     with pytest.raises(Exception, match=expected_msg):
