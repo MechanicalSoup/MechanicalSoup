@@ -8,6 +8,8 @@ browser.open("https://www.google.com/")
 # Fill-in the form
 browser.select_form('form[action="/search"]')
 browser["q"] = "MechanicalSoup"
+# Note: the button name is btnK in the content served to actual
+# browsers, but btnG for bots.
 browser.submit_selected(btnName="btnG")
 
 # Display links
