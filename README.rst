@@ -1,4 +1,4 @@
-.. image:: /assets/mechanical-soup-logo.svg
+.. image:: /assets/mechanical-soup-logo.png
   :width: 450px
   :height: 430px
 
