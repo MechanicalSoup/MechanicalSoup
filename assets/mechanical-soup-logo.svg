@@ -31,8 +31,8 @@
       </rdf:Description>
     </rdf:RDF>
   </metadata>
-  <text transform="matrix(1 0 0 1 39.6937 469.4026)" fill="#565759" font-family="'ZillaSlab-SemiBold'" font-size="65px" style="font-family: 'ZillaSlab-SemiBold';">MechanicalSoup</text>
-  <text transform="matrix(1 0 0 1 42.1231 495.8894)" fill="#97999C" font-family="'OpenSans-Semibold'" font-size="16.5px" style="font-family: 'OpenSans-Semibold';">A Python library for automating website interaction.</text>
+  <text transform="matrix(1 0 0 1 39.6937 469.4026)" fill="#565759" font-family="'ZillaSlab-SemiBold'" font-size="65px" style="font-family: 'Zilla Slab', sans-serif;">MechanicalSoup</text>
+  <text transform="matrix(1 0 0 1 42.1231 495.8894)" fill="#97999C" font-family="'OpenSans-Semibold'" font-size="16.5px" style="font-family: 'Open Sans', sans-serif;">A Python library for automating website interaction.</text>
   <path id="red-soup" fill="#D2613E" d="M367.732,253.222c0,62.613-50.934,113.546-113.546,113.546s-113.552-50.933-113.552-113.546
     c0-62.612,50.939-113.552,113.552-113.552S367.732,190.61,367.732,253.222z"/>
   <path id="cog-bowl-outline" fill="#6E6E6E" d="M267.067,107.731h-7.1h-11.57h-7.1l-1.653,6.904l-1.715,7.165
