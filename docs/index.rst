@@ -4,8 +4,6 @@
    contain the root `toctree` directive.
 
 .. image:: https://github.com/mkormendy/MechanicalSoup/blob/master/assets/mechanical-soup-logo.png
-  :width: 450px
-  :height: 430px
 
 Welcome to MechanicalSoup's documentation!
 ==========================================
