@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1" id="project-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
    y="0px" viewBox="0 0 550 525" enable-background="new 0 0 550 525" xml:space="preserve">
-
+  <defs>
+    <style type="text/css">
+      @import url('https://fonts.googleapis.com/css?family=Zilla+Slab:600');
+      @import url('https://fonts.googleapis.com/css?family=Open+Sans:600');
+   </style>
+  </defs>
   <desc xmlns:MechanicalSoup="https://github.com/MechanicalSoup/MechanicalSoup">
     <MechanicalSoup:title>MechanicalSoup Logo</MechanicalSoup:title>
     <MechanicalSoup:descr>MechanicalSoup: A Python library for automating website interaction.</MechanicalSoup:descr>
@@ -26,9 +31,8 @@
       </rdf:Description>
     </rdf:RDF>
   </metadata>
-
-  <text transform="matrix(1 0 0 1 39.6937 469.4026)" fill="#565759" font-family="'ZillaSlab-SemiBold'" font-size="65px">MechanicalSoup</text>
-  <text transform="matrix(1 0 0 1 42.1231 495.8894)" fill="#97999C" font-family="'OpenSans-Semibold'" font-size="16.5px">A Python library for automating website interaction.</text>
+  <text transform="matrix(1 0 0 1 39.6937 469.4026)" fill="#565759" font-family="'ZillaSlab-SemiBold'" font-size="65px" style="font-family: 'ZillaSlab-SemiBold';">MechanicalSoup</text>
+  <text transform="matrix(1 0 0 1 42.1231 495.8894)" fill="#97999C" font-family="'OpenSans-Semibold'" font-size="16.5px" style="font-family: 'OpenSans-Semibold';">A Python library for automating website interaction.</text>
   <path id="red-soup" fill="#D2613E" d="M367.732,253.222c0,62.613-50.934,113.546-113.546,113.546s-113.552-50.933-113.552-113.546
     c0-62.612,50.939-113.552,113.552-113.552S367.732,190.61,367.732,253.222z"/>
   <path id="cog-bowl-outline" fill="#6E6E6E" d="M267.067,107.731h-7.1h-11.57h-7.1l-1.653,6.904l-1.715,7.165
@@ -104,7 +108,6 @@
     </g>
   </g>
   <g id="spices">
-    
       <circle id="red-beet" fill="#9E492C" stroke="#873D1D" stroke-width="7" stroke-miterlimit="10" cx="235.739" cy="310.07" r="20.75"/>
     <path id="chili-right" fill="none" stroke="#914126" stroke-width="11" stroke-miterlimit="10" d="M275.193,276.453
       c0,0,12.699-13.816,26.514,0c13.816,13.816,26.173,0,26.173,0"/>
@@ -114,7 +117,6 @@
       <path id="leaf-fill" fill="#92B357" stroke="#588A59" stroke-width="6.18" stroke-miterlimit="10" d="M269.728,244.765
         c5.986,3.508,23.13,1.312,30.812-12.7c8.17-14.9,6.558-33.521,4.764-49.803c-15.082,6.391-32.116,14.085-41.124,28.494
         C255.71,224.306,264.111,241.473,269.728,244.765z"/>
-      
         <line id="leaf-crease" fill="none" stroke="#588A59" stroke-width="6.18" stroke-miterlimit="10" x1="269.728" y1="244.765" x2="286.394" y2="216.329"/>
     </g>
   </g>
@@ -182,5 +184,4 @@
         c0.526,0.063,1.06,0.1,1.604,0.1c0.543,0,1.078-0.036,1.604-0.1C73.441,232.463,77.71,228.836,79.267,223.991z"/>
     </g>
   </g>
-
 </svg>
