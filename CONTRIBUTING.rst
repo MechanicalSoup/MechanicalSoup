@@ -75,6 +75,16 @@ Installation should be as simple as:
 
     python setup.py install
 
+Editing the logo
+----------------
+
+The logo is available as an SVG file in ``assets/``. You may need to
+install the `Open Sans
+<https://fonts.google.com/specimen/Open+Sans>`__ and `Zilla Slab
+<https://fonts.google.com/specimen/Zilla+Slab>`__ fonts (download and
+store the ``*.ttf`` files in your ``~/.local/share/fonts`` directory)
+to view it properly. The file can then be opened in e.g. Inkscape.
+
 Release Checklist
 -----------------
 
