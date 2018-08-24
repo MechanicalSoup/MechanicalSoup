@@ -2,8 +2,8 @@ MechanicalSoup
 ==============
 
 .. image:: https://github.com/mkormendy/MechanicalSoup/blob/master/assets/mechanical-soup-logo.svg
-  :width: 250px
-  :height: 240px
+  :width: 450px
+  :height: 430px
 
 Home page
 ---------
