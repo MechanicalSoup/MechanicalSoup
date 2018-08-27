@@ -3,7 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. image:: https://github.com/mkormendy/MechanicalSoup/blob/master/assets/mechanical-soup-logo.png
+.. image:: ../assets/mechanical-soup-logo.png
+   :alt: MechanicalSoup. A Python library for automating website
+	 interaction.
+   :align: center
+
+.. This '|' generates a blank line to avoid sticking the logo to the
+   section.
+|
 
 Welcome to MechanicalSoup's documentation!
 ==========================================
