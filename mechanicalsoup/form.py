@@ -1,5 +1,6 @@
 from __future__ import print_function
 import copy
+import warnings
 from .utils import LinkNotFoundError
 from bs4 import BeautifulSoup
 
@@ -34,8 +35,11 @@ class Form(object):
 
     def __init__(self, form):
         if form.name != 'form':
-            raise LinkNotFoundError('Must construct a Form from a form '
-                                    'element, not {}'.format(form.name))
+            warnings.warn(
+                "Constructed a Form from a '{}' instead of a 'form' element. "
+                "This may be an error in a future version of MechanicalSoup.",
+                PendingDeprecationWarning)
+
         self.form = form
         self._submit_chosen = False
 
