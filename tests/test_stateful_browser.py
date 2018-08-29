@@ -621,5 +621,20 @@ def test_refresh_error():
         browser.refresh()
 
 
+def test_deprecated_submit(recwarn):
+    """Check that calling StatefulBrowser.submit forwards to the base class
+    with a deprecation warning when a deprecated call is detected."""
+    expected_post = [('diff', 'Review Changes'),
+                     ('text', 'All I know is my gut says maybe')]
+    browser, url = setup_mock_browser(expected_post=expected_post)
+    browser.open(url)
+    form = browser.select_form('#choose-submit-form')
+    form.choose_submit(expected_post[0][0])
+    form[expected_post[1][0]] = expected_post[1][1]
+    res = browser.submit(form, browser.get_url())
+    assert issubclass(recwarn.pop().category, DeprecationWarning)
+    assert(res.status_code == 200 and res.text == 'Success!')
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)

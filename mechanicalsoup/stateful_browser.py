@@ -7,6 +7,7 @@ from .form import Form
 import sys
 import re
 import bs4
+import warnings
 
 
 class _BrowserState:
@@ -220,6 +221,19 @@ class StatefulBrowser(Browser):
         to :func:`Form.choose_submit` on the current form to choose between
         them. All other arguments are forwarded to :func:`Browser.submit`.
         """
+        # Temporarily allow calling the old inherited Browser.submit directly
+        # in case we can detect with certainty that the call is an old style.
+        # Note: Browser.submit also accepts a bs4.element.Tag with name="form",
+        # but we cannot assume this is an old-style call since there could be
+        # a submit button with name="form".
+        if isinstance(btnName, Form):
+            warnings.warn("This usage of StatefulBrowser.submit is deprecated."
+                          " Please see the documentation for this function to "
+                          "upgrade to the new interface.",
+                          DeprecationWarning)
+            return super(StatefulBrowser, self).submit(btnName, *args,
+                                                       **kwargs)
+
         self.get_current_form().choose_submit(btnName)
 
         referer = self.get_url()
