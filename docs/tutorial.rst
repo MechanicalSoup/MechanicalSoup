@@ -166,7 +166,7 @@ used to list the fields)::
 Assuming we're satisfied with the content of the form, we can submit
 it (i.e. simulate a click on the submit button)::
 
-  >>> response = browser.submit_selected()
+  >>> response = browser.submit()
 
 The response is not an HTML page, so the browser doesn't parse it to a
 BeautifulSoup object, but we can still see the text it contains::

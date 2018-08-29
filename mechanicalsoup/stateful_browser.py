@@ -60,6 +60,10 @@ class StatefulBrowser(Browser):
         self.__verbose = 0
         self.__state = _BrowserState()
 
+        # Aliases for backwards compatibility
+        # (Included specifically in __init__ to suppress them in Sphinx docs)
+        self.submit_selected = self.submit
+
     def set_debug(self, debug):
         """Set the debug mode (off by default).
 
@@ -207,7 +211,7 @@ class StatefulBrowser(Browser):
 
         return self.get_current_form()
 
-    def submit_selected(self, btnName=None, *args, **kwargs):
+    def submit(self, btnName=None, *args, **kwargs):
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
@@ -225,8 +229,9 @@ class StatefulBrowser(Browser):
             else:
                 kwargs['headers'] = {'Referer': referer}
 
-        resp = self.submit(self.__state.form, url=self.__state.url,
-                           *args, **kwargs)
+        resp = super(StatefulBrowser, self).submit(self.__state.form,
+                                                   url=self.__state.url,
+                                                   *args, **kwargs)
         self.__state = _BrowserState(page=resp.soup, url=resp.url,
                                      request=resp.request)
         return resp
