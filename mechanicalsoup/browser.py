@@ -11,7 +11,10 @@ import weakref
 
 
 class Browser(object):
-    """Builds a Browser.
+    """Builds a low-level Browser.
+
+    It is recommended to use :class:`StatefulBrowser` for most applications,
+    since it offers more advanced features and conveniences than Browser.
 
     :param session: Attach a pre-existing requests Session instead of
         constructing a new one.
@@ -27,8 +30,6 @@ class Browser(object):
     :param raise_on_404: If True, raise :class:`LinkNotFoundError`
         when visiting a page triggers a 404 Not Found error.
     :param user_agent: Set the user agent header to this value.
-
-    See also: :func:`StatefulBrowser`
 
     """
     def __init__(self, session=None, soup_config={'features': 'lxml'},
