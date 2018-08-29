@@ -11,8 +11,7 @@ def test_construct_form_fail():
     soup = bs4.BeautifulSoup('<notform>This is not a form</notform>', 'lxml')
     tag = soup.find('notform')
     assert isinstance(tag, bs4.element.Tag)
-    with pytest.raises(mechanicalsoup.LinkNotFoundError):
-        mechanicalsoup.Form(tag)
+    pytest.deprecated_call(mechanicalsoup.Form, tag)
 
 
 def test_submit_online(httpbin):
