@@ -1,5 +1,6 @@
-MechanicalSoup
-==============
+.. image:: /assets/mechanical-soup-logo.png
+   :alt: MechanicalSoup. A Python library for automating website
+	 interaction.
 
 Home page
 ---------
