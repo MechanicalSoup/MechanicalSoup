@@ -140,7 +140,7 @@ non-standard `soup_config` argument to the browser's constructor.
 If you specify a `soup_config` argument, you should include the parser
 to use, like::
 
-    mechanicalsoup.StatufulBrowser(soup_config={'features': 'lxml', '...': '...'})
+    mechanicalsoup.StatefulBrowser(soup_config={'features': 'lxml', '...': '...'})
 
 Or if you don't have the parser `lxml
 <http://lxml.de/installation.html>`__ installed::
