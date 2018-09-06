@@ -5,11 +5,12 @@
 
 .. image:: ../assets/mechanical-soup-logo.png
    :alt: MechanicalSoup. A Python library for automating website
-	 interaction.
+    interaction.
    :align: center
 
 .. This '|' generates a blank line to avoid sticking the logo to the
    section.
+
 |
 
 Welcome to MechanicalSoup's documentation!
