@@ -122,6 +122,31 @@ In such cases, you typically have two options:
    `Selenium <http://selenium-python.readthedocs.io/>`__.
    See :ref:`label-alternatives` for more information.
 
+My form doesn't have a unique submit name. What can I do?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This answer will help those encountering a "Multiple submit elements match"
+error when trying to submit a form.
+
+Since MechanicalSoup uses `BeautifulSoup <https://www.crummy.com/software/BeautifulSoup/bs4/doc/>`__
+under the hood, you can uniquely select any element on the page using its many
+convenient search functions, e.g. `.find() <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#find>`__
+and `.select() <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors>`__.
+Then you can pass that element to :func:`~mechanicalsoup.Form.choose_submit`
+or :func:`~mechanicalsoup.StatefulBrowser.submit_selected`, assuming it is a
+valid submit element.
+
+For example, if you have a form with a submit element only identified by a
+unique ``id="button3"`` attribute, you can do the following::
+
+    br = mechanicalsoup.StatefulBrowser()
+    br.open(...)
+    submit = br.get_current_page().find('input', id='button3')
+    form = br.select_form()
+    form.choose_submit(submit)
+    br.submit_selected()
+
+
 "No parser was explicitly specified"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
