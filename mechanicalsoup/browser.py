@@ -218,6 +218,10 @@ class Browser(object):
     def submit(self, form, url=None, **kwargs):
         """Prepares and sends a form request.
 
+        NOTE: To submit a form with a :class:`StatefulBrowser` instance, it is
+        recommended to use :func:`StatefulBrowser.submit_selected` instead of
+        this method so that the browser state is correctly updated.
+
         :param form: The filled-out form.
         :param url: URL of the page the form is on. If the form action is a
             relative path, then this must be specified.
