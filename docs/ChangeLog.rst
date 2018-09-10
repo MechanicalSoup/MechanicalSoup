@@ -5,8 +5,16 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
+This release focuses on fixing bugs related to uncommon HTTP/HTML
+scenarios and on improving the documentation.
+
 Bug fixes
 ---------
+
+* Constructing a :class:`~mechanicalsoup.Form` instance from a
+  ``bs4.element.Tag`` whose tag name is not ``form`` will now emit a warning,
+  and may be deprecated in the future.
+  [`#228 <https://github.com/MechanicalSoup/MechanicalSoup/pull/228>`__]
 
 * **Breaking Change:** :class:`~mechanicalsoup.LinkNotFoundError` now derives
   from ``Exception`` instead of ``BaseException``. While this will bring the
@@ -14,6 +22,15 @@ Bug fixes
   of your code if you were heavily relying on this implementation detail in
   your exception handling.
   [`#203 <https://github.com/MechanicalSoup/MechanicalSoup/issues/203>`__]
+
+* Improve handling of ``button`` submit elements. Will now correctly ignore
+  buttons of type ``button`` and ``reset`` during form submission, since they
+  are not considered to be submit elements.
+  [`#199 <https://github.com/MechanicalSoup/MechanicalSoup/pull/199>`__]
+
+* Do a better job of inferring the content type of a response if the
+  ``Content-Type`` header is not provided.
+  [`#195 <https://github.com/MechanicalSoup/MechanicalSoup/pull/195>`__]
 
 * Improve consistency of query string construction between MechanicalSoup
   and web browsers in edge cases where form elements have duplicate name
