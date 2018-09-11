@@ -2,8 +2,8 @@
 Release Notes
 =============
 
-Version 1.0 (in development)
-============================
+Version 0.11
+============
 
 This release focuses on fixing bugs related to uncommon HTTP/HTML
 scenarios and on improving the documentation.
