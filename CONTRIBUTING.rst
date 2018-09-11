@@ -93,13 +93,19 @@ GitHub and PyPI. Things to do are:
 
 At each release:
 
-- Make sure all changes are documented in ``docs/ChangeLog.rst``
-- Update the version number to $v in
-  ``mechanicalsoup/__version__.py``
-- Remove the ``(in development)`` mention in ``docs/ChangeLog.rst``.
-- git commit -m "Release $v"
-- git tag v$ver
-- git push origin master v$v
+-  Make all final changes to the repository before release:
+
+   - Document all notable changes in ``docs/ChangeLog.rst``.
+   - Update the version number to X.Y.Z in ``mechanicalsoup/__version__.py``.
+   - Remove the ``(in development)`` mention in ``docs/ChangeLog.rst``.
+
+- Commit and push the release to GitHub (both branch and tag)::
+
+    git commit -m "Release X.Y.Z"
+    git branch vX.Y
+    git tag vX.Y.Z
+    git push origin master vX.Y vX.Y.Z
+
 - Visit the `release page on GitHub
   <https://github.com/MechanicalSoup/MechanicalSoup/releases>`__, copy
   the relevant section from ``docs/ChangeLog.rst`` to the release
@@ -148,9 +154,9 @@ At each release:
 
 Right after the release:
 
-- Update the version number to a ``x.y.z-dev`` number in
+- Update the version number to a ``X.Y.Z-dev`` number in
   ``mechanicalsoup/__version__.py``
-- Create the ``(in development)`` section in ``docs/ChangeLog.rst``.
+- Create a new ``(in development)`` section in ``docs/ChangeLog.rst``.
 - ``git commit -m "Prepare for next release" && git push``
 
 .. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master
