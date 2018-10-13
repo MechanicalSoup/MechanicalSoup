@@ -45,14 +45,14 @@ def test__request(httpbin):
       <textarea name="comments">freezer</textarea>
       <fieldset>
         <legend> Pizza Size </legend>
-        <p><input type=radio name=size value="small">Small</p>
-        <p><input type=radio name=size value="medium" checked>Medium</p>
+        <p><input type=RADIO name=size value="small">Small</p>
+        <p><input type=radiO name=size value="medium" checked>Medium</p>
         <p><input type=radio name=size value="large">Large</p>
       </fieldset>
       <fieldset>
         <legend> Pizza Toppings </legend>
-        <p><input type=checkbox name="topping" value="bacon" checked>Bacon</p>
-        <p><input type=checkbox name="topping" value="cheese">Extra Cheese</p>
+        <p><input type=CHECKBOX name="topping" value="bacon" checked>Bacon</p>
+        <p><input type=checkBox name="topping" value="cheese">Extra Cheese</p>
         <p><input type=checkbox name="topping" value="onion" checked>Onion</p>
         <p><input type=checkbox name="topping" value="mushroom">Mushroom</p>
       </fieldset>
