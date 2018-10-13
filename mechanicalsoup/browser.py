@@ -163,7 +163,10 @@ class Browser(object):
             name = tag.get("name")  # name-attribute of tag
 
             if tag.name == "input":
-                if tag.get("type") in ("radio", "checkbox"):
+                if (
+                        tag.get("type") is not None and
+                        tag.get("type").lower() in ("radio", "checkbox")
+                ):
                     if "checked" not in tag.attrs:
                         continue
                     value = tag.get("value", "on")
