@@ -476,11 +476,11 @@ def test_choose_submit_buttons(expected_post):
     """Buttons of type reset and button are not valid submits"""
     text = """
     <form method="post" action="mock://form.com/post">
-      <button type="button" name="sub1" value="val1">Val1</button>
-      <button type="submit" name="sub2" value="val2">Val2</button>
+      <button type="butTon" name="sub1" value="val1">Val1</button>
+      <button type="suBmit" name="sub2" value="val2">Val2</button>
       <button type="reset" name="sub3" value="val3">Val3</button>
       <button name="sub4" value="val4">Val4</button>
-      <input type="submit" name="sub5" value="val5">
+      <input type="subMit" name="sub5" value="val5">
     </form>
     """
     browser, url = setup_mock_browser(expected_post=expected_post, text=text)

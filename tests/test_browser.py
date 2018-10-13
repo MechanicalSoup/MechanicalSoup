@@ -56,7 +56,7 @@ def test__request(httpbin):
         <p><input type=checkbox name="topping" value="onion" checked>Onion</p>
         <p><input type=checkbox name="topping" value="mushroom">Mushroom</p>
       </fieldset>
-      <input name="pic" type="file">
+      <input name="pic" type="FiLe">
       <select name="shape">
         <option value="round">Round</option>
         <option value="square" selected>Square</option>
