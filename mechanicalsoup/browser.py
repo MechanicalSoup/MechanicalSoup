@@ -174,7 +174,10 @@ class Browser(object):
                     # browsers use empty string for inputs with missing values
                     value = tag.get("value", "")
 
-                if tag.get("type") == "file":
+                if (
+                        tag.get("type") is not None and
+                        tag.get("type").lower() == "file"
+                ):
                     # read http://www.cs.tut.fi/~jkorpela/forms/file.html
                     # in browsers, file upload only happens if the form
                     # (or submit button) enctype attribute is set to
@@ -188,7 +191,7 @@ class Browser(object):
                     data.append((name, value))
 
             elif tag.name == "button":
-                if tag.get("type", "") in ("button", "reset"):
+                if tag.get("type", "").lower() in ("button", "reset"):
                     continue
                 else:
                     data.append((name, tag.get("value", "")))

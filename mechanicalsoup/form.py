@@ -322,8 +322,10 @@ class Form(object):
                 raise Exception('Submit already chosen. Cannot change submit!')
 
         # All buttons NOT of type (button,reset) are valid submits
-        inps = [i for i in self.form.select('input[type="submit"], button')
-                if i.get('type', '') not in ('button', 'reset')]
+        inps = (self.find_by_type("input", "submit", dict()) +
+                self.form.find_all("button"))
+        inps = [i for i in inps
+                if i.get('type', '').lower() not in ('button', 'reset')]
 
         # If no submit specified, choose the first one
         if submit is None and inps:
