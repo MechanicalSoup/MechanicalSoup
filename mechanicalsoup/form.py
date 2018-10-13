@@ -111,8 +111,8 @@ class Form(object):
             the HTML is served.
         """
         for (name, value) in data.items():
-            checkboxes = self.form.find_all("input", {"name": name},
-                                            type="checkbox")
+            # Case-insensitive search for type=checkbox
+            checkboxes = self.find_by_type("input", "checkbox", {'name': name})
             if not checkboxes:
                 raise InvalidFormMethod("No input checkbox named " + name)
 
@@ -155,7 +155,8 @@ class Form(object):
             Only one radio button in the family can be checked.
         """
         for (name, value) in data.items():
-            radios = self.form.find_all("input", {"name": name}, type="radio")
+            # Case-insensitive search for type=radio
+            radios = self.find_by_type("input", "radio", {'name': name})
             if not radios:
                 raise InvalidFormMethod("No input radio named " + name)
 
@@ -373,3 +374,8 @@ class Form(object):
                 if subtag.string:
                     subtag.string = subtag.string.strip()
             print(input_copy)
+
+    def find_by_type(self, tag_name, type_attr, attrs):
+        attrs_dict = attrs.copy()
+        attrs_dict['type'] = lambda x: x and x.lower() == type_attr
+        return self.form.find_all(tag_name, attrs=attrs_dict)

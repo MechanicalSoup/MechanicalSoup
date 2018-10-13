@@ -313,6 +313,38 @@ def test_form_not_found():
         form.set_select({'entree': ('no_multiple', 'no_multiple')})
 
 
+def test_form_set_radio_checkbox(capsys):
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(page_with_various_fields,
+                           url="http://example.com/invalid/")
+    form = browser.select_form("form")
+    form.set_radio({"size": "small"})
+    form.set_checkbox({"topping": "cheese"})
+    browser.get_current_form().print_summary()
+    out, err = capsys.readouterr()
+    # Different versions of bs4 show either <input></input> or
+    # <input/>. Normalize before comparing.
+    out = out.replace('></input>', '/>')
+    assert out == """<input name="foo"/>
+<textarea name="bar"></textarea>
+<select name="entree">
+<option selected="selected" value="tofu">Tofu Stir Fry</option>
+<option value="curry">Red Curry</option>
+<option value="tempeh">Tempeh Tacos</option>
+</select>
+<input name="topping" type="checkbox" value="bacon"/>
+<input checked="" name="topping" type="Checkbox" value="cheese"/>
+<input name="topping" type="checkbox" value="onion"/>
+<input name="topping" type="checkbox" value="mushroom"/>
+<input checked="" name="size" type="Radio" value="small"/>
+<input name="size" type="radio" value="medium"/>
+<input name="size" type="radio" value="large"/>
+<button name="action" value="cancel">Cancel</button>
+<input type="submit" value="Select"/>
+"""
+    assert err == ""
+
+
 page_with_radio = '''
 <html>
   <form method="post">
@@ -351,14 +383,14 @@ page_with_various_fields = '''
      <legend> Pizza Toppings </legend>
      <p><label> <input type=checkbox name="topping"
       value="bacon"> Bacon </label></p>
-     <p><label> <input type=checkbox name="topping"
+     <p><label> <input type=Checkbox name="topping"
       value="cheese" checked>Extra Cheese   </label></p>
      <p><label> <input type=checkbox name="topping"
       value="onion" checked> Onion </label></p>
      <p><label> <input type=checkbox name="topping"
       value="mushroom"> Mushroom </label></p>
     </fieldset>
-    <p><input name="size" type=radio value="small">Small</p>
+    <p><input name="size" type=Radio value="small">Small</p>
     <p><input name="size" type=radio value="medium">Medium</p>
     <p><input name="size" type=radio value="large">Large</p>
     <button name="action"  value="cancel">Cancel</button>
@@ -386,10 +418,10 @@ def test_form_print_summary(capsys):
 <option value="tempeh">Tempeh Tacos</option>
 </select>
 <input name="topping" type="checkbox" value="bacon"/>
-<input checked="" name="topping" type="checkbox" value="cheese"/>
+<input checked="" name="topping" type="Checkbox" value="cheese"/>
 <input checked="" name="topping" type="checkbox" value="onion"/>
 <input name="topping" type="checkbox" value="mushroom"/>
-<input name="size" type="radio" value="small"/>
+<input name="size" type="Radio" value="small"/>
 <input name="size" type="radio" value="medium"/>
 <input name="size" type="radio" value="large"/>
 <button name="action" value="cancel">Cancel</button>
