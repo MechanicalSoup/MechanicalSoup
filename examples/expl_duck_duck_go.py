@@ -15,3 +15,4 @@ browser.submit_selected()
 # Display the results
 for link in browser.get_current_page().select('a.result__a'):
     print(link.text, '->', link.attrs['href'])
+    print("happy hacking")
