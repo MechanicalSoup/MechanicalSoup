@@ -216,6 +216,14 @@ class Form(object):
 
             for choice in value:
                 option = select.find("option", {"value": choice})
+
+                # try to find with text instead of value
+                if not option:
+                  option = select.find("option", string=choice)
+
+                  if not option:
+                    raise LinkNotFoundError('Option %s not found for select %s' % (choice, name))
+
                 option.attrs["selected"] = "selected"
 
     def __setitem__(self, name, value):
