@@ -221,10 +221,10 @@ class Form(object):
                 if not option:
                     option = select.find("option", string=choice)
 
-                    if not option:
-                        raise LinkNotFoundError(
-                          'Option %s not found for select %s' % (choice, name)
-                        )
+                if not option:
+                    raise LinkNotFoundError(
+                        'Option %s not found for select %s' % (choice, name)
+                    )
 
                 option.attrs["selected"] = "selected"
 
