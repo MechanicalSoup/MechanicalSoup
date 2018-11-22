@@ -206,7 +206,8 @@ class Browser(object):
                     data.append((name, selected_values[-1]))
                 elif options:
                     # Selects the first option if none are selected
-                    data.append((name, options[0].get("value", options[0].text)))
+                    data.append((name, options[0].get("value",
+                                                      options[0].text)))
 
         if method.lower() == "get":
             kwargs["params"] = data
