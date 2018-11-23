@@ -225,7 +225,7 @@ class Browser(object):
         :param form: The filled-out form.
         :param url: URL of the page the form is on. If the form action is a
             relative path, then this must be specified.
-        :param \*\*kwargs: Arguments forwarded to `requests.Session.request
+        :param \\*\\*kwargs: Arguments forwarded to `requests.Session.request
             <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
 
         :return: `requests.Response
