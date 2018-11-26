@@ -100,12 +100,15 @@ def test__request_file(httpbin):
     response = browser._request(form)
 
     # Check that only "files" includes a "pic" keyword in the response
+    found = False
     for key, value in response.json().items():
         if key == "files":
             assert value["pic"] == ":-)"
+            found = True
         else:
             assert (value is None) or ("pic" not in value)
 
+    assert found
     assert "multipart/form-data" in response.request.headers["Content-Type"]
 
 
