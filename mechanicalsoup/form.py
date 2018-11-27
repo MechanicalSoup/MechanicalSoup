@@ -193,9 +193,10 @@ class Form(object):
         :param data: Dict of ``{name: value, ...}``.
             Find the select element whose *name*-attribute is ``name``.
             Then select from among its children the option element whose
-            *value*-attribute is ``value``. If the select element's
-            *multiple*-attribute is set, then ``value`` can be a list
-            or tuple to select multiple options.
+            *value*-attribute is ``value``. If no matching *value*-attribute
+            is found, this will search for an option whose text matches
+            ``value``. If the select element's *multiple*-attribute is set,
+            then ``value`` can be a list or tuple to select multiple options.
         """
         for (name, value) in data.items():
             select = self.form.find("select", {"name": name})

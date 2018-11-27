@@ -467,20 +467,18 @@ def test_choose_submit_buttons(expected_post):
                  id='Option with value selected by its text'),
     pytest.param(True, 'Unknown option', None,
                  id='Unknown option, must raise a LinkNotFound exception')
-
 ])
 def test_option_without_value(fail, selected, expected_post):
     """Option tag in select can have no value option"""
     text = """
     <form method="post" action="mock://form.com/post">
-<select name="selector">
-<option value="with_value">We have a value here</option>
-<option>Without value</option>
-</select>
-<button type="submit">Submit</button>
-</form>
-"""
-    expected_post = expected_post
+      <select name="selector">
+        <option value="with_value">We have a value here</option>
+        <option>Without value</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+    """
     browser, url = setup_mock_browser(expected_post=expected_post,
                                       text=text)
     browser.open(url)

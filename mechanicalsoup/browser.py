@@ -194,6 +194,8 @@ class Browser(object):
                 data.append((name, tag.text))
 
             elif tag.name == "select":
+                # If the value attribute is not specified, the content will
+                # be passed as a value instead.
                 options = tag.select("option")
                 selected_values = [i.get("value", i.text) for i in options
                                    if "selected" in i.attrs]
@@ -206,8 +208,8 @@ class Browser(object):
                     data.append((name, selected_values[-1]))
                 elif options:
                     # Selects the first option if none are selected
-                    data.append((name, options[0].get("value",
-                                                      options[0].text)))
+                    first_value = options[0].get("value", options[0].text)
+                    data.append((name, first_value))
 
         if method.lower() == "get":
             kwargs["params"] = data
