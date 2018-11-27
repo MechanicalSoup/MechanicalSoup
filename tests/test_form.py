@@ -458,5 +458,40 @@ def test_choose_submit_buttons(expected_post):
     assert res.status_code == 200 and res.text == 'Success!'
 
 
+@pytest.mark.parametrize("fail, selected, expected_post", [
+    pytest.param(False, 'with_value', [('selector', 'with_value')],
+                 id='Option with value'),
+    pytest.param(False, 'Without value', [('selector', 'Without value')],
+                 id='Option without value'),
+    pytest.param(False, 'We have a value here', [('selector', 'with_value')],
+                 id='Option with value selected by its text'),
+    pytest.param(True, 'Unknown option', None,
+                 id='Unknown option, must raise a LinkNotFound exception')
+])
+def test_option_without_value(fail, selected, expected_post):
+    """Option tag in select can have no value option"""
+    text = """
+    <form method="post" action="mock://form.com/post">
+      <select name="selector">
+        <option value="with_value">We have a value here</option>
+        <option>Without value</option>
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+    """
+    browser, url = setup_mock_browser(expected_post=expected_post,
+                                      text=text)
+    browser.open(url)
+    browser.select_form()
+    if fail:
+        with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+            browser['selector'] = selected
+    else:
+        browser['selector'] = selected
+
+        res = browser.submit_selected()
+        assert res.status_code == 200 and res.text == 'Success!'
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
