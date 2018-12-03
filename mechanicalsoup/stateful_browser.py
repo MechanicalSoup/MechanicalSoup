@@ -174,7 +174,7 @@ class StatefulBrowser(Browser):
                                      request=resp.request)
         return resp
 
-    def select_form(self, selector="form", nr=0):
+    def select_form(self, selector="form", nr=0, dev_op=False):
         """Select a form in the current page.
 
         :param selector: CSS selector or a bs4.element.Tag object to identify
@@ -195,7 +195,7 @@ class StatefulBrowser(Browser):
         if isinstance(selector, bs4.element.Tag):
             if selector.name != "form":
                 raise LinkNotFoundError
-            self.__state.form = Form(selector)
+            self.__state.form = Form(selector, dev_op)
         else:
             # nr is a 0-based index for consistency with mechanize
             found_forms = self.get_current_page().select(selector,
@@ -205,7 +205,7 @@ class StatefulBrowser(Browser):
                     print('select_form failed for', selector)
                     self.launch_browser()
                 raise LinkNotFoundError()
-            self.__state.form = Form(found_forms[-1])
+            self.__state.form = Form(found_forms[-1], dev_op)
 
         return self.get_current_form()
 

@@ -33,7 +33,7 @@ class Form(object):
     It also handles submit-type elements using :func:`~Form.choose_submit`.
     """
 
-    def __init__(self, form):
+    def __init__(self, form, dev_op=False):
         if form.name != 'form':
             warnings.warn(
                 "Constructed a Form from a '{}' instead of a 'form' element. "
@@ -42,6 +42,7 @@ class Form(object):
 
         self.form = form
         self._submit_chosen = False
+        self.dev_op = dev_op
 
         # Aliases for backwards compatibility
         # (Included specifically in __init__ to suppress them in Sphinx docs)
@@ -67,6 +68,8 @@ class Form(object):
             i = self.form.find("input", {"name": name})
             if not i:
                 raise InvalidFormMethod("No input field named " + name)
+            if i.has_attr("disabled") and not self.dev_op:
+                raise LinkNotFoundError("This is disabled field you have to set dev_op to true to edit this field " + name)
             i["value"] = value
 
     def uncheck_all(self, name):
@@ -74,7 +77,8 @@ class Form(object):
         a *name*-attribute given by ``name``.
         """
         for option in self.form.find_all("input", {"name": name}):
-            if "checked" in option.attrs:
+            is_disabled = option.has_attr("disabled")
+            if option.has_attr("checked") and (is_disabled or (is_disabled and self.dev_op)):
                 del option.attrs["checked"]
 
     def check(self, data):
@@ -128,6 +132,8 @@ class Form(object):
             for choice in value:
                 choice_str = str(choice)  # Allow for example literal numbers
                 for checkbox in checkboxes:
+                    if checkbox.has_attr("disabled") and not self.dev_op:
+                        continue
                     if checkbox.attrs.get("value", "on") == choice_str:
                         checkbox["checked"] = ""
                         break
@@ -164,6 +170,8 @@ class Form(object):
 
             # Check the appropriate radio button (value cannot be a list/tuple)
             for radio in radios:
+                if radio.has_attr("disabled") and not self.dev_op:
+                    continue
                 if radio.attrs.get("value", "on") == str(value):
                     radio["checked"] = ""
                     break
@@ -184,6 +192,8 @@ class Form(object):
             t = self.form.find("textarea", {"name": name})
             if not t:
                 raise InvalidFormMethod("No textarea named " + name)
+            if t.has_attr("disabled") and not self.dev_op:
+                raise LinkNotFoundError("This is disabled field you have to set dev_op to true to edit this field " + name)
             t.string = value
 
     def set_select(self, data):
@@ -202,6 +212,8 @@ class Form(object):
             select = self.form.find("select", {"name": name})
             if not select:
                 raise InvalidFormMethod("No select named " + name)
+            if select.has_attr("disabled") and not self.dev_op:
+                raise LinkNotFoundError("This is disabled field you have to set dev_op to true to edit this field " + name)
 
             # Deselect all options first
             for option in select.find_all("option"):
