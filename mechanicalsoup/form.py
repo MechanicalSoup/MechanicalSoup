@@ -77,7 +77,7 @@ class Form(object):
         """
         for option in self.form.find_all("input", {"name": name}):
             is_disabled = option.has_attr("disabled")
-            if option.has_attr("checked") and is_disabled:
+            if option.has_attr("checked") and not is_disabled:
                 del option.attrs["checked"]
 
     def check(self, data):
@@ -273,7 +273,7 @@ class Form(object):
 
         .. code-block:: python
 
-            form.set("tagname") = path_to_local_file
+            form.set("tagname") = path_to_loecal_file
 
         """
         for func in ("checkbox", "radio", "input", "textarea", "select"):
