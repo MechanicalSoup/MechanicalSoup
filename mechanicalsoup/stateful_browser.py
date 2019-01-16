@@ -292,7 +292,7 @@ class StatefulBrowser(Browser):
             raise ValueError('link parameter cannot be treated as '
                              'url_regex because url_regex is already '
                              'present in keyword arguments')
-        else:
+        elif link:
             kwargs['url_regex'] = link
 
         try:
