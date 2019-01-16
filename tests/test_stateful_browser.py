@@ -424,8 +424,7 @@ def test_referer_submit_headers(httpbin):
 @pytest.mark.parametrize('expected, kwargs', [
     pytest.param('/foo', {}, id='none'),
     pytest.param('/get', {'text': 'Link'}, id='text'),
-    pytest.param('/get', {'url_regex': 'get'}, id='regex',
-                 marks=pytest.mark.xfail),
+    pytest.param('/get', {'url_regex': 'get'}, id='regex'),
 ])
 def test_follow_link_arg(httpbin, expected, kwargs):
     browser = mechanicalsoup.StatefulBrowser()
