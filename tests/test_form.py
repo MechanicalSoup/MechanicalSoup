@@ -74,30 +74,30 @@ def test_submit_set(httpbin):
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
         [
+            ('text', 'Setting some text!'),
             ('comment', 'Testing preview page'),
             ('preview', 'Preview Page'),
-            ('text', 'Setting some text!')
         ], id='preview'),
     pytest.param(
         [
+            ('text', '= Heading =\n\nNew page here!\n'),
             ('comment', 'Created new page'),
             ('save', 'Submit changes'),
-            ('text', '= Heading =\n\nNew page here!\n')
         ], id='save'),
     pytest.param(
         [
+            ('text', '= Heading =\n\nNew page here!\n'),
             ('comment', 'Testing choosing cancel button'),
             ('cancel', 'Cancel'),
-            ('text', '= Heading =\n\nNew page here!\n')
         ], id='cancel'),
 ])
 def test_choose_submit(expected_post):
     browser, url = setup_mock_browser(expected_post=expected_post)
     browser.open(url)
     form = browser.select_form('#choose-submit-form')
-    browser['text'] = expected_post[2][1]
-    browser['comment'] = expected_post[0][1]
-    form.choose_submit(expected_post[1][0])
+    browser['text'] = dict(expected_post)['text']
+    browser['comment'] = dict(expected_post)['comment']
+    form.choose_submit(expected_post[2][0])
     res = browser.submit_selected()
     assert(res.status_code == 200 and res.text == 'Success!')
 
