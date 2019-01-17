@@ -92,7 +92,7 @@ There are other libraries with the same purpose as MechanicalSoup:
   2015 on RoboBrowser). RoboBrowser is `broken on Python 3.7
   <https://github.com/jmcarp/robobrowser/issues/87>`__, and while
   there is an easy workaround this is a sign that the lack of activity
-  is due to the project being abandonned more than to its maturity.
+  is due to the project being abandoned more than to its maturity.
 
 * `Selenium <http://selenium-python.readthedocs.io/>`__ is a much
   heavier solution: it launches a real web browser (Firefox,
