@@ -163,10 +163,7 @@ class Browser(object):
             name = tag.get("name")  # name-attribute of tag
 
             if tag.name == "input":
-                if (
-                        tag.get("type") is not None and
-                        tag.get("type").lower() in ("radio", "checkbox")
-                ):
+                if tag.get("type", "").lower() in ("radio", "checkbox"):
                     if "checked" not in tag.attrs:
                         continue
                     value = tag.get("value", "on")
@@ -174,10 +171,7 @@ class Browser(object):
                     # browsers use empty string for inputs with missing values
                     value = tag.get("value", "")
 
-                if (
-                        tag.get("type") is not None and
-                        tag.get("type").lower() == "file"
-                ):
+                if tag.get("type", "").lower() == "file":
                     # read http://www.cs.tut.fi/~jkorpela/forms/file.html
                     # in browsers, file upload only happens if the form
                     # (or submit button) enctype attribute is set to
