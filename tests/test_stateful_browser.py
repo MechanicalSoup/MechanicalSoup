@@ -125,15 +125,15 @@ def test_links():
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
         [
+            ('text', 'Setting some text!'),
             ('comment', 'Selecting an input submit'),
             ('diff', 'Review Changes'),
-            ('text', 'Setting some text!')
         ], id='input'),
     pytest.param(
         [
+            ('text', '= Heading =\n\nNew page here!\n'),
             ('comment', 'Selecting a button submit'),
             ('cancel', 'Cancel'),
-            ('text', '= Heading =\n\nNew page here!\n')
         ], id='button'),
 ])
 def test_submit_btnName(expected_post):
@@ -141,9 +141,9 @@ def test_submit_btnName(expected_post):
     browser, url = setup_mock_browser(expected_post=expected_post)
     browser.open(url)
     browser.select_form('#choose-submit-form')
-    browser['text'] = expected_post[2][1]
-    browser['comment'] = expected_post[0][1]
-    res = browser.submit_selected(btnName=expected_post[1][0])
+    browser['text'] = dict(expected_post)['text']
+    browser['comment'] = dict(expected_post)['comment']
+    res = browser.submit_selected(btnName=expected_post[2][0])
     assert(res.status_code == 200 and res.text == 'Success!')
 
 
