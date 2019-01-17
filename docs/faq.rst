@@ -77,18 +77,22 @@ There are other libraries with the same purpose as MechanicalSoup:
 
 * `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`__ is an
   ancestor of MechanicalSoup (getting its name from the Perl mechanize
-  module). It was a great tool, but doesn't support Python 3. It was
-  unmaintained for several years but got a new maintainer in 2017.
-  Note that Mechanize is a much bigger piece of code (around 20 times
-  more lines!) than MechanicalSoup, which is small because it
-  delegates most of its work to BeautifulSoup and requests.
+  module). It was a great tool, but became unmaintained for several
+  years and didn't support Python 3. Fortunately, Mechanize got a new
+  maintainer in 2017 and completed Python 3 support in 2019. Note that
+  Mechanize is a much bigger piece of code (around 20 times more
+  lines!) than MechanicalSoup, which is small because it delegates
+  most of its work to BeautifulSoup and requests.
 
 * `RoboBrowser <https://github.com/jmcarp/robobrowser>`__ is very
   similar to MechanicalSoup. Both are small libraries built on top of
   requests and BeautifulSoup. Their APIs are very similar. Both have an
   automated testsuite. As of writing, MechanicalSoup is more actively
-  maintained (only 1 really active developer and no activity the last
-  two years for RoboBrowser).
+  maintained (only 1 really active developer and no activity since
+  2015 on RoboBrowser). RoboBrowser is `broken on Python 3.7
+  <https://github.com/jmcarp/robobrowser/issues/87>`__, and while
+  there is an easy workaround this is a sign that the lack of activity
+  is due to the project being abandonned more than to its maturity.
 
 * `Selenium <http://selenium-python.readthedocs.io/>`__ is a much
   heavier solution: it launches a real web browser (Firefox,
