@@ -1,5 +1,7 @@
 import mechanicalsoup
 import requests_mock
+from distutils.version import StrictVersion
+import bs4
 try:
     from urllib.parse import parse_qsl
 except ImportError:
@@ -62,7 +64,12 @@ def mock_post(mocked_adapter, url, expected, reply='Success!'):
     def text_callback(request, context):
         # Python 2's parse_qsl doesn't like None argument
         query = parse_qsl(request.text) if request.text else []
-        assert (query == expected)
+        # In bs4 4.7.0+, CSS selectors return elements in page order,
+        # but did not in earlier versions.
+        if StrictVersion(bs4.__version__) >= StrictVersion('4.7.0'):
+            assert query == expected
+        else:
+            assert sorted(query) == sorted(expected)
         return reply
 
     mocked_adapter.register_uri('POST', url, text=text_callback)
