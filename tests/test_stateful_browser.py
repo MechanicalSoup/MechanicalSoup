@@ -257,7 +257,7 @@ def test_form_noaction():
     browser, url = setup_mock_browser()
     browser.open_fake_page(submit_form_noaction)
     browser.select_form('#choose-submit-form')
-    with pytest.raises(ValueError, message="no URL to submit to"):
+    with pytest.raises(ValueError, match="no URL to submit to"):
         browser.submit_selected()
 
 
