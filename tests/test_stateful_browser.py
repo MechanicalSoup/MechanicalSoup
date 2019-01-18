@@ -421,18 +421,18 @@ def test_referer_submit_headers(httpbin):
     assert headers['X-Test-Header'] == 'x-test-value'
 
 
-def test_link_arg_text(httpbin):
+@pytest.mark.parametrize('expected, kwargs', [
+    pytest.param('/foo', {}, id='none'),
+    pytest.param('/get', {'text': 'Link'}, id='text'),
+    pytest.param('/get', {'url_regex': 'get'}, id='regex',
+                 marks=pytest.mark.xfail),
+])
+def test_follow_link_arg(httpbin, expected, kwargs):
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
-    browser.follow_link(link_text='Link')
-    assert browser.get_url() == httpbin + '/get'
-
-
-def test_link_arg_regex(httpbin):
-    browser = mechanicalsoup.StatefulBrowser()
-    browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
-    browser.follow_link(url_regex='.*')
-    assert browser.get_url() == httpbin + '/get'
+    html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
+    browser.open_fake_page(html, httpbin.url)
+    browser.follow_link(**kwargs)
+    assert browser.get_url() == httpbin + expected
 
 
 def test_link_arg_multiregex(httpbin):
