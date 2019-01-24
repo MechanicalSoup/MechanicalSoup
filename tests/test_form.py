@@ -467,6 +467,26 @@ def test_issue158():
     browser.close()
 
 
+def test_duplicate_submit_buttons():
+    """Tests that duplicate submits doesn't break form submissions
+    See issue https://github.com/MechanicalSoup/MechanicalSoup/issues/264"""
+    issue264_form = '''
+<form method="post" action="mock://form.com/post">
+  <input name="box" type="hidden" value="1"/>
+  <input name="search" type="submit" value="Search"/>
+  <input name="search" type="submit" value="Search"/>
+</form>
+'''
+    expected_post = [('box', '1'), ('search', 'Search')]
+    browser, url = setup_mock_browser(expected_post=expected_post,
+                                      text=issue264_form)
+    browser.open(url)
+    browser.select_form()
+    res = browser.submit_selected()
+    assert(res.status_code == 200 and res.text == 'Success!')
+    browser.close()
+
+
 @pytest.mark.parametrize("expected_post", [
     pytest.param([('sub2', 'val2')], id='submit button'),
     pytest.param([('sub4', 'val4')], id='typeless button'),

@@ -344,12 +344,17 @@ class Form(object):
 
         found = False
         for inp in inps:
-            if inp == submit or (inp.has_attr('name') and
-                                 inp['name'] == submit):
+            if (inp.has_attr('name') and inp['name'] == submit):
                 if found:
                     raise LinkNotFoundError(
                         "Multiple submit elements match: {0}".format(submit)
                     )
+                found = True
+            elif inp == submit:
+                if found:
+                    # Ignore submit element since it is an exact
+                    # duplicate of the one we're looking at.
+                    del inp['name']
                 found = True
             else:
                 # Delete any non-matching element's name so that it will be
