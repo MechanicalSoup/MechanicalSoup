@@ -129,6 +129,18 @@ def test__request_select_none(httpbin):
     assert response.json()['form'] == {'shape': 'round'}
 
 
+def test__request_disabled_attr(httpbin):
+    """Make sure that disabled form controls are not submitted."""
+    form_html = """
+    <form method="post" action="{}/post">
+      <input disabled name="nosubmit" value="1" />
+    </form>""".format(httpbin.url)
+
+    browser = mechanicalsoup.Browser()
+    response = browser._request(BeautifulSoup(form_html, "lxml").form)
+    assert response.json()['form'] == {}
+
+
 def test_no_404(httpbin):
     browser = mechanicalsoup.Browser()
     resp = browser.get(httpbin + "/nosuchpage")

@@ -162,6 +162,10 @@ class Browser(object):
         for tag in form.select(selector):
             name = tag.get("name")  # name-attribute of tag
 
+            # Skip disabled elements, since they should not be submitted.
+            if tag.has_attr('disabled'):
+                continue
+
             if tag.name == "input":
                 if tag.get("type", "").lower() in ("radio", "checkbox"):
                     if "checked" not in tag.attrs:
