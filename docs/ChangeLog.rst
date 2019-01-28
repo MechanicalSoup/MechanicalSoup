@@ -5,6 +5,16 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
+Bug fixes
+---------
+
+* Form controls with the ``disabled`` attribute will no longer be submitted
+  to improve compliance with the HTML standard. If you were relying on this
+  bug to submit disabled elements, you can still achieve this by deleting the
+  ``disabled`` attribute from the element in the :class:`~mechanicalsoup.Form`
+  object directly.
+  [`#248 <https://github.com/MechanicalSoup/MechanicalSoup/issues/248>`__]
+
 Version 0.11
 ============
 
