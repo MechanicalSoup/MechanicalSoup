@@ -128,9 +128,10 @@ def test_choose_submit_from_selector_submit(value):
     pytest.param('cancel', id='second'),
 ])
 def test_choose_submit_from_selector_image(value):
-    """Test choose_submit by passing a CSS selector argument for a input type image.
-    This test aims to ensure that inputs with type image are found, regardless its repetition.
-    Based in part of this issue: https://github.com/MechanicalSoup/MechanicalSoup/issues/201
+    """Test choose_submit by passing a CSS selector arg for a input type image.
+    This test aims to ensure that inputs with type image are found,
+    regardless its repetition.
+    Issue: https://github.com/MechanicalSoup/MechanicalSoup/issues/201
     """
     text = """
     <form method="post" action="mock://form.com/post">
