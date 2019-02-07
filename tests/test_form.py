@@ -106,12 +106,33 @@ def test_choose_submit(expected_post):
     pytest.param('continue', id='first'),
     pytest.param('cancel', id='second'),
 ])
-def test_choose_submit_from_selector(value):
+def test_choose_submit_from_selector_submit(value):
     """Test choose_submit by passing a CSS selector argument."""
     text = """
     <form method="post" action="mock://form.com/post">
       <input type="submit" name="do" value="continue" />
       <input type="submit" name="do" value="cancel" />
+    </form>"""
+    browser, url = setup_mock_browser(expected_post=[('do', value)], text=text)
+    browser.open(url)
+    form = browser.select_form()
+    submits = form.form.select('input[value="{}"]'.format(value))
+    assert len(submits) == 1
+    form.choose_submit(submits[0])
+    res = browser.submit_selected()
+    assert res.status_code == 200 and res.text == 'Success!'
+
+
+@pytest.mark.parametrize("value", [
+    pytest.param('continue', id='first'),
+    pytest.param('cancel', id='second'),
+])
+def test_choose_submit_from_selector_image(value):
+    """Test choose_submit by passing a CSS selector argument."""
+    text = """
+    <form method="post" action="mock://form.com/post">
+      <input type="image" name="do" value="continue" />
+      <input type="image" name="do" value="cancel" />
     </form>"""
     browser, url = setup_mock_browser(expected_post=[('do', value)], text=text)
     browser.open(url)

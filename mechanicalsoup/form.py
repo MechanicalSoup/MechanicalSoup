@@ -334,6 +334,7 @@ class Form(object):
 
         # All buttons NOT of type (button,reset) are valid submits
         inps = (self.find_by_type("input", "submit", dict()) +
+                self.find_by_type("input", "image", dict()) +
                 self.form.find_all("button"))
         inps = [i for i in inps
                 if i.get('type', '').lower() not in ('button', 'reset')]
