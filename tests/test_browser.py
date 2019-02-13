@@ -3,6 +3,7 @@ import mechanicalsoup
 import sys
 from bs4 import BeautifulSoup
 import tempfile
+import os
 from requests.cookies import RequestsCookieJar
 import pytest
 
@@ -80,7 +81,11 @@ def test__request(httpbin):
         "Content-Type"]
 
 
-def test__request_file(httpbin):
+@pytest.mark.parametrize('expected_content, set_value', [
+    (b":-)", True),
+    (b"", False)
+])
+def test__request_file(httpbin, expected_content, set_value):
     form_html = """
     <form method="post" action="{}/post">
       <input name="pic" type="file" />
@@ -88,12 +93,13 @@ def test__request_file(httpbin):
     """.format(httpbin.url)
     form = BeautifulSoup(form_html, "lxml").form
 
-    # create a temporary file for testing file upload
-    pic_path = tempfile.mkstemp()[1]
-    with open(pic_path, "w") as f:
-        f.write(":-)")
+    if set_value:
+        # create a temporary file for testing file upload
+        pic_filedescriptor, pic_path = tempfile.mkstemp()
+        os.write(pic_filedescriptor, expected_content)
+        os.close(pic_filedescriptor)
 
-    form.find("input", {"name": "pic"})["value"] = pic_path
+        form.find("input", {"name": "pic"})["value"] = pic_path
 
     browser = mechanicalsoup.Browser()
     response = browser._request(form)
@@ -102,13 +108,28 @@ def test__request_file(httpbin):
     found = False
     for key, value in response.json().items():
         if key == "files":
-            assert value["pic"] == ":-)"
-            found = True
+            if "pic" in value:
+                if value["pic"].encode() == expected_content:
+                    # If pic is found twice, an error will occur
+                    assert not found
+                    found = True
+        # One would expect to find "pic" in files, but as of writing,
+        # httpbin puts it in form when the filename is empty:
+        elif key == "form":
+            if "pic" in value:
+                if value["pic"].encode() == expected_content:
+                    assert not found
+                    found = True
+                    assert b"filename=\"\"" in response.request.body
         else:
             assert (value is None) or ("pic" not in value)
 
     assert found
     assert "multipart/form-data" in response.request.headers["Content-Type"]
+
+    # In case we created a file for upload, we need to close & delete it
+    if set_value:
+        os.remove(pic_path)
 
 
 def test__request_select_none(httpbin):

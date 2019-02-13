@@ -14,6 +14,10 @@ Bug fixes
   ``disabled`` attribute from the element in the :class:`~mechanicalsoup.Form`
   object directly.
   [`#248 <https://github.com/MechanicalSoup/MechanicalSoup/issues/248>`__]
+* Upon submitting a form containing a file input field without uploading one,
+  an empty filename & content will be sent in compliance with regular web
+  browser behavior.
+  [`#250 <https://github.com/MechanicalSoup/MechanicalSoup/issues/250>`__]
 
 Version 0.11
 ============
