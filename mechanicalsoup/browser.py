@@ -180,11 +180,14 @@ class Browser(object):
                     # in browsers, file upload only happens if the form
                     # (or submit button) enctype attribute is set to
                     # "multipart/form-data". We don't care, simplify.
-                    if not value:
-                        continue
-                    if isinstance(value, string_types):
-                        value = open(value, "rb")
-                    files[name] = value
+                    filename = value
+                    if filename != "" and isinstance(filename, string_types):
+                        content = open(filename, "rb")
+                    else:
+                        content = ""
+                    # If value is the empty string, we still pass it for
+                    # consistency with browsers (see #250).
+                    files[name] = (filename, content)
                 else:
                     data.append((name, value))
 
