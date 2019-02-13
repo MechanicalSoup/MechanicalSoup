@@ -18,8 +18,8 @@ JavaScript.
 MechanicalSoup was created by `M Hickford
 <https://github.com/hickford/>`__, who was a fond user of the
 `Mechanize <https://github.com/jjlee/mechanize>`__ library.
-Unfortunately, Mechanize is `incompatible with Python 3
-<https://github.com/jjlee/mechanize/issues/96>`__ and its development
+Unfortunately, Mechanize was `incompatible with Python 3 until 2019
+<https://github.com/python-mechanize/mechanize/issues/9>`__ and its development
 stalled for several years. MechanicalSoup provides a similar API, built on Python
 giants `Requests <http://docs.python-requests.org/en/latest/>`__ (for
 HTTP sessions) and `BeautifulSoup
