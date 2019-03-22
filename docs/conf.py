@@ -15,6 +15,7 @@
 
 import sys
 import os
+from datetime import datetime
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -48,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'MechanicalSoup'
-copyright = '2014'
+copyright = '2014-{}'.format(datetime.utcnow().year)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
