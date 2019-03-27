@@ -15,6 +15,7 @@
 
 import sys
 import os
+from datetime import datetime
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -48,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'MechanicalSoup'
-copyright = '2014'
+copyright = '2014-{}'.format(datetime.utcnow().year)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -140,7 +141,7 @@ html_theme = 'default'
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = '%b %d, %Y'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
