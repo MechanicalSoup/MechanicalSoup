@@ -220,6 +220,35 @@ class Browser(object):
         else:
             kwargs["data"] = data
 
+        # the next part of the function is here to respect
+        # the enctype specified by the form
+        # as Requests doesn't already have a feature to choose enctype,
+        # so we have to use tricks to make it behave as we want
+        if form.has_attr("enctype"):
+
+            if form.get("enctype"
+                        ) == "application/x-www-form-urlencoded" and files:
+                # if files is not None or empty, Requests will
+                # automatically use "multipart/form-data" enctype,
+                # so in this case we remove files to force Requests to
+                # use "application/x-www-form-urlencoded" enctype
+                # files won't be sent
+                files = None
+
+            if form.get("enctype") == "multipart/form-data" and not files:
+                # Requests will switch to "multipart/form-data" only if
+                # files is a non empty dictionary, so we use
+                # an object that is iterable and return true when tested
+                class Fake_file_dict:
+                    def __iter__(self):
+                        return self
+
+                    def __next__(self):
+                        raise StopIteration
+                    next = __next__
+
+                files = Fake_file_dict()
+
         return self.session.request(method, url, files=files, **kwargs)
 
     def submit(self, form, url=None, **kwargs):

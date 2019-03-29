@@ -112,6 +112,49 @@ def test__request_file(httpbin):
     assert "multipart/form-data" in response.request.headers["Content-Type"]
 
 
+def test__multipart_no_files(httpbin):
+    # test forms with "multipart/form-data" enctype with no file fields
+    form_html = """
+    <form method="post" action="{}/post" enctype="multipart/form-data">
+      <input name="in" value="test" />
+    </form>
+    """.format(httpbin.url)
+    browser = mechanicalsoup.Browser()
+    response = browser._request(BeautifulSoup(form_html, "lxml").form)
+
+    assert "multipart/form-data" in response.request.headers["Content-Type"]
+    assert response.json()["form"]["in"] == "test"
+
+
+def test__urlencoded_with_files(httpbin):
+    # Test forms with "application/x-www-form-urlencoded" enctype
+    # and files fields
+    form_html = """
+    <form method="post" action="{}/post"
+            enctype="application/x-www-form-urlencoded">
+      <input name="empty" type="file" />
+      <input name="in" value="test" />
+    </form>
+    """.format(httpbin.url)
+    form = BeautifulSoup(form_html, "lxml").form
+
+    # create a temporary file
+    file_path = tempfile.mkstemp()[1]
+    with open(file_path, "w") as f:
+        f.write(":-)")
+
+    form.find("input", {"name": "empty"})["value"] = file_path
+
+    browser = mechanicalsoup.Browser()
+    response = browser._request(form)
+
+    # Check that no files have been received
+    assert not response.json()["files"]
+    assert "application/x-www-form-urlencoded" in response.request.headers[
+        "Content-Type"]
+    assert response.json()["form"]["in"] == "test"
+
+
 def test__request_select_none(httpbin):
     """Make sure that a <select> with no options selected
     submits the first option, as it does in a browser."""
