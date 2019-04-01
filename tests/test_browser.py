@@ -81,55 +81,95 @@ def test__request(httpbin):
         "Content-Type"]
 
 
-@pytest.mark.parametrize('expected_content, set_value', [
-    (b":-)", True),
-    (b"", False)
+valid_enctypes_file_submit = {"multipart/form-data": True,
+                              "application/x-www-form-urlencoded": False
+                              }
+
+default_enctype = "application/x-www-form-urlencoded"
+
+# create a temporary file for testing file upload
+file_content = b":-)"
+pic_filedescriptor, pic_path = tempfile.mkstemp()
+os.write(pic_filedescriptor, file_content)
+os.close(pic_filedescriptor)
+
+# key is :
+# valid_enctype_file_submit[enctype], file_submit
+expected_content = {
+    (False, False): (b"", "form"),
+    (False, True): (pic_path.encode(), "form"),
+    (True, False): (b"", "files"),
+    (True, True): (file_content, "files")
+}
+
+
+@pytest.mark.parametrize("file_field", [
+  """<input name="pic" type="file" />""",
+  ""])
+@pytest.mark.parametrize("submit_file", [
+    True,
+    False
 ])
-def test__request_file(httpbin, expected_content, set_value):
+@pytest.mark.parametrize("enctype", [
+  pytest.param("multipart/form-data"),
+  pytest.param("application/x-www-form-urlencoded"),
+  pytest.param("Invalid encytpe")
+])
+def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
+    # test if enctype is respected when specified
+    # and if files are processed correctly
     form_html = """
-    <form method="post" action="{}/post">
-      <input name="pic" type="file" />
+    <form method="post" action="{}/post" enctype="{}">
+      <input name="in" value="test" />
+      {}
     </form>
-    """.format(httpbin.url)
+    """.format(httpbin.url, enctype, file_field)
     form = BeautifulSoup(form_html, "lxml").form
 
-    if set_value:
-        # create a temporary file for testing file upload
-        pic_filedescriptor, pic_path = tempfile.mkstemp()
-        os.write(pic_filedescriptor, expected_content)
-        os.close(pic_filedescriptor)
-
+    if submit_file and file_field:
         form.find("input", {"name": "pic"})["value"] = pic_path
 
     browser = mechanicalsoup.Browser()
     response = browser._request(form)
 
-    # Check that only "files" includes a "pic" keyword in the response
+    if enctype not in valid_enctypes_file_submit.keys():
+        enctype = default_enctype
+    assert enctype in response.request.headers["Content-Type"]
+
+    resp = response.json()
+    assert resp["form"]["in"] == "test"
+
     found = False
-    for key, value in response.json().items():
-        if key == "files":
-            if "pic" in value:
-                if value["pic"].encode() == expected_content:
-                    # If pic is found twice, an error will occur
-                    assert not found
-                    found = True
-        # One would expect to find "pic" in files, but as of writing,
-        # httpbin puts it in form when the filename is empty:
-        elif key == "form":
-            if "pic" in value:
-                if value["pic"].encode() == expected_content:
-                    assert not found
-                    found = True
-                    assert b"filename=\"\"" in response.request.body
-        else:
-            assert (value is None) or ("pic" not in value)
+    foundIn = None
 
-    assert found
-    assert "multipart/form-data" in response.request.headers["Content-Type"]
+    for key, value in resp.items():
+        if value:
+            if "pic" in value:
+                content = value["pic"].encode()
+                assert not found
+                assert key in ("files", "form")
+                found = True
+                foundIn = key
+            if key == "files" and not valid_enctypes_file_submit[enctype]:
+                assert not value
 
-    # In case we created a file for upload, we need to close & delete it
-    if set_value:
-        os.remove(pic_path)
+    assert found == bool(file_field)
+    if file_field:
+        assert expected_content[(valid_enctypes_file_submit[enctype],
+                                submit_file)] == (content, foundIn)
+
+        if valid_enctypes_file_submit[enctype]:
+            if(submit_file):
+                assert ("filename=\"" + pic_path + "\""
+                        ).encode() in response.request.body
+            else:
+                assert b"filename=\"\"" in response.request.body
+
+
+# delete the temporary file
+# os.remove(pic_path)
+# line commented because it is executed multiple times
+# i don't know how to solve it
 
 
 def test__request_select_none(httpbin):

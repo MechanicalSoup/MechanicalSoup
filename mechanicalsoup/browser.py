@@ -155,6 +155,8 @@ class Browser(object):
         # Requests also retains order when encoding form data in 2-tuple lists.
         data = [(k, v) for k, v in data.items()]
 
+        multipart = form.get("enctype", "") == "multipart/form-data"
+
         # Process form tags in the order that they appear on the page,
         # skipping those tags that do not have a name-attribute.
         selector = ",".join("{}[name]".format(i) for i in
@@ -175,11 +177,9 @@ class Browser(object):
                     # browsers use empty string for inputs with missing values
                     value = tag.get("value", "")
 
-                if tag.get("type", "").lower() == "file":
-                    # read http://www.cs.tut.fi/~jkorpela/forms/file.html
-                    # in browsers, file upload only happens if the form
-                    # (or submit button) enctype attribute is set to
-                    # "multipart/form-data". We don't care, simplify.
+                # if the enctype is not multipart, the filename is put in
+                # the form as a text input and the file is not sent
+                if tag.get("type", "").lower() == "file" and multipart:
                     filename = value
                     if filename != "" and isinstance(filename, string_types):
                         content = open(filename, "rb")
@@ -222,6 +222,21 @@ class Browser(object):
             kwargs["params"] = data
         else:
             kwargs["data"] = data
+
+        # the next part of the function is here to respect the enctype
+        # specified by the form and, as Requests doesn't have yet a feature
+        # to choose enctype, we have to use tricks to make it behave as we want
+        # This code will be updated if Requests implements it
+        if multipart and not files:
+            # Requests will switch to "multipart/form-data" only if
+            # files pass the `if files:` test, so in this case we use
+            # a modified dict that passes the if test even if empty
+            class dict_that_returns_true(dict):
+                def __bool__(self):
+                    return True
+                __nonzero__ = __bool__
+
+            files = dict_that_returns_true()
 
         return self.session.request(method, url, files=files, **kwargs)
 
