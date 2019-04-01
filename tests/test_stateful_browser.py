@@ -339,8 +339,10 @@ def test_upload_file(httpbin):
                     ("first file content", "second file content"))
 
     # The form doesn't have a type=file field, but the target action
-    # does show it => add the fields ourselves.
+    # does show it => add the fields ourselves, and add enctype too.
     browser.select_form()
+    browser._StatefulBrowser__state.form.form[
+      "enctype"] = "multipart/form-data"
     browser.new_control("file", "first", path1)
     browser.new_control("file", "second", "")
     browser["second"] = path2
