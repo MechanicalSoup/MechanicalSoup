@@ -322,7 +322,7 @@ class Form(object):
             browser.open(url)
             form = browser.select_form()
             form.choose_submit('form_name_attr')
-            browser.submit_selected()
+            browser.submit()
         """
         # Since choose_submit is destructive, it doesn't make sense to call
         # this method twice unless no submit is specified.

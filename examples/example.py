@@ -24,7 +24,7 @@ browser.follow_link("login")
 browser.select_form('#login form')
 browser["login"] = args.username
 browser["password"] = args.password
-resp = browser.submit_selected()
+resp = browser.submit()
 
 # Uncomment to launch a web browser on the current page:
 # browser.launch_browser()

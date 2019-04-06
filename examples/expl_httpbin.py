@@ -23,5 +23,5 @@ browser["comments"] = "This pizza looks really good :-)"
 # Uncomment to display a summary of the filled-in form
 # browser.get_current_form().print_summary()
 
-response = browser.submit_selected()
+response = browser.submit()
 print(response.text)

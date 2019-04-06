@@ -7,6 +7,7 @@ from .form import Form
 import sys
 import re
 import bs4
+import warnings
 
 
 class _BrowserState:
@@ -59,6 +60,10 @@ class StatefulBrowser(Browser):
         self.__debug = False
         self.__verbose = 0
         self.__state = _BrowserState()
+
+        # Aliases for backwards compatibility
+        # (Included specifically in __init__ to suppress them in Sphinx docs)
+        self.submit_selected = self.submit
 
     def set_debug(self, debug):
         """Set the debug mode (off by default).
@@ -209,7 +214,7 @@ class StatefulBrowser(Browser):
 
         return self.get_current_form()
 
-    def submit_selected(self, btnName=None, *args, **kwargs):
+    def submit(self, btnName=None, *args, **kwargs):
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
@@ -218,6 +223,19 @@ class StatefulBrowser(Browser):
         to :func:`Form.choose_submit` on the current form to choose between
         them. All other arguments are forwarded to :func:`Browser.submit`.
         """
+        # Temporarily allow calling the old inherited Browser.submit directly
+        # in case we can detect with certainty that the call is an old style.
+        # Note: Browser.submit also accepts a bs4.element.Tag with name="form",
+        # but we cannot assume this is an old-style call since there could be
+        # a submit button with name="form".
+        if isinstance(btnName, Form):
+            warnings.warn("This usage of StatefulBrowser.submit is deprecated."
+                          " Please see the documentation for this function to "
+                          "upgrade to the new interface.",
+                          DeprecationWarning)
+            return super(StatefulBrowser, self).submit(btnName, *args,
+                                                       **kwargs)
+
         self.get_current_form().choose_submit(btnName)
 
         referer = self.get_url()
@@ -227,8 +245,9 @@ class StatefulBrowser(Browser):
             else:
                 kwargs['headers'] = {'Referer': referer}
 
-        resp = self.submit(self.__state.form, url=self.__state.url,
-                           *args, **kwargs)
+        resp = super(StatefulBrowser, self).submit(self.__state.form,
+                                                   url=self.__state.url,
+                                                   *args, **kwargs)
         self.__state = _BrowserState(page=resp.soup, url=resp.url,
                                      request=resp.request)
         return resp

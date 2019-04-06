@@ -5,6 +5,15 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
+Main changes:
+-------------
+
+* **Breaking Change:** The method ``StatefulBrowser.submit_selected`` has been
+  renamed to :func:`StatefulBrowser.submit`. The original name remains usable
+  for backwards compatibility. This is a breaking change _only_ if you use the
+  :func:`Browser.submit` method from a ``StatefulBrowser`` instance (this is
+  not typical), since it is now overridden by :func:`StatefulBrowser.submit`.
+
 Bug fixes
 ---------
 

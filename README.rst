@@ -81,7 +81,7 @@ a DuckDuckGo search:
     # Fill-in the search form
     browser.select_form('#search_form_homepage')
     browser["q"] = "MechanicalSoup"
-    browser.submit_selected()
+    browser.submit()
 
     # Display the results
     for link in browser.get_current_page().select('a.result__a'):
