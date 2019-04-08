@@ -12,7 +12,7 @@ def requirements_from_file(filename):
             if line.strip() and not line.strip().startswith('--')]
 
 
-def read(fname, URL):
+def read(fname, URL, URLImage):
     """Read the content of a file."""
     readme = open(path.join(path.dirname(__file__), fname)).read()
     if hasattr(readme, 'decode'):
@@ -22,6 +22,8 @@ def read(fname, URL):
     readme = re.sub(r'`<([^>]*)>`__',
                     r'`\1 <' + URL + r"/blob/master/\1>`__",
                     readme)
+    readme = re.sub(r"\.\. image:: /", ".. image:: " + URLImage + "/", readme)
+
     return readme
 
 
@@ -44,7 +46,8 @@ setup(
     version=about['__version__'],
 
     description=about['__description__'],
-    long_description=read('README.rst', about['__github_url__']),
+    long_description=read('README.rst', about['__github_url__'], about[
+        '__github_assets_absoluteURL__']),
     url=about['__url__'],
 
     license=about['__license__'],
