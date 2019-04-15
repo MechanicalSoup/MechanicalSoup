@@ -143,8 +143,24 @@ def test_submit_btnName(expected_post):
     browser.select_form('#choose-submit-form')
     browser['text'] = dict(expected_post)['text']
     browser['comment'] = dict(expected_post)['comment']
+    initial_state = browser._StatefulBrowser__state
     res = browser.submit_selected(btnName=expected_post[2][0])
-    assert(res.status_code == 200 and res.text == 'Success!')
+    assert res.status_code == 200 and res.text == 'Success!'
+    assert initial_state != browser._StatefulBrowser__state
+
+
+def test_submit_dont_update_state():
+    expected_post = [
+            ('text', 'Bananas are good.'),
+            ('preview', 'Preview Page')]
+    browser, url = setup_mock_browser(expected_post=expected_post)
+    browser.open(url)
+    browser.select_form('#choose-submit-form')
+    browser['text'] = dict(expected_post)['text']
+    initial_state = browser._StatefulBrowser__state
+    res = browser.submit_selected(update_state=False)
+    assert res.status_code == 200 and res.text == 'Success!'
+    assert initial_state == browser._StatefulBrowser__state
 
 
 def test_get_set_debug():

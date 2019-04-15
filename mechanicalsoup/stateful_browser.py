@@ -209,14 +209,18 @@ class StatefulBrowser(Browser):
 
         return self.get_current_form()
 
-    def submit_selected(self, btnName=None, *args, **kwargs):
+    def submit_selected(self, btnName=None, update_state=True,
+                        *args, **kwargs):
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
 
         If there are multiple submit input/button elements, passes ``btnName``
         to :func:`Form.choose_submit` on the current form to choose between
-        them. All other arguments are forwarded to :func:`Browser.submit`.
+        them. If `update_state` is False, form will be submited but the browser
+        state will remain unchanged. This is useful for forms that result in
+        a download of a file. All other arguments are forwarded to
+        :func:`Browser.submit`.
         """
         self.get_current_form().choose_submit(btnName)
 
@@ -229,8 +233,9 @@ class StatefulBrowser(Browser):
 
         resp = self.submit(self.__state.form, url=self.__state.url,
                            *args, **kwargs)
-        self.__state = _BrowserState(page=resp.soup, url=resp.url,
-                                     request=resp.request)
+        if update_state:
+            self.__state = _BrowserState(page=resp.soup, url=resp.url,
+                                         request=resp.request)
         return resp
 
     def list_links(self, *args, **kwargs):
