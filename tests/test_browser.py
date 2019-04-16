@@ -203,7 +203,7 @@ def test_post(httpbin):
     browser = mechanicalsoup.Browser()
     data = {'color': 'blue', 'colorblind': 'True'}
     resp = browser.post(httpbin + "/post", data)
-    assert(resp.status_code == 200 and resp.json()['form'] == data)
+    assert resp.status_code == 200 and resp.json()['form'] == data
 
 
 if __name__ == '__main__':
