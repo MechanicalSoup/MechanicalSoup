@@ -166,9 +166,9 @@ def test_submit_dont_update_state():
 def test_get_set_debug():
     browser = mechanicalsoup.StatefulBrowser()
     # Debug mode is off by default
-    assert(not browser.get_debug())
+    assert not browser.get_debug()
     browser.set_debug(True)
-    assert(browser.get_debug())
+    assert browser.get_debug()
 
 
 def test_list_links(capsys):
@@ -298,7 +298,7 @@ def test_form_noname():
     browser.open_fake_page(submit_form_noname, url=url)
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
-    assert(response.status_code == 200 and response.text == 'Success!')
+    assert response.status_code == 200 and response.text == 'Success!'
 
 
 submit_form_multiple = '''
@@ -322,7 +322,7 @@ def test_form_multiple():
     browser.open_fake_page(submit_form_multiple, url=url)
     browser.select_form('#choose-submit-form')
     response = browser.submit_selected()
-    assert(response.status_code == 200 and response.text == 'Success!')
+    assert response.status_code == 200 and response.text == 'Success!'
 
 
 def test_upload_file(httpbin):
