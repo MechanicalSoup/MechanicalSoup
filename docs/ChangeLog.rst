@@ -5,6 +5,13 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
+Main changes:
+-------------
+* Added ability to submit a form without updating `StatefulBrowser` internal
+  state. This means you get a response from the form submission, but your
+  browser "stays" on the same page. Useful for handling forms that result in
+  a download of a file or results opening in a new window.
+
 Bug fixes
 ---------
 
