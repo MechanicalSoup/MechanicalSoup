@@ -96,6 +96,20 @@ class Browser(object):
         # the requests module uses a case-insensitive dict for session headers
         self.session.headers['User-agent'] = user_agent
 
+    @staticmethod
+    def safe_call(function, *args, **kwargs):
+        """Call function(*args, **kwargs), but make sure args[0] does not
+        contain any newline characters (\r or \n) before). If so,
+        URL-encode these characters.
+
+        Calling the functions directly should be sufficient, but this
+        escaping makes sure we're robust to mis-escaping by underlying
+        libraries, hence immune to security issues like
+        https://github.com/urllib3/urllib3/issues/1553.
+        """
+        args = (args[0].replace('\r', '%0D').replace('\n', '%0A'),) + args[1:]
+        return function(*args, **kwargs)
+
     def request(self, *args, **kwargs):
         """Straightforward wrapper around `requests.Session.request
         <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
@@ -109,7 +123,7 @@ class Browser(object):
         need an HTTP verb that MechanicalSoup doesn't manage (e.g. MKCOL) for
         example.
         """
-        response = self.session.request(*args, **kwargs)
+        response = self.safe_call(self.session.request, *args, **kwargs)
         Browser.add_soup(response, self.soup_config)
         return response
 
@@ -121,7 +135,7 @@ class Browser(object):
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
         """
-        response = self.session.get(*args, **kwargs)
+        response = self.safe_call(self.session.get, *args, **kwargs)
         if self.raise_on_404 and response.status_code == 404:
             raise LinkNotFoundError()
         Browser.add_soup(response, self.soup_config)
@@ -135,7 +149,7 @@ class Browser(object):
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
         """
-        response = self.session.post(*args, **kwargs)
+        response = self.safe_call(self.session.post, *args, **kwargs)
         Browser.add_soup(response, self.soup_config)
         return response
 
