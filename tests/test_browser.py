@@ -130,7 +130,7 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
         os.write(pic_filedescriptor, file_content)
         os.close(pic_filedescriptor)
         file_content + file_content
-        file_path.clear()
+        del file_path[:]
         file_path.extend(pic_path.encode())
         form.find("input", {"name": "pic"})["value"] = pic_path
 
