@@ -89,15 +89,13 @@ default_enctype = "application/x-www-form-urlencoded"
 
 # create a temporary file for testing file upload
 file_content = b":-)"
-pic_filedescriptor, pic_path = tempfile.mkstemp()
-os.write(pic_filedescriptor, file_content)
-os.close(pic_filedescriptor)
+file_path = bytearray()
 
 # key is :
 # valid_enctype_file_submit[enctype], file_submit
 expected_content = {
     (False, False): (b"", "form"),
-    (False, True): (pic_path.encode(), "form"),
+    (False, True): (file_path, "form"),
     (True, False): (b"", "files"),
     (True, True): (file_content, "files")
 }
@@ -127,6 +125,13 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
     form = BeautifulSoup(form_html, "lxml").form
 
     if submit_file and file_field:
+        # create a temporary file for testing file upload
+        pic_filedescriptor, pic_path = tempfile.mkstemp()
+        os.write(pic_filedescriptor, file_content)
+        os.close(pic_filedescriptor)
+        file_content + file_content
+        file_path.clear()
+        file_path.extend(pic_path.encode())
         form.find("input", {"name": "pic"})["value"] = pic_path
 
     browser = mechanicalsoup.Browser()
@@ -165,11 +170,8 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
             else:
                 assert b"filename=\"\"" in response.request.body
 
-
-# delete the temporary file
-# os.remove(pic_path)
-# line commented because it is executed multiple times
-# i don't know how to solve it
+    if submit_file and file_field:
+        os.remove(pic_path)
 
 
 def test__request_select_none(httpbin):
