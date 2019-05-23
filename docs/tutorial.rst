@@ -107,7 +107,7 @@ attribute::
   >>> browser["comments"] = "This pizza looks really good :-)"
 
 For radio buttons, well, it's simple too: radio buttons have several
-``input`` tag with the same ``name`` and different values, just select
+``input`` tags with the same ``name`` and different values, just select
 the one you need (``"size"`` is the ``name`` attribute, ``"medium"``
 is the ``"value"`` attribute of the element we want to tick)::
 
@@ -136,7 +136,7 @@ Let's see what the filled-in form looks like::
 real web browser on the current page visited by our ``browser``
 object, including the changes we just made to the form (note that it
 does not open the real webpage, but creates a temporary file
-containing the page content, and point your browser to this file). Try
+containing the page content, and points your browser to this file). Try
 changing the boxes ticked and the content of the text field, and
 re-launch the browser.
 
@@ -214,7 +214,7 @@ in MechanicalSoup's source code):
 Alternatively, one can use the :class:`~mechanicalsoup.Browser` class,
 which doesn't maintain a state from one call to another (i.e. the
 Browser itself doesn't remember which page you are visiting and what
-is its content, it's up to the caller to do so). This example is
+its content is, it's up to the caller to do so). This example is
 available as `examples/example_manual.py
 <https://github.com/MechanicalSoup/MechanicalSoup/blob/master/examples/example_manual.py>`__
 in the source:

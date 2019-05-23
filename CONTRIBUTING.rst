@@ -88,7 +88,7 @@ to view it properly. The file can then be opened in e.g. Inkscape.
 Release Checklist
 -----------------
 
-Releases can be done only by people with sufficient priviledges on
+Releases can be done only by people with sufficient privileges on
 GitHub and PyPI. Things to do are:
 
 At each release:
