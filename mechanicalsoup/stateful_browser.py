@@ -78,7 +78,7 @@ class StatefulBrowser(Browser):
 
         * 0 means no verbose output.
         * 1 shows one dot per visited page (looks like a progress bar)
-        * >= 1 shows each visited URL.
+        * >= 2 shows each visited URL.
         """
         self.__verbose = verbose
 
