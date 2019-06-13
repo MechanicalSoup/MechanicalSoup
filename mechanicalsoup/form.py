@@ -381,6 +381,23 @@ class Form(object):
                 if subtag.string:
                     subtag.string = subtag.string.strip()
             print(input_copy)
+    def get_info(self):
+    """Get a summary of the form with classic mechanize style
+    """
+    info = "<%s[%s]>\n" %(self.form.get('method'), self.form.get('action'))
+    for input in self.form.find_all(("input", "textarea", "select", "button")):
+        fType = input.attrs['type']
+        try:
+            fValue = input.attrs['value']
+        except:
+            fValue = None
+        try:
+            fID = input.attrs['id']
+        except:
+            fID = input.attrs['name']
+        info += "%s(%s)=\'%s\'\n" %(fType, fID, fValue)
+
+        return info
 
     def find_by_type(self, tag_name, type_attr, attrs):
         attrs_dict = attrs.copy()
