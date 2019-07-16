@@ -111,9 +111,8 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
     """.format(httpbin.url, enctype, file_field)
     form = BeautifulSoup(form_html, "lxml").form
 
-    # For now, assume that the encoding always allow sending file's
-    # content.
-    valid_enctype = True
+    valid_enctype = (enctype in valid_enctypes_file_submit and
+                     valid_enctypes_file_submit[enctype])
     expected_content = b""  # default
     if submit_file and file_field:
         # create a temporary file for testing file upload
@@ -133,10 +132,10 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
     browser = mechanicalsoup.Browser()
     response = browser._request(form)
 
-    if file_field:
-        expected_enctype = 'multipart/form-data'
+    if enctype not in valid_enctypes_file_submit:
+        expected_enctype = default_enctype
     else:
-        expected_enctype = 'application/x-www-form-urlencoded'
+        expected_enctype = enctype
     assert expected_enctype in response.request.headers["Content-Type"]
 
     resp = response.json()
@@ -153,6 +152,8 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
                 assert key in ("files", "form")
                 found = True
                 found_in = key
+            if key == "files" and not valid_enctype:
+                assert not value
 
     assert found == bool(file_field)
     if file_field:
