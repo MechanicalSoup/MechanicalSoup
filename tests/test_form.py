@@ -200,7 +200,7 @@ def test_form_noaction():
     form = browser.select_form('#choose-submit-form')
     form['text1'] = 'newText1'
     res = browser.submit_selected()
-    assert res.status_code == 200 and browser.get_url() == url
+    assert res.status_code == 200 and browser.url == url
 
 
 submit_form_action = '''
@@ -224,7 +224,7 @@ def test_form_action():
     form = browser.select_form('#choose-submit-form')
     form['text1'] = 'newText1'
     res = browser.submit_selected()
-    assert res.status_code == 200 and browser.get_url() == url
+    assert res.status_code == 200 and browser.url == url
 
 
 set_select_form = '''
@@ -320,7 +320,7 @@ def test_form_set_radio_checkbox(capsys):
     form = browser.select_form("form")
     form.set_radio({"size": "small"})
     form.set_checkbox({"topping": "cheese"})
-    browser.get_current_form().print_summary()
+    browser.form.print_summary()
     out, err = capsys.readouterr()
     # Different versions of bs4 show either <input></input> or
     # <input/>. Normalize before comparing.
@@ -405,7 +405,7 @@ def test_form_print_summary(capsys):
     browser.open_fake_page(page_with_various_fields,
                            url="http://example.com/invalid/")
     browser.select_form("form")
-    browser.get_current_form().print_summary()
+    browser.form.print_summary()
     out, err = capsys.readouterr()
     # Different versions of bs4 show either <input></input> or
     # <input/>. Normalize before comparing.

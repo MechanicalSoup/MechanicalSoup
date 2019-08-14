@@ -54,7 +54,7 @@ def test_submit_online(httpbin):
             browser.follow_link(link)
             break
     browser.follow_link("forms/post")
-    assert browser.get_url() == httpbin + "/forms/post"
+    assert browser.url == httpbin + "/forms/post"
     browser.select_form("form")
     browser["custname"] = "Customer Name Here"
     browser["size"] = "medium"
@@ -62,7 +62,7 @@ def test_submit_online(httpbin):
     # Change our mind to make sure old boxes are unticked
     browser["topping"] = ("cheese", "onion")
     browser["comments"] = "Some comment here"
-    browser.get_current_form().set("nosuchfield", "new value", True)
+    browser.form.set("nosuchfield", "new value", True)
     response = browser.submit_selected()
     json = response.json()
     data = json["form"]
@@ -108,11 +108,11 @@ def test_open_relative(httpbin):
     # Open a relative page and make sure remote host and browser agree on URL
     resp = browser.open_relative("/get")
     assert resp.json()['url'] == httpbin + "/get"
-    assert browser.get_url() == httpbin + "/get"
+    assert browser.url == httpbin + "/get"
 
     # Test passing additional kwargs to the session
     resp = browser.open_relative("/basic-auth/me/123", auth=('me', '123'))
-    assert browser.get_url() == httpbin + "/basic-auth/me/123"
+    assert browser.url == httpbin + "/basic-auth/me/123"
     assert resp.json() == {"authenticated": True, "user": "me"}
 
 
@@ -267,7 +267,7 @@ def test_new_control(httpbin):
     fake_select["name"] = "foo"
     browser.get_current_form().form.append(fake_select)
     browser.new_control("checkbox", "foo", "valval", checked="checked")
-    tag = browser.get_current_form().form.find("input", {"name": "foo"})
+    tag = browser.form.form.find("input", {"name": "foo"})
     assert tag.attrs["checked"] == "checked"
     browser["temperature"] = "hot"
     response = browser.submit_selected()
@@ -370,7 +370,7 @@ def test_upload_file(httpbin):
     browser.new_control("file", "first", path1)
     browser.new_control("file", "second", "")
     browser["second"] = path2
-    browser.get_current_form().print_summary()
+    browser.form.print_summary()
     response = browser.submit_selected()
     files = response.json()["files"]
     assert files["first"] == "first file content"
@@ -414,7 +414,7 @@ def test_select_form_tag_object():
 def test_referer_follow_link(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
     open_legacy_httpbin(browser, httpbin)
-    start_url = browser.get_url()
+    start_url = browser.url
     response = browser.follow_link("/headers")
     referer = response.json()["headers"]["Referer"]
     actual_ref = re.sub('/*$', '', referer)
@@ -473,7 +473,7 @@ def test_follow_link_arg(httpbin, expected, kwargs):
     html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
     browser.open_fake_page(html, httpbin.url)
     browser.follow_link(**kwargs)
-    assert browser.get_url() == httpbin + expected
+    assert browser.url == httpbin + expected
 
 
 def test_link_arg_multiregex(httpbin):
@@ -494,13 +494,13 @@ def test_download_link(httpbin):
     open_legacy_httpbin(browser, httpbin)
     tmpdir = tempfile.mkdtemp()
     tmpfile = tmpdir + '/nosuchfile.png'
-    current_url = browser.get_url()
-    current_page = browser.get_current_page()
+    current_url = browser.url
+    current_page = browser.page
     response = browser.download_link(file=tmpfile, link='image/png')
 
     # Check that the browser state has not changed
-    assert browser.get_url() == current_url
-    assert browser.get_current_page() == current_page
+    assert browser.url == current_url
+    assert browser.page == current_page
 
     # Check that the file was downloaded
     assert os.path.isfile(tmpfile)
@@ -513,13 +513,13 @@ def test_download_link_nofile(httpbin):
     """Test downloading the contents of a link without saving it."""
     browser = mechanicalsoup.StatefulBrowser()
     open_legacy_httpbin(browser, httpbin)
-    current_url = browser.get_url()
-    current_page = browser.get_current_page()
+    current_url = browser.url
+    current_page = browser.page
     response = browser.download_link(link='image/png')
 
     # Check that the browser state has not changed
-    assert browser.get_url() == current_url
-    assert browser.get_current_page() == current_page
+    assert browser.url == current_url
+    assert browser.page == current_page
 
     # Check that we actually downloaded a PNG file
     assert response.content[:4] == b'\x89PNG'
@@ -533,13 +533,13 @@ def test_download_link_to_existing_file(httpbin):
     tmpfile = tmpdir + '/existing.png'
     with open(tmpfile, "w") as f:
         f.write("initial content")
-    current_url = browser.get_url()
-    current_page = browser.get_current_page()
+    current_url = browser.url
+    current_page = browser.page
     response = browser.download_link('image/png', tmpfile)
 
     # Check that the browser state has not changed
-    assert browser.get_url() == current_url
-    assert browser.get_current_page() == current_page
+    assert browser.url == current_url
+    assert browser.page == current_page
 
     # Check that the file was downloaded
     assert os.path.isfile(tmpfile)
@@ -555,14 +555,14 @@ def test_download_link_404(httpbin):
                            url=httpbin.url)
     tmpdir = tempfile.mkdtemp()
     tmpfile = tmpdir + '/nosuchfile.txt'
-    current_url = browser.get_url()
-    current_page = browser.get_current_page()
+    current_url = browser.url
+    current_page = browser.page
     with pytest.raises(mechanicalsoup.LinkNotFoundError):
         browser.download_link(file=tmpfile, link_text='Link')
 
     # Check that the browser state has not changed
-    assert browser.get_url() == current_url
-    assert browser.get_current_page() == current_page
+    assert browser.url == current_url
+    assert browser.page == current_page
 
     # Check that the file was not downloaded
     assert not os.path.exists(tmpfile)
@@ -575,13 +575,13 @@ def test_download_link_referer(httpbin):
     browser.open_fake_page('<a href="/headers">Link</a>',
                            url=ref)
     tmpfile = tempfile.NamedTemporaryFile()
-    current_url = browser.get_url()
-    current_page = browser.get_current_page()
+    current_url = browser.url
+    current_page = browser.page
     browser.download_link(file=tmpfile.name, link_text='Link')
 
     # Check that the browser state has not changed
-    assert browser.get_url() == current_url
-    assert browser.get_current_page() == current_page
+    assert browser.url == current_url
+    assert browser.page == current_page
 
     # Check that the file was downloaded
     with open(tmpfile.name) as f:
@@ -603,8 +603,8 @@ def test_refresh_open():
 
     browser.refresh()
 
-    assert browser.get_url() == url
-    assert browser.get_current_page() == reload_page
+    assert browser.url == url
+    assert browser.page == reload_page
 
 
 def test_refresh_follow_link():
@@ -625,8 +625,8 @@ def test_refresh_follow_link():
 
     browser.refresh()
 
-    assert browser.get_url() == follow_url
-    assert browser.get_current_page() == reload_page
+    assert browser.url == follow_url
+    assert browser.page == reload_page
 
 
 def test_refresh_form_not_retained():
@@ -644,9 +644,10 @@ def test_refresh_form_not_retained():
 
     browser.refresh()
 
-    assert browser.get_url() == url
-    assert browser.get_current_page() == reload_page
-    assert browser.get_current_form() is None
+    assert browser.url == url
+    assert browser.page == reload_page
+    with pytest.raises(AttributeError, match="No form has been selected yet."):
+        browser.form
 
 
 def test_refresh_error():
