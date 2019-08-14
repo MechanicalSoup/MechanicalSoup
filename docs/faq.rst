@@ -145,7 +145,7 @@ unique ``id="button3"`` attribute, you can do the following::
 
     br = mechanicalsoup.StatefulBrowser()
     br.open(...)
-    submit = br.get_current_page().find('input', id='button3')
+    submit = br.page.find('input', id='button3')
     form = br.select_form()
     form.choose_submit(submit)
     br.submit_selected()
