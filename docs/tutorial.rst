@@ -32,14 +32,14 @@ contains the content of the page we just downloaded.
 Just like a normal browser's URL bar, the browser remembers which URL
 it's browsing::
 
-  >>> browser.get_url()
+  >>> browser.url
   'http://httpbin.org/'
 
 Now, let's follow the link to ``/forms/post``::
 
   >>> browser.follow_link("forms")
   <Response [200]>
-  >>> browser.get_url()
+  >>> browser.url
   'http://httpbin.org/forms/post'
 
 We passed a regular expression ``"forms"``
@@ -51,7 +51,7 @@ get back to it.
 We're now visiting http://httpbin.org/forms/post, which contains a
 form. Let's see the page content::
 
-  >>> browser.get_current_page()
+  >>> browser.page
   <!DOCTYPE html>
   <html>
   ...
@@ -59,13 +59,13 @@ form. Let's see the page content::
   ...
 
 Actually, the return type
-of :func:`~mechanicalsoup.StatefulBrowser().get_current_page` is
+of :func:`~mechanicalsoup.StatefulBrowser().page` is
 bs4.BeautifulSoup_. BeautifulSoup, aka bs4, is the second library used
 by Mechanicalsoup: it is an HTML manipulation library. You can now
 navigate in the tags of the pages using BeautifulSoup. For example, to
 get all the ``<legend>`` tags::
 
-  >>> browser.get_current_page().find_all('legend')
+  >>> browser.page.find_all('legend')
   [<legend> Pizza Size </legend>, <legend> Pizza Toppings </legend>]
 
 To fill-in a form, we need to tell MechanicalSoup which form we're
@@ -83,7 +83,7 @@ Now, give a value to fields in the form. First, what are the available
 fields? You can print a summary of the currently selected form
 with :func:`~mechanicalsoup.Form.print_summary()`::
 
-  >>> browser.get_current_form().print_summary()
+  >>> browser.form.print_summary()
   <input name="custname"/>
   <input name="custtel" type="tel"/>
   <input name="custemail" type="email"/>
@@ -149,7 +149,7 @@ It's also possible to check the content
 with :func:`~mechanicalsoup.Form.print_summary()` (that we already
 used to list the fields)::
 
-  >>> browser.get_current_form().print_summary()
+  >>> browser.form.print_summary()
   <input name="custname" value="Me"/>
   <input name="custtel" type="tel" value="00 00 0001"/>
   <input name="custemail" type="email" value="nobody@example.com"/>
