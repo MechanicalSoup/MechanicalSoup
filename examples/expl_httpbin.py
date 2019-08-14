@@ -3,10 +3,10 @@ import mechanicalsoup
 browser = mechanicalsoup.StatefulBrowser()
 browser.open("http://httpbin.org/")
 
-print(browser.get_url())
+print(browser.url)
 browser.follow_link("forms")
-print(browser.get_url())
-print(browser.get_current_page())
+print(browser.url)
+print(browser.page)
 
 browser.select_form('form[action="/post"]')
 browser["custname"] = "Me"
@@ -21,7 +21,7 @@ browser["comments"] = "This pizza looks really good :-)"
 # browser.launch_browser()
 
 # Uncomment to display a summary of the filled-in form
-# browser.get_current_form().print_summary()
+# browser.form.print_summary()
 
 response = browser.submit_selected()
 print(response.text)
