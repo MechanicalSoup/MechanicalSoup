@@ -117,11 +117,11 @@ class StatefulBrowser(Browser):
         """Call item assignment on the currently selected form.
         See :func:`Form.__setitem__`.
         """
-        self.get_current_form()[name] = value
+        self.form[name] = value
 
     def new_control(self, type, name, value, **kwargs):
         """Call :func:`Form.new_control` on the currently selected form."""
-        return self.get_current_form().new_control(type, name, value, **kwargs)
+        return self.form.new_control(type, name, value, **kwargs)
 
     def absolute_url(self, url):
         """Return the absolute URL made from the current URL and ``url``.
@@ -129,7 +129,7 @@ class StatefulBrowser(Browser):
         ``url``, as in the `.urljoin() method of urllib.parse
         <https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urljoin>`__.
         """
-        return urllib.parse.urljoin(self.get_url(), url)
+        return urllib.parse.urljoin(self.url, url)
 
     def open(self, url, *args, **kwargs):
         """Open the URL and store the Browser's state in this object.
@@ -211,8 +211,8 @@ class StatefulBrowser(Browser):
             self.__state.form = Form(selector)
         else:
             # nr is a 0-based index for consistency with mechanize
-            found_forms = self.get_current_page().select(selector,
-                                                         limit=nr + 1)
+            found_forms = self.page.select(selector,
+                                           limit=nr + 1)
             if len(found_forms) != nr + 1:
                 if self.__debug:
                     print('select_form failed for', selector)
@@ -220,7 +220,7 @@ class StatefulBrowser(Browser):
                 raise LinkNotFoundError()
             self.__state.form = Form(found_forms[-1])
 
-        return self.get_current_form()
+        return self.form
 
     def submit_selected(self, btnName=None, update_state=True,
                         *args, **kwargs):
@@ -235,9 +235,9 @@ class StatefulBrowser(Browser):
         a download of a file. All other arguments are forwarded to
         :func:`Browser.submit`.
         """
-        self.get_current_form().choose_submit(btnName)
+        self.form.choose_submit(btnName)
 
-        referer = self.get_url()
+        referer = self.url
         if referer is not None:
             if 'headers' in kwargs:
                 kwargs['headers']['Referer'] = referer
@@ -268,7 +268,7 @@ class StatefulBrowser(Browser):
         the `.find_all() method in BeautifulSoup
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#find-all>`__.
         """
-        all_links = self.get_current_page().find_all(
+        all_links = self.page.find_all(
             'a', href=True, *args, **kwargs)
         if url_regex is not None:
             all_links = [a for a in all_links
@@ -340,7 +340,7 @@ class StatefulBrowser(Browser):
         """
         link = self._find_link_internal(link, args, kwargs)
 
-        referer = self.get_url()
+        referer = self.url
         headers = {'Referer': referer} if referer else None
 
         return self.open_relative(link['href'], headers=headers)
@@ -364,7 +364,7 @@ class StatefulBrowser(Browser):
         link = self._find_link_internal(link, args, kwargs)
         url = self.absolute_url(link['href'])
 
-        referer = self.get_url()
+        referer = self.url
         headers = {'Referer': referer} if referer else None
 
         response = self.session.get(url, headers=headers)
@@ -385,5 +385,5 @@ class StatefulBrowser(Browser):
             Defaults to the current page of the ``StatefulBrowser`` instance.
         """
         if soup is None:
-            soup = self.get_current_page()
+            soup = self.page
         super(StatefulBrowser, self).launch_browser(soup)
