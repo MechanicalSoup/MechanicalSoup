@@ -30,7 +30,7 @@ resp = browser.submit_selected()
 # browser.launch_browser()
 
 # verify we are now logged in
-page = browser.get_current_page()
+page = browser.page
 messages = page.find("div", class_="flash-messages")
 if messages:
     print(messages.text)

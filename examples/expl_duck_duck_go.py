@@ -1,5 +1,9 @@
-"""Example usage of MechanicalSoup to get the results from
-DuckDuckGo."""
+"""WARNING: this script does not seem to work with the current
+DuckDuckGo version (as of 2019/08).
+
+Example usage of MechanicalSoup to get the results from
+DuckDuckGo.
+"""
 
 import mechanicalsoup
 
@@ -13,5 +17,5 @@ browser["q"] = "MechanicalSoup"
 browser.submit_selected()
 
 # Display the results
-for link in browser.get_current_page().select('a.result__a'):
+for link in browser.page.select('a.result__a'):
     print(link.text, '->', link.attrs['href'])
