@@ -95,7 +95,7 @@ def open_legacy_httpbin(browser, httpbin):
     try:
         response = browser.open(httpbin + "/legacy")
         if response.status_code == 404:
-            # The line above may or may not have raised the expection
+            # The line above may or may not have raised the exception
             # depending on raise_on_404. Raise it unconditionally now.
             raise mechanicalsoup.LinkNotFoundError()
     except mechanicalsoup.LinkNotFoundError:
