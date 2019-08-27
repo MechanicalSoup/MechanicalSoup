@@ -2,19 +2,27 @@
 Release Notes
 =============
 
-Version 1.0 (in development)
-============================
+Version 0.12
+============
 
 Main changes:
 -------------
 
-* Added ability to submit a form without updating `StatefulBrowser` internal
-  state. This means you get a response from the form submission, but your
-  browser "stays" on the same page. Useful for handling forms that result in
-  a download of a file or opening a new window.
+* Changes in official python version support: added 3.7 and dropped 3.4.
+
+* Added ability to submit a form without updating ``StatefulBrowser`` internal
+  state: ``submit_selected(..., update_state=False)``. This means you get a
+  response from the form submission, but your browser stays on the same page.
+  Useful for handling forms that result in a file download or open a new tab.
 
 Bug fixes
 ---------
+
+* Improve handling of form enctype to behave like a real browser.
+  [`#242 <https://github.com/MechanicalSoup/MechanicalSoup/issues/242>`__]
+
+* HTML ``type`` attributes are no longer required to be lowercase.
+  [`#245 <https://github.com/MechanicalSoup/MechanicalSoup/issues/245>`__]
 
 * Form controls with the ``disabled`` attribute will no longer be submitted
   to improve compliance with the HTML standard. If you were relying on this
@@ -22,10 +30,23 @@ Bug fixes
   ``disabled`` attribute from the element in the :class:`~mechanicalsoup.Form`
   object directly.
   [`#248 <https://github.com/MechanicalSoup/MechanicalSoup/issues/248>`__]
-* Upon submitting a form containing a file input field without uploading one,
-  an empty filename & content will be sent in compliance with regular web
-  browser behavior.
+
+* When a form containing a file input field is submitted without choosing a
+  file, an empty filename & content will be sent just like in a real browser.
   [`#250 <https://github.com/MechanicalSoup/MechanicalSoup/issues/250>`__]
+
+* ``<option>`` tags without a ``value`` attribute will now use their text as
+  the value.
+  [`#252 <https://github.com/MechanicalSoup/MechanicalSoup/pull/252>`__]
+
+* The optional ``url_regex`` argument to ``follow_link`` and ``download_link``
+  was fixed so that it is no longer ignored.
+  [`#256 <https://github.com/MechanicalSoup/MechanicalSoup/pull/256>`__]
+
+* Allow duplicate submit elements instead of raising a LinkNotFoundError.
+  [`#264 <https://github.com/MechanicalSoup/MechanicalSoup/issues/264>`__]
+
+Our thanks to the many new contributors in this release!
 
 Version 0.11
 ============
