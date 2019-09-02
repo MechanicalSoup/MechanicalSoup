@@ -282,15 +282,10 @@ class Form(object):
 
         The arguments set the attributes of the new element.
         """
-        old_input = self.form.find_all('input', {'name': name})
-        for old in old_input:
-            old.decompose()
-        old_textarea = self.form.find_all('textarea', {'name': name})
-        for old in old_textarea:
-            old.decompose()
-        old_select = self.form.find_all('select', {'name': name})
-        for old in old_select:
-            old.decompose()
+        # Remove existing input-like elements with the same name
+        for tag in ('input', 'textarea', 'select'):
+            for old in self.form.find_all(tag, {'name': name}):
+                old.decompose()
         # We don't have access to the original soup object (just the
         # Tag), so we instantiate a new BeautifulSoup() to call
         # new_tag(). We're only building the soup object, not parsing
