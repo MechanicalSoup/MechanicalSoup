@@ -242,6 +242,9 @@ def test_new_control(httpbin):
     browser.new_control("text", "temperature", "warm")
     browser.new_control("textarea", "size", "Sooo big !")
     browser.new_control("text", "comments", "This is an override comment")
+    fake_select = BeautifulSoup("", "html.parser").new_tag('select')
+    fake_select["name"] = "foo"
+    browser.get_current_form().form.append(fake_select)
     browser.new_control("checkbox", "foo", "valval", checked="checked")
     tag = browser.get_current_form().form.find("input", {"name": "foo"})
     assert tag.attrs["checked"] == "checked"
