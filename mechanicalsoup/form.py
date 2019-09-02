@@ -288,6 +288,9 @@ class Form(object):
         old_textarea = self.form.find_all('textarea', {'name': name})
         for old in old_textarea:
             old.decompose()
+        old_select = self.form.find_all('select', {'name': name})
+        for old in old_select:
+            old.decompose()
         # We don't have access to the original soup object (just the
         # Tag), so we instantiate a new BeautifulSoup() to call
         # new_tag(). We're only building the soup object, not parsing
