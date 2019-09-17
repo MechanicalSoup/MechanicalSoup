@@ -15,8 +15,8 @@ Main changes:
   ``get_current_form`` and ``get_url`` have been deprecated in favor
   of ``page``, ``form`` and ``url`` properties (e.g. the new
   ``x.page`` is equivalent to the now deprecated
-  ``x.get_current_page()``) [`#175
-  <https://github.com/MechanicalSoup/MechanicalSoup/issues/175`__]
+  ``x.get_current_page()``).
+  [`#175 <https://github.com/MechanicalSoup/MechanicalSoup/issues/175>`__]
 
 * ``StatefulBrowser.form`` will raise an ``AttributeError`` instead of
   returning ``None`` if no form has been selected yet. Note that
