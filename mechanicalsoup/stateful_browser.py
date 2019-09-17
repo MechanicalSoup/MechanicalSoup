@@ -203,7 +203,7 @@ class StatefulBrowser(Browser):
             Default is the first matching form (``nr=0``).
 
         :return: The selected form as a soup object. It can also be
-            retrieved later with :func:`get_current_form`.
+            retrieved later with the :attr:`form` attribute.
         """
         if isinstance(selector, bs4.element.Tag):
             if selector.name != "form":
