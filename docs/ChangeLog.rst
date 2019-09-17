@@ -5,9 +5,6 @@ Release Notes
 Version 1.0 (in development)
 ============================
 
-Version 0.12
-============
-
 Main changes:
 -------------
 
@@ -23,10 +20,11 @@ Main changes:
   ``StatefulBrowser.get_current_form()`` still returns ``None`` for
   backward compatibility.
 
-* Added ability to submit a form without updating `StatefulBrowser` internal
-  state. This means you get a response from the form submission, but your
-  browser "stays" on the same page. Useful for handling forms that result in
-  a download of a file or opening a new window.
+Version 0.12
+============
+
+Main changes:
+-------------
 
 * Changes in official python version support: added 3.7 and dropped 3.4.
 
