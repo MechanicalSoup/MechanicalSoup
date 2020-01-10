@@ -75,7 +75,7 @@ How does MechanicalSoup compare to the alternatives?
 
 There are other libraries with the same purpose as MechanicalSoup:
 
-* `Mechanize <http://wwwsearch.sourceforge.net/mechanize/>`__ is an
+* `Mechanize <https://github.com/python-mechanize/mechanize/>`__ is an
   ancestor of MechanicalSoup (getting its name from the Perl mechanize
   module). It was a great tool, but became unmaintained for several
   years and didn't support Python 3. Fortunately, Mechanize got a new
