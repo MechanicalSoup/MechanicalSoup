@@ -4,13 +4,13 @@ dist: xenial
 language: python
 cache: pip
 python:
+  - pypy
+  - pypy3
   - 2.7
   - 3.5
   - 3.6
   - 3.7
   - 3.8
-  - pypy
-  - pypy3
 install:
   - pip install --upgrade pytest # needed for cases where there is already an old pytest installed
   - pip install pytest-cov       # needed for the codecov uploader
