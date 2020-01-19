@@ -1,6 +1,5 @@
 # Validate all YAML changes, e.g. http://lint.travis-ci.org/
 
-sudo: false
 dist: xenial
 language: python
 cache: pip
