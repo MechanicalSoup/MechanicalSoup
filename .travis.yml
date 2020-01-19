@@ -10,8 +10,8 @@ python:
   - 3.6
   - 3.7
   - 3.8
-  - pypy2.7-6.0
-  - pypy3.5-6.0
+  - pypy
+  - pypy3
 install:
   - pip install --upgrade pytest # needed for cases where there is already an old pytest installed
   - pip install pytest-cov       # needed for the codecov uploader
