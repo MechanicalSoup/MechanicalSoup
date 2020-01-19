@@ -1,7 +1,6 @@
 import requests
 import bs4
-from six.moves import urllib
-from six import string_types
+import urllib
 from .form import Form
 import webbrowser
 import tempfile

@@ -1,10 +1,10 @@
-from six.moves import urllib
 from .browser import Browser
 from .utils import LinkNotFoundError
 from .form import Form
 import sys
 import re
 import bs4
+import urllib
 
 
 class _BrowserState:
