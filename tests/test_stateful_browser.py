@@ -69,7 +69,7 @@ def test_submit_online(httpbin):
     assert data["custname"] == "Customer Name Here"
     assert data["custtel"] == ""  # web browser submits "" for input left blank
     assert data["size"] == "medium"
-    assert set(data["topping"]) == set(("cheese", "onion"))
+    assert set(data["topping"]) == {"cheese", "onion"}
     assert data["comments"] == "Some comment here"
     assert data["nosuchfield"] == "new value"
 
@@ -199,10 +199,10 @@ def test_list_links(capsys):
      <a href="/link1">Link #1</a>
      <a href="/link2" id="link2"> Link #2</a>
 '''
-    browser.open_fake_page('<html>{0}</html>'.format(links))
+    browser.open_fake_page('<html>{}</html>'.format(links))
     browser.list_links()
     out, err = capsys.readouterr()
-    expected = 'Links in the current page:{0}'.format(links)
+    expected = 'Links in the current page:{}'.format(links)
     assert out == expected
 
 

@@ -2,7 +2,6 @@
 
 NOTE: This example will not work if the user has 2FA enabled."""
 
-from __future__ import print_function
 import argparse
 import mechanicalsoup
 from getpass import getpass
