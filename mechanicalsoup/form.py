@@ -37,8 +37,8 @@ class Form(object):
         if form.name != 'form':
             warnings.warn(
                 "Constructed a Form from a '{}' instead of a 'form' element. "
-                "This may be an error in a future version of MechanicalSoup.",
-                PendingDeprecationWarning)
+                "This may be an error in a future version of MechanicalSoup."
+                .format(form.name), FutureWarning)
 
         self.form = form
         self._submit_chosen = False
