@@ -12,7 +12,7 @@ browser = mechanicalsoup.StatefulBrowser()
 browser.open("https://duckduckgo.com/")
 
 # Fill-in the search form
-browser.select_form('#search_form_input_homepage')
+browser.select_form('#search_form_homepage')
 browser["q"] = "MechanicalSoup"
 browser.submit_selected()
 
