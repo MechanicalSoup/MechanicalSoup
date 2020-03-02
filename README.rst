@@ -63,28 +63,38 @@ documentation <https://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.ht
 Example
 -------
 
-From `<examples/expl_duck_duck_go.py>`__, code to get the results from
-a DuckDuckGo search:
+From `<examples/expl_qwant.py>`__, code to get the results from
+a Qwant search:
 
 .. code:: python
 
-    """Example usage of MechanicalSoup to get the results from
-    DuckDuckGo."""
-
+    """Example usage of MechanicalSoup to get the results from the Qwant
+    search engine.
+    """
+    
+    import re
     import mechanicalsoup
-
+    import html
+    import urllib.parse
+    
     # Connect to duckduckgo
-    browser = mechanicalsoup.StatefulBrowser()
-    browser.open("https://duckduckgo.com/")
-
+    browser = mechanicalsoup.StatefulBrowser(user_agent='MechanicalSoup')
+    browser.open("https://lite.qwant.com/")
+    
     # Fill-in the search form
-    browser.select_form('#search_form_homepage')
+    browser.select_form('#search-form')
     browser["q"] = "MechanicalSoup"
     browser.submit_selected()
-
+    
     # Display the results
-    for link in browser.page.select('a.result__a'):
-        print(link.text, '->', link.attrs['href'])
+    for link in browser.page.select('.result a'):
+        # Qwant shows redirection links, not the actual URL, so extract
+        # the actual URL from the redirect link:
+        href = link.attrs['href']
+        m = re.match(r"^/redirect/[^/]*/(.*)$", href)
+        if m:
+            href = urllib.parse.unquote(m.group(1))
+        print(link.text, '->', href)
 
 More examples are available in `<examples/>`__.
 
