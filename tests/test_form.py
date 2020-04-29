@@ -546,5 +546,45 @@ def test_option_without_value(fail, selected, expected_post):
         assert res.status_code == 200 and res.text == 'Success!'
 
 
+one_field_form = '''<form method="post">
+  <input name="life" type="hidden" value="good"/>
+</form>'''
+
+
+def test_get_value_of_input_field():
+    """Test that we can get input field of current form by name"""
+
+    browser, url = setup_mock_browser(text=one_field_form)
+    browser.open(url)
+    browser.select_form()
+
+    assert browser['life'] == 'good'
+    browser['life'] = 'veryGood'
+    assert browser['life'] == 'veryGood'
+
+
+def test_getting_invalid_field_raises_exception():
+    """Test that we can get input field of current form by name"""
+
+    browser, url = setup_mock_browser(text=one_field_form)
+    browser.open(url)
+    browser.select_form()
+
+    with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
+        _ = browser['unknown_life']
+
+
+def test_if_given_field_is_in_current_form():
+    """Test if given input field is one of form input fields"""
+    browser, url = setup_mock_browser(text=one_field_form)
+    browser.open(url)
+    browser.select_form()
+
+    assert 'life' in browser
+    assert 'unknown_life' not in browser
+    browser.new_control('text', 'unknown_life', 'goodToo')
+    assert 'unknown_life' in browser
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)

@@ -119,6 +119,18 @@ class StatefulBrowser(Browser):
         """
         self.form[name] = value
 
+    def __getitem__(self, name):
+        """Get input value of a field in currently selected form.
+        See :func:`Form.__getitem__`.
+        """
+        return self.form[name]
+
+    def __contains__(self, name):
+        """Test if specific field is in the form's input fields.
+        See :func:`Form.__contains__`.
+        """
+        return name in self.form
+
     def new_control(self, type, name, value, **kwargs):
         """Call :func:`Form.new_control` on the currently selected form."""
         return self.form.new_control(type, name, value, **kwargs)

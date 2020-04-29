@@ -231,7 +231,7 @@ class Form(object):
                 option.attrs["selected"] = "selected"
 
     def __setitem__(self, name, value):
-        """Forwards arguments to :func:`~Form.set`. For example,
+        """Forward arguments to :func:`~Form.set`. For example,
         :code:`form["name"] = "value"` calls :code:`form.set("name", "value")`.
         """
         return self.set(name, value)
@@ -276,6 +276,44 @@ class Form(object):
             self.new_control('text', name, value=value)
             return
         raise LinkNotFoundError("No valid element named " + name)
+
+    def __getitem__(self, name):
+        """Forward arguments to :func:`~Form.get` to get value for a given form field.
+        For example, :code:`name = form["name"]` calls :code:`form.get("name")`
+        """
+        return self.get(name)
+
+    def get(self, name):
+        """Get a ``value`` from input element identified by ``name``.
+        Currently it does support "input" type only.
+
+        Example:
+
+        .. code-block:: python
+            firstname = browser['firstname']
+
+        If the element is not found , raise a :class:`LinkNotFoundError`
+        exception.
+
+"""
+        inp = self.form.find("input", {"name": name})
+        if not inp:
+            raise LinkNotFoundError("No input field named " + name)
+        return inp["value"]
+
+    def __contains__(self, name):
+        """Test if ``name`` input field is in the form.
+        Support "input" type only.
+
+        Example:
+
+        .. code-block:: python
+           if 'name' in form:
+               ...
+
+        """
+        inp = self.form.find("input", {"name": name})
+        return True if inp else False
 
     def new_control(self, type, name, value, **kwargs):
         """Add a new input element to the form.
