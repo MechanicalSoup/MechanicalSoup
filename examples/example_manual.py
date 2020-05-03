@@ -34,11 +34,10 @@ page2 = browser.submit(login_form, login_page.url)
 messages = page2.soup.find("div", class_="flash-messages")
 if messages:
     print(messages.text)
-assert page2.soup.select(".logout-form")
+assert not page.title.text.startswith('Sign in to GitHub')  # NOTE will fail for app passwords
 
 print(page2.soup.title.text)
 
 # verify we remain logged in (thanks to cookies) as we browse the rest of
 # the site
 page3 = browser.get("https://github.com/MechanicalSoup/MechanicalSoup")
-assert page3.soup.select(".logout-form")
