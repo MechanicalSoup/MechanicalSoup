@@ -34,7 +34,7 @@ page2 = browser.submit(login_form, login_page.url)
 messages = page2.soup.find("div", class_="flash-messages")
 if messages:
     print(messages.text)
-assert not page.title.text.startswith('Sign in to GitHub')  # NOTE will fail for app passwords
+assert not page2.title.text.startswith('Sign in to GitHub')  # NOTE will fail for app passwords
 
 print(page2.soup.title.text)
 
