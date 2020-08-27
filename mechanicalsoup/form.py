@@ -263,7 +263,7 @@ class Form(object):
 
         .. code-block:: python
 
-            form.set("tagname") = path_to_local_file
+            form.set("tagname", path_to_local_file)
 
         """
         for func in ("checkbox", "radio", "input", "textarea", "select"):
