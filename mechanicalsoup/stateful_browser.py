@@ -256,8 +256,8 @@ class StatefulBrowser(Browser):
         forwarded to :func:`links`.
         """
         print("Links in the current page:")
-        for l in self.links(*args, **kwargs):
-            print("    ", l)
+        for link in self.links(*args, **kwargs):
+            print("    ", link)
 
     def links(self, url_regex=None, link_text=None, *args, **kwargs):
         """Return links in the page, as a list of bs4.element.Tag objects.
