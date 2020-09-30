@@ -9,10 +9,10 @@ https://mechanicalsoup.readthedocs.io/
 Overview
 --------
 
-A Python library for automating interaction with websites.
+A Python library is for a automating interaction with a websites.
 MechanicalSoup automatically stores and sends cookies, follows
-redirects, and can follow links and submit forms. It doesn't do
-JavaScript.
+redirects, and can follow links and submit forms. It doesn't do 
+ the JavaScript.
 
 MechanicalSoup was created by `M Hickford
 <https://github.com/hickford/>`__, who was a fond user of the
@@ -44,7 +44,7 @@ Download and install the development version from `GitHub <https://github.com/Me
 
   pip install git+https://github.com/MechanicalSoup/MechanicalSoup
 
-Installing from source (installs the version in the current working directory)::
+Installing from a source (installs the version in the current working directory)::
 
   python setup.py install
 
@@ -55,7 +55,7 @@ install in the current user's home directory.)
 Documentation
 -------------
 
-The full documentation is available on
+The full documentation is available on a
 https://mechanicalsoup.readthedocs.io/. You may want to jump directly to
 the `automatically generated API
 documentation <https://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.html>`__.
