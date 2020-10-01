@@ -1,6 +1,5 @@
 """Example usage of MechanicalSoup to get the results from the Qwant
-search engine.
-"""
+search engine."""
 
 import re
 import mechanicalsoup
