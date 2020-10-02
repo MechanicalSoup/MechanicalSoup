@@ -9,7 +9,7 @@ https://mechanicalsoup.readthedocs.io/
 Overview
 --------
 
-A Python library for automating interaction with websites.
+A Python library is for automating interaction with websites.
 MechanicalSoup automatically stores and sends cookies, follows
 redirects, and can follow links and submit forms. It doesn't do
 JavaScript.
@@ -68,7 +68,7 @@ a Qwant search:
 
 .. code:: python
 
-    """Example usage of MechanicalSoup to get the results from the Qwant
+    """Example use of MechanicalSoup to get the results from the Qwant
     search engine.
     """
     
