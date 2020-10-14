@@ -58,7 +58,7 @@ Documentation
 The full documentation is available on
 https://mechanicalsoup.readthedocs.io/. You may want to jump directly to
 the `automatically generated API
-documentation <https://mechanicalsoup.readthedocs.io/en/latest/mechanicalsoup.html>`__.
+documentation <https://mechanicalsoup.readthedocs.io/en/stable/mechanicalsoup.html>`__.
 
 Example
 -------
@@ -118,7 +118,7 @@ Common problems
 ---------------
 
 Read the `FAQ
-<https://mechanicalsoup.readthedocs.io/en/latest/faq.html>`__.
+<https://mechanicalsoup.readthedocs.io/en/stable/faq.html>`__.
 
 
 .. |Latest Version| image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
