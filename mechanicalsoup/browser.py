@@ -139,8 +139,18 @@ class Browser(object):
         Browser.add_soup(response, self.soup_config)
         return response
 
-    def _request(self, form, url=None, **kwargs):
-        """Extract input data from the form to pass to a Requests session."""
+    @staticmethod
+    def _get_request_kwargs(method, url, **kwargs):
+        """This method exists to raise a TypeError when a method or url is
+        specified in the kwargs.
+        """
+        request_kwargs = {"method": method, "url": url}
+        request_kwargs.update(kwargs)
+        return request_kwargs
+
+    @classmethod
+    def get_request_kwargs(cls, form, url=None, **kwargs):
+        """Extract input data from the form."""
         method = str(form.get("method", "get"))
         action = form.get("action")
         url = urllib.parse.urljoin(url, action)
@@ -240,7 +250,12 @@ class Browser(object):
 
             files = DictThatReturnsTrue()
 
-        return self.session.request(method, url, files=files, **kwargs)
+        return cls._get_request_kwargs(method, url, files=files, **kwargs)
+
+    def _request(self, form, url=None, **kwargs):
+        """Extract input data from the form to pass to a Requests session."""
+        request_kwargs = Browser.get_request_kwargs(form, url, **kwargs)
+        return self.session.request(**request_kwargs)
 
     def submit(self, form, url=None, **kwargs):
         """Prepares and sends a form request.
