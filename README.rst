@@ -1,7 +1,7 @@
 .. image:: /assets/mechanical-soup-logo.png
    :alt: MechanicalSoup. A Python library for automating website interaction.
 
-Home page
+Home page link below:
 ---------
 
 https://mechanicalsoup.readthedocs.io/
