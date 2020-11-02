@@ -1,4 +1,6 @@
-"""Example app to login to GitHub using the StatefulBrowser class."""
+"""Example app to login to GitHub using the StatefulBrowser class.
+
+NOTE: This example will not work if the user has 2FA enabled."""
 
 from __future__ import print_function
 import argparse
