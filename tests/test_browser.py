@@ -202,6 +202,19 @@ def test__request_disabled_attr(httpbin):
     assert response.json()['form'] == {}
 
 
+@pytest.mark.parametrize("keyword", [
+    pytest.param('method'),
+    pytest.param('url'),
+])
+def test_request_keyword_error(keyword):
+    """Make sure exception is raised if kwargs duplicates an arg."""
+    form_html = "<form></form>"
+    browser = mechanicalsoup.Browser()
+    with pytest.raises(TypeError, match="multiple values for"):
+        browser._request(BeautifulSoup(form_html, "lxml").form,
+                         'myurl', **{keyword: 'somevalue'})
+
+
 def test_no_404(httpbin):
     browser = mechanicalsoup.Browser()
     resp = browser.get(httpbin + "/nosuchpage")
