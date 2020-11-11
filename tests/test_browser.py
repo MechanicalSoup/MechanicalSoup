@@ -38,6 +38,40 @@ def test_submit_online(httpbin):
     assert 'MechanicalSoup' in json["headers"]["User-Agent"]
 
 
+def test_get_request_kwargs(httpbin):
+    """Return kwargs without a submit"""
+    browser = mechanicalsoup.Browser()
+    page = browser.get(httpbin + "/forms/post")
+    form = page.soup.form
+    form.find("input", {"name": "custname"})["value"] = "Philip J. Fry"
+    request_kwargs = browser.get_request_kwargs(form, page.url)
+    assert "method" in request_kwargs
+    assert "url" in request_kwargs
+    assert "data" in request_kwargs
+    assert ("custname", "Philip J. Fry") in request_kwargs["data"]
+
+
+def test_get_request_kwargs_when_method_is_in_kwargs(httpbin):
+    """Raise TypeError exception"""
+    browser = mechanicalsoup.Browser()
+    page = browser.get(httpbin + "/forms/post")
+    form = page.soup.form
+    kwargs = {"method": "post"}
+    with pytest.raises(TypeError):
+        browser.get_request_kwargs(form, page.url, **kwargs)
+
+
+def test_get_request_kwargs_when_url_is_in_kwargs(httpbin):
+    """Raise TypeError exception"""
+    browser = mechanicalsoup.Browser()
+    page = browser.get(httpbin + "/forms/post")
+    form = page.soup.form
+    kwargs = {"url": httpbin + "/forms/post"}
+    with pytest.raises(TypeError):
+        # pylint: disable=redundant-keyword-arg
+        browser.get_request_kwargs(form, page.url, **kwargs)
+
+
 def test__request(httpbin):
     form_html = """
     <form method="post" action="{}/post">
