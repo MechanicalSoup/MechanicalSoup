@@ -8,7 +8,7 @@ Version 1.0 (in development)
 Main changes:
 -------------
 
-* Added support for Python 3.8.
+* Added support for Python 3.8 and 3.9.
 
 * ``StatefulBrowser`` methods ``get_current_page``,
   ``get_current_form`` and ``get_url`` have been deprecated in favor
