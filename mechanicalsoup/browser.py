@@ -158,7 +158,10 @@ class Browser(object):
             raise ValueError('no URL to submit to')
 
         # read https://www.w3.org/TR/html52/sec-forms.html
-        data = kwargs.pop("data", dict())
+        if method.lower() == "get":
+            data = kwargs.pop("params", dict())
+        else:
+            data = kwargs.pop("data", dict())
         files = kwargs.pop("files", dict())
 
         # Use a list of 2-tuples to better reflect the behavior of browser QSL.
@@ -269,6 +272,8 @@ class Browser(object):
             relative path, then this must be specified.
         :param \\*\\*kwargs: Arguments forwarded to `requests.Session.request
             <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
+            If `files`, `params` (with GET), or `data` (with POST) are
+            specified, they will be appended to by the contents of `form`.
 
         :return: `requests.Response
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
