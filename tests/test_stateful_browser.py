@@ -199,10 +199,10 @@ def test_list_links(capsys):
      <a href="/link1">Link #1</a>
      <a href="/link2" id="link2"> Link #2</a>
 '''
-    browser.open_fake_page('<html>{}</html>'.format(links))
+    browser.open_fake_page(f'<html>{links}</html>')
     browser.list_links()
     out, err = capsys.readouterr()
-    expected = 'Links in the current page:{}'.format(links)
+    expected = f'Links in the current page:{links}'
     assert out == expected
 
 
@@ -610,7 +610,7 @@ def test_refresh_open():
 def test_refresh_follow_link():
     url = 'mock://example.com'
     follow_url = 'mock://example.com/followed'
-    initial_content = '<a href="{url}">Link</a>'.format(url=follow_url)
+    initial_content = f'<a href="{follow_url}">Link</a>'
     initial_page = BeautifulSoup(initial_content, 'lxml')
     reload_page = BeautifulSoup('<p>Fake reloaded page</p>', 'lxml')
 

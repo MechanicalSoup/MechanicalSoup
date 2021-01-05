@@ -35,9 +35,9 @@ class Form:
     def __init__(self, form):
         if form.name != 'form':
             warnings.warn(
-                "Constructed a Form from a '{}' instead of a 'form' element. "
-                "This may be an error in a future version of MechanicalSoup."
-                .format(form.name), FutureWarning)
+                f"Constructed a Form from a '{form.name}' instead of a 'form' "
+                " element. This may be an error in a future version of "
+                "MechanicalSoup.", FutureWarning)
 
         self.form = form
         self._submit_chosen = False
@@ -169,9 +169,7 @@ class Form:
                     break
             else:
                 raise LinkNotFoundError(
-                    "No input radio named {} with choice {}".format(
-                        name, value
-                    )
+                    f"No input radio named {name} with choice {value}"
                 )
 
     def set_textarea(self, data):
@@ -226,9 +224,7 @@ class Form:
 
                 if not option:
                     raise LinkNotFoundError(
-                        'Option {} not found for select {}'.format(
-                            choice, name
-                        )
+                        f'Option {choice} not found for select {name}'
                     )
 
                 option.attrs["selected"] = "selected"
@@ -348,7 +344,7 @@ class Form:
             if (inp.has_attr('name') and inp['name'] == submit):
                 if found:
                     raise LinkNotFoundError(
-                        "Multiple submit elements match: {}".format(submit)
+                        f"Multiple submit elements match: {submit}"
                     )
                 found = True
             elif inp == submit:
@@ -364,7 +360,7 @@ class Form:
 
         if not found and submit is not None:
             raise LinkNotFoundError(
-                "Specified submit element not found: {}".format(submit)
+                f"Specified submit element not found: {submit}"
             )
         self._submit_chosen = True
 
