@@ -117,7 +117,7 @@ def test_choose_submit_from_selector(value):
     browser, url = setup_mock_browser(expected_post=[('do', value)], text=text)
     browser.open(url)
     form = browser.select_form()
-    submits = form.form.select('input[value="{}"]'.format(value))
+    submits = form.form.select(f'input[value="{value}"]')
     assert len(submits) == 1
     form.choose_submit(submits[0])
     res = browser.submit_selected()

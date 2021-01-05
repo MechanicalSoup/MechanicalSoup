@@ -90,9 +90,7 @@ class Browser:
         # set a default user_agent if not specified
         if user_agent is None:
             requests_ua = requests.utils.default_user_agent()
-            user_agent = '{} ({}/{})'.format(
-                requests_ua, __title__, __version__
-            )
+            user_agent = f'{requests_ua} ({__title__}/{__version__})'
 
         # the requests module uses a case-insensitive dict for session headers
         self.session.headers['User-agent'] = user_agent
@@ -173,7 +171,7 @@ class Browser:
 
         # Process form tags in the order that they appear on the page,
         # skipping those tags that do not have a name-attribute.
-        selector = ",".join("{}[name]".format(i) for i in
+        selector = ",".join(f"{tag}[name]" for tag in
                             ("input", "button", "textarea", "select"))
         for tag in form.select(selector):
             name = tag.get("name")  # name-attribute of tag

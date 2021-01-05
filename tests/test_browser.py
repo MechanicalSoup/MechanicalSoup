@@ -73,8 +73,8 @@ def test_get_request_kwargs_when_url_is_in_kwargs(httpbin):
 
 
 def test__request(httpbin):
-    form_html = """
-    <form method="post" action="{}/post">
+    form_html = f"""
+    <form method="post" action="{httpbin.url}/post">
       <input name="customer" value="Philip J. Fry"/>
       <input name="telephone" value="555"/>
       <textarea name="comments">freezer</textarea>
@@ -96,7 +96,7 @@ def test__request(httpbin):
         <option value="square" selected>Square</option>
       </select>
     </form>
-    """.format(httpbin.url)
+    """
 
     form = BeautifulSoup(form_html, "lxml").form
 
@@ -137,12 +137,12 @@ default_enctype = "application/x-www-form-urlencoded"
 def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
     # test if enctype is respected when specified
     # and if files are processed correctly
-    form_html = """
-    <form method="post" action="{}/post" enctype="{}">
+    form_html = f"""
+    <form method="post" action="{httpbin.url}/post" enctype="{enctype}">
       <input name="in" value="test" />
-      {}
+      {file_field}
     </form>
-    """.format(httpbin.url, enctype, file_field)
+    """
     form = BeautifulSoup(form_html, "lxml").form
 
     valid_enctype = (enctype in valid_enctypes_file_submit and
@@ -210,13 +210,13 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
 def test__request_select_none(httpbin):
     """Make sure that a <select> with no options selected
     submits the first option, as it does in a browser."""
-    form_html = """
-    <form method="post" action={}/post>
+    form_html = f"""
+    <form method="post" action={httpbin.url}/post>
       <select name="shape">
         <option value="round">Round</option>
         <option value="square">Square</option>
       </select>
-    </form>""".format(httpbin.url)
+    </form>"""
 
     form = BeautifulSoup(form_html, "lxml").form
     browser = mechanicalsoup.Browser()
@@ -226,10 +226,10 @@ def test__request_select_none(httpbin):
 
 def test__request_disabled_attr(httpbin):
     """Make sure that disabled form controls are not submitted."""
-    form_html = """
-    <form method="post" action="{}/post">
+    form_html = f"""
+    <form method="post" action="{httpbin.url}/post">
       <input disabled name="nosubmit" value="1" />
-    </form>""".format(httpbin.url)
+    </form>"""
 
     browser = mechanicalsoup.Browser()
     response = browser._request(BeautifulSoup(form_html, "lxml").form)
