@@ -2,25 +2,40 @@
 Release Notes
 =============
 
-Version 1.0 (in development)
-============================
+Version 1.0
+===========
+
+This is the last release that will support Python 2.7. Thanks to the many
+contributors that made this release possible!
 
 Main changes:
 -------------
 
 * Added support for Python 3.8 and 3.9.
 
-* ``StatefulBrowser`` methods ``get_current_page``,
-  ``get_current_form`` and ``get_url`` have been deprecated in favor
-  of ``page``, ``form`` and ``url`` properties (e.g. the new
-  ``x.page`` is equivalent to the now deprecated
-  ``x.get_current_page()``).
+* ``StatefulBrowser`` has new properties ``page``, ``form``, and ``url``,
+  which can be used in place of the methods ``get_current_page``,
+  ``get_current_form`` and ``get_url`` respectively (e.g. the new ``x.page``
+  is equivalent to ``x.get_current_page()``). These methods may be deprecated
+  in a future release.
   [`#175 <https://github.com/MechanicalSoup/MechanicalSoup/issues/175>`__]
 
 * ``StatefulBrowser.form`` will raise an ``AttributeError`` instead of
   returning ``None`` if no form has been selected yet. Note that
   ``StatefulBrowser.get_current_form()`` still returns ``None`` for
   backward compatibility.
+
+Bug fixes
+---------
+
+* Decompose ``<select>`` elements with the same name when adding a new
+  input element to a form.
+  [`#297 <https://github.com/MechanicalSoup/MechanicalSoup/issues/297>`__]
+
+* The ``params`` and ``data`` kwargs passed to ``submit`` will now properly
+  be forwarded to the underlying request for GET methods (whereas previously
+  ``params`` was being overwritten by ``data``).
+  [`#343 <https://github.com/MechanicalSoup/MechanicalSoup/pull/343>`__]
 
 Version 0.12
 ============
