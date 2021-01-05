@@ -34,7 +34,7 @@ Installation
 
 |Latest Version| |Supported Versions|
 
-PyPy and PyPy3 are also supported (and tested against).
+PyPy3 is also supported (and tested against).
 
 Download and install the latest released version from `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__::
 
