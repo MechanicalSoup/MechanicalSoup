@@ -75,8 +75,8 @@ class Browser:
         session handles cookies automatically without calling this function,
         only use this when default cookie handling is insufficient.
 
-        :param cookiejar: Any `cookielib.CookieJar
-          <https://docs.python.org/2/library/cookielib.html#cookielib.CookieJar>`__
+        :param cookiejar: Any `http.cookiejar.CookieJar
+          <https://docs.python.org/3/library/http.cookiejar.html#http.cookiejar.CookieJar>`__
           compatible object.
         """
         self.session.cookies = cookiejar
