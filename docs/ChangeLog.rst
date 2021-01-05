@@ -5,6 +5,11 @@ Release Notes
 Version 1.1 (in development)
 ============================
 
+Main changes
+------------
+
+* Dropped support for EOL Python versions: 2.7 and 3.5.
+
 Version 1.0
 ===========
 
