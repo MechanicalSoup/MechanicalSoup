@@ -1,4 +1,3 @@
-from __future__ import print_function
 import copy
 import warnings
 from .utils import LinkNotFoundError
@@ -16,7 +15,7 @@ class InvalidFormMethod(LinkNotFoundError):
     pass
 
 
-class Form(object):
+class Form:
     """Build a fillable form.
 
     :param form: A bs4.element.Tag corresponding to an HTML form element.
@@ -170,7 +169,9 @@ class Form(object):
                     break
             else:
                 raise LinkNotFoundError(
-                    "No input radio named %s with choice %s" % (name, value)
+                    "No input radio named {} with choice {}".format(
+                        name, value
+                    )
                 )
 
     def set_textarea(self, data):
@@ -225,7 +226,9 @@ class Form(object):
 
                 if not option:
                     raise LinkNotFoundError(
-                        'Option %s not found for select %s' % (choice, name)
+                        'Option {} not found for select {}'.format(
+                            choice, name
+                        )
                     )
 
                 option.attrs["selected"] = "selected"
@@ -345,7 +348,7 @@ class Form(object):
             if (inp.has_attr('name') and inp['name'] == submit):
                 if found:
                     raise LinkNotFoundError(
-                        "Multiple submit elements match: {0}".format(submit)
+                        "Multiple submit elements match: {}".format(submit)
                     )
                 found = True
             elif inp == submit:
@@ -361,7 +364,7 @@ class Form(object):
 
         if not found and submit is not None:
             raise LinkNotFoundError(
-                "Specified submit element not found: {0}".format(submit)
+                "Specified submit element not found: {}".format(submit)
             )
         self._submit_chosen = True
 

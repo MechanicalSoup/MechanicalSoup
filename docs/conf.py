@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # MechanicalSoup documentation build configuration file, created by
 # sphinx-quickstart on Sun Sep 14 18:44:39 2014.

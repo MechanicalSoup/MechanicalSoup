@@ -2,10 +2,7 @@ import mechanicalsoup
 import requests_mock
 from distutils.version import StrictVersion
 import bs4
-try:
-    from urllib.parse import parse_qsl
-except ImportError:
-    from urlparse import parse_qsl
+from urllib.parse import parse_qsl
 
 """
 Utilities for testing MechanicalSoup.
@@ -62,8 +59,7 @@ def mock_get(mocked_adapter, url, reply, content_type='text/html', **kwargs):
 
 def mock_post(mocked_adapter, url, expected, reply='Success!'):
     def text_callback(request, context):
-        # Python 2's parse_qsl doesn't like None argument
-        query = parse_qsl(request.text) if request.text else []
+        query = parse_qsl(request.text)
         # In bs4 4.7.0+, CSS selectors return elements in page order,
         # but did not in earlier versions.
         if StrictVersion(bs4.__version__) >= StrictVersion('4.7.0'):

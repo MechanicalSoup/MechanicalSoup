@@ -1,12 +1,10 @@
-from __future__ import print_function
-
-from six.moves import urllib
 from .browser import Browser
 from .utils import LinkNotFoundError
 from .form import Form
 import sys
 import re
 import bs4
+import urllib
 
 
 class _BrowserState:
@@ -55,7 +53,7 @@ class StatefulBrowser(Browser):
     """
 
     def __init__(self, *args, **kwargs):
-        super(StatefulBrowser, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__debug = False
         self.__verbose = 0
         self.__state = _BrowserState()
@@ -386,4 +384,4 @@ class StatefulBrowser(Browser):
         """
         if soup is None:
             soup = self.page
-        super(StatefulBrowser, self).launch_browser(soup)
+        super().launch_browser(soup)

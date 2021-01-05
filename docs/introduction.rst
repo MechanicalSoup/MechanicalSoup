@@ -3,7 +3,7 @@ Introduction
 
 |Latest Version| |Supported Versions|
 
-PyPy and PyPy3 are also supported (and tested against).
+PyPy3 is also supported (and tested against).
 
 Find MechanicalSoup on `Python Package Index (Pypi)
 <https://pypi.python.org/pypi/MechanicalSoup/>`__ and follow the

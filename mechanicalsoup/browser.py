@@ -1,7 +1,6 @@
 import requests
 import bs4
-from six.moves import urllib
-from six import string_types
+import urllib
 from .form import Form
 import webbrowser
 import tempfile
@@ -10,7 +9,7 @@ from .__version__ import __version__, __title__
 import weakref
 
 
-class Browser(object):
+class Browser:
     """Builds a low-level Browser.
 
     It is recommended to use :class:`StatefulBrowser` for most applications,
@@ -76,8 +75,8 @@ class Browser(object):
         session handles cookies automatically without calling this function,
         only use this when default cookie handling is insufficient.
 
-        :param cookiejar: Any `cookielib.CookieJar
-          <https://docs.python.org/2/library/cookielib.html#cookielib.CookieJar>`__
+        :param cookiejar: Any `http.cookiejar.CookieJar
+          <https://docs.python.org/3/library/http.cookiejar.html#http.cookiejar.CookieJar>`__
           compatible object.
         """
         self.session.cookies = cookiejar
@@ -91,7 +90,9 @@ class Browser(object):
         # set a default user_agent if not specified
         if user_agent is None:
             requests_ua = requests.utils.default_user_agent()
-            user_agent = '%s (%s/%s)' % (requests_ua, __title__, __version__)
+            user_agent = '{} ({}/{})'.format(
+                requests_ua, __title__, __version__
+            )
 
         # the requests module uses a case-insensitive dict for session headers
         self.session.headers['User-agent'] = user_agent
@@ -194,7 +195,7 @@ class Browser(object):
                 # the form as a text input and the file is not sent.
                 if tag.get("type", "").lower() == "file" and multipart:
                     filename = value
-                    if filename != "" and isinstance(filename, string_types):
+                    if filename != "" and isinstance(filename, str):
                         content = open(filename, "rb")
                     else:
                         content = ""
