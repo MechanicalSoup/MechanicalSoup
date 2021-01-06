@@ -1,6 +1,6 @@
 # Validate all YAML changes, e.g. http://lint.travis-ci.org/
 
-dist: xenial
+dist: focal
 language: python
 cache: pip
 python:
