@@ -100,47 +100,10 @@ At each release:
   <https://github.com/MechanicalSoup/MechanicalSoup/releases>`__, copy
   the relevant section from ``docs/ChangeLog.rst`` to the release
   page.
-- Upload the distribution (see the `Python Packaging Guide
-  <https://packaging.python.org/tutorials/packaging-projects/#generating-distribution-archives>`__
-  for details). First, install any needed dependencies::
 
-    pip install --upgrade setuptools wheel twine
-
-  Then locally prepare the distribution::
-
-    python setup.py sdist bdist_wheel
-
-  Use the following ``~/.pypirc`` (if you omit the ``username`` and
-  ``password`` fields for security, you will be prompted for them during
-  the upload)::
-
-    [distutils]
-    index-servers =
-        pypi
-        test
-
-    [test]
-    repository = https://test.pypi.org/legacy/
-    username = <username>
-    password = <password>
-
-    [pypi]
-    repository = https://upload.pypi.org/legacy/
-    username = <username>
-    password = <password>
-
-  Upload the distribution to Test PyPI::
-
-    twine upload -r test dist/*
-
-  Once you verify that it is correct on `test.pypi.org
-  <https://test.pypi.org/project/MechanicalSoup/>`__ and make any necessary
-  fixes for the official distribution, you are ready to release::
-
-    twine upload -r pypi dist/*
-
-- Check on https://pypi.org/project/MechanicalSoup/, and verify
-  installation from PyPI with ``pip install --no-cache-dir mechanicalsoup``.
+- Wait for the "Upload Python Package" GitHub Action to complete, and then
+  check on https://pypi.org/project/MechanicalSoup/. Verify installation
+  from PyPI with ``pip install --no-cache-dir mechanicalsoup``.
 
 Right after the release:
 
