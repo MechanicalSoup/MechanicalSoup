@@ -111,7 +111,8 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=checkbox
-            checkboxes = self.find_by_type("input", "checkbox", {'name': name})
+            selector = 'input[type="checkbox" i][name="{}"]'.format(name)
+            checkboxes = self.form.select(selector)
             if not checkboxes:
                 raise InvalidFormMethod("No input checkbox named " + name)
 
@@ -155,7 +156,8 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=radio
-            radios = self.find_by_type("input", "radio", {'name': name})
+            selector = 'input[type="radio" i][name="{}"]'.format(name)
+            radios = self.form.select(selector)
             if not radios:
                 raise InvalidFormMethod("No input radio named " + name)
 
@@ -330,10 +332,9 @@ class Form:
                 raise Exception('Submit already chosen. Cannot change submit!')
 
         # All buttons NOT of type (button,reset) are valid submits
-        inps = (self.find_by_type("input", "submit", dict()) +
-                self.form.find_all("button"))
-        inps = [i for i in inps
-                if i.get('type', '').lower() not in ('button', 'reset')]
+        # Case-insensitive search for type=submit
+        inps = [i for i in self.form.select('input[type="submit" i], button')
+                if i.get("type", "").lower() not in ('button', 'reset')]
 
         # If no submit specified, choose the first one
         if submit is None and inps:
@@ -378,8 +379,3 @@ class Form:
                 if subtag.string:
                     subtag.string = subtag.string.strip()
             print(input_copy)
-
-    def find_by_type(self, tag_name, type_attr, attrs):
-        attrs_dict = attrs.copy()
-        attrs_dict['type'] = lambda x: x and x.lower() == type_attr
-        return self.form.find_all(tag_name, attrs=attrs_dict)
