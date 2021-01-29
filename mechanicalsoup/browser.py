@@ -1,5 +1,6 @@
 import requests
 import bs4
+import bs4.dammit
 import urllib
 from .form import Form
 import webbrowser
@@ -66,7 +67,28 @@ class Browser:
         """Attaches a soup object to a requests response."""
         if ("text/html" in response.headers.get("Content-Type", "") or
                 Browser.__looks_like_html(response)):
-            response.soup = bs4.BeautifulSoup(response.content, **soup_config)
+            # Note: By default (no charset provided in HTTP headers), requests
+            # returns 'ISO-8859-1' which is the default for HTML4, even if HTML
+            # code specifies a different encoding. In this case, we want to
+            # resort to bs4 sniffing, hence the special handling here.
+            http_encoding = (
+                response.encoding
+                if 'charset' in response.headers.get("Content-Type")
+                else None
+            )
+            html_encoding = bs4.dammit.EncodingDetector.find_declared_encoding(
+                response.content,
+                is_html=True
+            )
+            # See https://www.w3.org/International/questions/qa-html-encoding-declarations.en#httphead  # noqa: E501
+            # > The HTTP header has a higher precedence than the in-document
+            # > meta declarations.
+            encoding = http_encoding if http_encoding else html_encoding
+            response.soup = bs4.BeautifulSoup(
+                response.content,
+                from_encoding=encoding,
+                **soup_config
+            )
         else:
             response.soup = None
 

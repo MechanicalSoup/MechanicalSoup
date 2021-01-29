@@ -7,6 +7,11 @@ import os
 from requests.cookies import RequestsCookieJar
 import pytest
 
+from utils import (
+    prepare_mock_browser,
+    mock_get
+)
+
 
 def test_submit_online(httpbin):
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
@@ -292,6 +297,55 @@ def test_post(httpbin):
     data = {'color': 'blue', 'colorblind': 'True'}
     resp = browser.post(httpbin + "/post", data)
     assert resp.status_code == 200 and resp.json()['form'] == data
+
+
+@pytest.mark.parametrize("http_html_expected_encoding", [
+    pytest.param((None, 'utf-8', 'utf-8')),
+    pytest.param(('utf-8', 'utf-8', 'utf-8')),
+    pytest.param(('utf-8', None, 'utf-8')),
+    pytest.param(('utf-8', 'ISO-8859-1', 'utf-8')),
+])
+def test_encoding(httpbin, http_html_expected_encoding):
+    http_encoding = http_html_expected_encoding[0]
+    html_encoding = http_html_expected_encoding[1]
+    expected_encoding = http_html_expected_encoding[2]
+
+    url = 'mock://encoding'
+    text = (
+        '<!doctype html>'
+        + '<html lang="fr">'
+        + (
+            (
+                '<head><meta charset="'
+                + html_encoding
+                + '"><title>Titleéàè</title></head>'
+            ) if html_encoding
+            else ''
+        )
+        + '<body></body>'
+        + '</html>'
+    )
+
+    browser, adapter = prepare_mock_browser()
+    mock_get(
+        adapter,
+        url=url,
+        reply=(
+            text.encode(http_encoding)
+            if http_encoding
+            else text.encode("utf-8")
+        ),
+        content_type=(
+            'text/html'
+            + (
+                ';charset=' + http_encoding
+                if http_encoding
+                else ''
+            )
+        )
+    )
+    browser.open(url)
+    assert browser.page.original_encoding == expected_encoding
 
 
 if __name__ == '__main__':
