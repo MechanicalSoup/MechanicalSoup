@@ -298,6 +298,12 @@ def test_post(httpbin):
     resp = browser.post(httpbin + "/post", data)
     assert resp.status_code == 200 and resp.json()['form'] == data
 
+def test_put(httpbin):
+    browser = mechanicalsoup.Browser()
+    data = {'color': 'blue', 'colorblind': 'True'}
+    resp = browser.put(httpbin + "/put", data)
+    assert resp.status_code == 200 and resp.json()['form'] == data
+
 
 @pytest.mark.parametrize("http_html_expected_encoding", [
     pytest.param((None, 'utf-8', 'utf-8')),
