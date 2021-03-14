@@ -160,6 +160,18 @@ class Browser:
         Browser.add_soup(response, self.soup_config)
         return response
 
+    def put(self, *args, **kwargs):
+        """Straightforward wrapper around `requests.Session.put
+        <http://docs.python-requests.org/en/master/api/#requests.Session.put>`__.
+
+        :return: `requests.Response
+            <http://docs.python-requests.org/en/master/api/#requests.Response>`__
+            object with a *soup*-attribute added by :func:`add_soup`.
+        """
+        response = self.session.put(*args, **kwargs)
+        Browser.add_soup(response, self.soup_config)
+        return response
+
     @staticmethod
     def _get_request_kwargs(method, url, **kwargs):
         """This method exists to raise a TypeError when a method or url is
