@@ -1,9 +1,11 @@
-import setpath  # noqa:F401, must come before 'import mechanicalsoup'
-import mechanicalsoup
-import bs4
-from utils import setup_mock_browser
 import sys
+
+import bs4
 import pytest
+import setpath  # noqa:F401, must come before 'import mechanicalsoup'
+from utils import setup_mock_browser
+
+import mechanicalsoup
 
 
 def test_construct_form_fail():

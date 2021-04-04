@@ -1,19 +1,17 @@
-import os
-import tempfile
 import json
-import setpath  # noqa:F401, must come before 'import mechanicalsoup'
-import mechanicalsoup
-import sys
+import os
 import re
-from bs4 import BeautifulSoup
-from utils import (
-    setup_mock_browser,
-    prepare_mock_browser,
-    mock_get,
-    open_legacy_httpbin
-)
-import pytest
+import sys
+import tempfile
 import webbrowser
+
+import pytest
+import setpath  # noqa:F401, must come before 'import mechanicalsoup'
+from bs4 import BeautifulSoup
+from utils import (mock_get, open_legacy_httpbin, prepare_mock_browser,
+                   setup_mock_browser)
+
+import mechanicalsoup
 
 
 def test_request_forward():

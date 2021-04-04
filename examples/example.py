@@ -3,8 +3,10 @@
 NOTE: This example will not work if the user has 2FA enabled."""
 
 import argparse
-import mechanicalsoup
 from getpass import getpass
+
+import mechanicalsoup
+
 
 parser = argparse.ArgumentParser(description="Login to GitHub.")
 parser.add_argument("username")

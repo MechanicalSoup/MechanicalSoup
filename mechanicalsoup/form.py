@@ -1,7 +1,9 @@
 import copy
 import warnings
-from .utils import LinkNotFoundError
+
 from bs4 import BeautifulSoup
+
+from .utils import LinkNotFoundError
 
 
 class InvalidFormMethod(LinkNotFoundError):

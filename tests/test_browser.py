@@ -1,16 +1,14 @@
-import setpath  # noqa:F401, must come before 'import mechanicalsoup'
-import mechanicalsoup
-import sys
-from bs4 import BeautifulSoup
-import tempfile
 import os
-from requests.cookies import RequestsCookieJar
-import pytest
+import sys
+import tempfile
 
-from utils import (
-    prepare_mock_browser,
-    mock_get
-)
+import pytest
+import setpath  # noqa:F401, must come before 'import mechanicalsoup'
+from bs4 import BeautifulSoup
+from requests.cookies import RequestsCookieJar
+from utils import mock_get, prepare_mock_browser
+
+import mechanicalsoup
 
 
 def test_submit_online(httpbin):

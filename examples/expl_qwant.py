@@ -3,8 +3,10 @@ search engine.
 """
 
 import re
-import mechanicalsoup
 import urllib.parse
+
+import mechanicalsoup
+
 
 # Connect to duckduckgo
 browser = mechanicalsoup.StatefulBrowser(user_agent='MechanicalSoup')
