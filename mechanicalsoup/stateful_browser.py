@@ -8,6 +8,8 @@ from .browser import Browser
 from .form import Form
 from .utils import LinkNotFoundError
 
+from requests.structures import CaseInsensitiveDict
+
 
 class _BrowserState:
     def __init__(self, page=None, url=None, form=None, request=None):
@@ -222,6 +224,17 @@ class StatefulBrowser(Browser):
 
         return self.form
 
+    def _merge_referer(self, **kwargs):
+        """Helper function to set the Referer header in kwargs passed to
+        requests, if it has not already been overriden by the user."""
+
+        referer = self.url
+        headers = CaseInsensitiveDict(kwargs.get('headers', {}))
+        if referer is not None and 'Referer' not in headers:
+            headers['Referer'] = referer
+            kwargs['headers'] = headers
+        return kwargs
+
     def submit_selected(self, btnName=None, update_state=True,
                         *args, **kwargs):
         """Submit the form that was selected with :func:`select_form`.
@@ -237,13 +250,7 @@ class StatefulBrowser(Browser):
         """
         self.form.choose_submit(btnName)
 
-        referer = self.url
-        if referer is not None:
-            if 'headers' in kwargs:
-                kwargs['headers']['Referer'] = referer
-            else:
-                kwargs['headers'] = {'Referer': referer}
-
+        kwargs = self._merge_referer(**kwargs)
         resp = self.submit(self.__state.form, url=self.__state.url,
                            *args, **kwargs)
         if update_state:
