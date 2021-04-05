@@ -73,7 +73,7 @@ class Browser:
             # resort to bs4 sniffing, hence the special handling here.
             http_encoding = (
                 response.encoding
-                if 'charset' in response.headers.get("Content-Type")
+                if 'charset' in response.headers.get("Content-Type", "")
                 else None
             )
             html_encoding = bs4.dammit.EncodingDetector.find_declared_encoding(
