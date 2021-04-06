@@ -1,8 +1,11 @@
-import mechanicalsoup
-import requests_mock
 from distutils.version import StrictVersion
-import bs4
 from urllib.parse import parse_qsl
+
+import bs4
+import requests_mock
+
+import mechanicalsoup
+
 
 """
 Utilities for testing MechanicalSoup.

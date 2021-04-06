@@ -1,5 +1,6 @@
-import mechanicalsoup
 import pytest
+
+import mechanicalsoup
 
 
 def test_LinkNotFoundError():

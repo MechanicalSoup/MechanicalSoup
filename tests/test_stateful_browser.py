@@ -1,19 +1,18 @@
-import os
-import tempfile
+import copy
 import json
-import setpath  # noqa:F401, must come before 'import mechanicalsoup'
-import mechanicalsoup
-import sys
+import os
 import re
-from bs4 import BeautifulSoup
-from utils import (
-    setup_mock_browser,
-    prepare_mock_browser,
-    mock_get,
-    open_legacy_httpbin
-)
-import pytest
+import sys
+import tempfile
 import webbrowser
+
+import pytest
+import setpath  # noqa:F401, must come before 'import mechanicalsoup'
+from bs4 import BeautifulSoup
+from utils import (mock_get, open_legacy_httpbin, prepare_mock_browser,
+                   setup_mock_browser)
+
+import mechanicalsoup
 
 
 def test_request_forward():
@@ -168,6 +167,21 @@ def test_submit_btnName(expected_post):
     res = browser.submit_selected(btnName=expected_post[2][0])
     assert res.status_code == 200 and res.text == 'Success!'
     assert initial_state != browser._StatefulBrowser__state
+
+
+def test_submit_dont_modify_kwargs():
+    """Test that submit_selected() doesn't modify the caller's passed-in
+    kwargs, for example when adding a Referer header.
+    """
+    kwargs = {'headers': {'Content-Type': 'text/html'}}
+    saved_kwargs = copy.deepcopy(kwargs)
+
+    browser, url = setup_mock_browser(expected_post=[], text='<form></form>')
+    browser.open(url)
+    browser.select_form()
+    browser.submit_selected(**kwargs)
+
+    assert kwargs == saved_kwargs
 
 
 def test_submit_dont_update_state():
@@ -446,6 +460,26 @@ def test_referer_submit(httpbin):
     referer = headers["Referer"]
     actual_ref = re.sub('/*$', '', referer)
     assert actual_ref == ref
+
+
+@pytest.mark.parametrize("referer_header", ["Referer", "referer"])
+def test_referer_submit_override(httpbin, referer_header):
+    """Ensure the caller can override the Referer header that
+    mechanicalsoup would normally add. Because headers are case insensitive,
+    test with both 'Referer' and 'referer'.
+    """
+
+    browser = mechanicalsoup.StatefulBrowser()
+    ref = "https://example.com/my-referer"
+    ref_override = "https://example.com/override"
+    page = submit_form_headers.format(httpbin.url + "/headers")
+    browser.open_fake_page(page, url=ref)
+    browser.select_form()
+    response = browser.submit_selected(headers={referer_header: ref_override})
+    headers = response.json()["headers"]
+    referer = headers["Referer"]
+    actual_ref = re.sub('/*$', '', referer)
+    assert actual_ref == ref_override
 
 
 def test_referer_submit_headers(httpbin):

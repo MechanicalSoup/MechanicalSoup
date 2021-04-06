@@ -1,13 +1,15 @@
-import requests
+import tempfile
+import urllib
+import weakref
+import webbrowser
+
 import bs4
 import bs4.dammit
-import urllib
+import requests
+
+from .__version__ import __title__, __version__
 from .form import Form
-import webbrowser
-import tempfile
 from .utils import LinkNotFoundError
-from .__version__ import __version__, __title__
-import weakref
 
 
 class Browser:

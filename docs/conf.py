@@ -12,8 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 from datetime import datetime
 
 
@@ -23,6 +23,7 @@ from datetime import datetime
 sys.path.insert(0, os.path.abspath('..'))
 
 import mechanicalsoup
+
 
 # -- General configuration ------------------------------------------------
 
