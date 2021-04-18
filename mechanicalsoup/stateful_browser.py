@@ -12,6 +12,7 @@ from requests.structures import CaseInsensitiveDict
 
 
 class _BrowserState:
+    """An internal class whose purpose is underspecified."""
     def __init__(self, page=None, url=None, form=None, request=None):
         self.page = page
         self.url = url
@@ -68,7 +69,7 @@ class StatefulBrowser(Browser):
         # Almost same as self.form, but don't raise an error if no
         # form was selected for backward compatibility.
         self.get_current_form = lambda: self.__state.form
-        self.get_url = lambda: self.url
+        self.get_url = lambda: self.__state.url
 
     def set_debug(self, debug):
         """Set the debug mode (off by default).
@@ -131,7 +132,7 @@ class StatefulBrowser(Browser):
         ``url``, as in the `.urljoin() method of urllib.parse
         <https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urljoin>`__.
         """
-        return urllib.parse.urljoin(self.url, url)
+        return urllib.parse.urljoin(self.__state.url, url)
 
     def open(self, url, *args, **kwargs):
         """Open the URL and store the Browser's state in this object.
@@ -228,7 +229,7 @@ class StatefulBrowser(Browser):
         """Helper function to set the Referer header in kwargs passed to
         requests, if it has not already been overriden by the user."""
 
-        referer = self.url
+        referer = self.__state.url
         headers = CaseInsensitiveDict(kwargs.get('headers', {}))
         if referer is not None and 'Referer' not in headers:
             headers['Referer'] = referer
@@ -347,7 +348,7 @@ class StatefulBrowser(Browser):
         """
         link = self._find_link_internal(link, args, kwargs)
 
-        referer = self.url
+        referer = self.__state.url
         headers = {'Referer': referer} if referer else None
 
         return self.open_relative(link['href'], headers=headers)
@@ -371,7 +372,7 @@ class StatefulBrowser(Browser):
         link = self._find_link_internal(link, args, kwargs)
         url = self.absolute_url(link['href'])
 
-        referer = self.url
+        referer = self.__state.url
         headers = {'Referer': referer} if referer else None
 
         response = self.session.get(url, headers=headers)
