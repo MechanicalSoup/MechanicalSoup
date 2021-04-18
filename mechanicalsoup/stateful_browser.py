@@ -236,7 +236,7 @@ class StatefulBrowser(Browser):
         return kwargs
 
     def submit_selected(self, btnName=None, update_state=True,
-                        *args, **kwargs):
+                        **kwargs):
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
@@ -252,7 +252,7 @@ class StatefulBrowser(Browser):
 
         kwargs = self._merge_referer(**kwargs)
         resp = self.submit(self.__state.form, url=self.__state.url,
-                           *args, **kwargs)
+                           **kwargs)
         if update_state:
             self.__state = _BrowserState(page=resp.soup, url=resp.url,
                                          request=resp.request)
