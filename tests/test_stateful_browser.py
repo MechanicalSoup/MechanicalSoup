@@ -506,7 +506,7 @@ def test_follow_link_arg(httpbin, expected, kwargs):
     browser = mechanicalsoup.StatefulBrowser()
     html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
     browser.open_fake_page(html, httpbin.url)
-    browser.follow_link(**kwargs)
+    browser.follow_link(bs4_kwargs=kwargs)
     assert browser.url == httpbin + expected
 
 
@@ -544,7 +544,7 @@ def test_link_arg_multiregex(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
     with pytest.raises(ValueError, match="link parameter cannot be .*"):
-        browser.follow_link('foo', url_regex='bar')
+        browser.follow_link('foo', bs4_kwargs={'url_regex': 'bar'})
 
 
 def file_get_contents(filename):
