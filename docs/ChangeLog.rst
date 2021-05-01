@@ -10,6 +10,14 @@ Main changes
 
 * Dropped support for EOL Python versions: 2.7 and 3.5.
 
+* ``StatefulBrowser`` methods ``follow_link`` and ``download_link``
+  now support passing a dictionary of keyword arguments to
+  ``requests``, via ``requests_kwargs``. For symmetry, they also
+  support passing Beautiful Soup args in as ``bs4_kwargs``, although
+  any excess ``**kwargs`` are sent to Beautiful Soup as well, just as
+  they were previously.
+
+
 Version 1.0
 ===========
 

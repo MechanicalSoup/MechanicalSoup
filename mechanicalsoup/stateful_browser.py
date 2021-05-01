@@ -236,7 +236,7 @@ class StatefulBrowser(Browser):
         return kwargs
 
     def submit_selected(self, btnName=None, update_state=True,
-                        *args, **kwargs):
+                        **kwargs):
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
@@ -252,7 +252,7 @@ class StatefulBrowser(Browser):
 
         kwargs = self._merge_referer(**kwargs)
         resp = self.submit(self.__state.form, url=self.__state.url,
-                           *args, **kwargs)
+                           **kwargs)
         if update_state:
             self.__state = _BrowserState(page=resp.soup, url=resp.url,
                                          request=resp.request)
@@ -329,7 +329,8 @@ class StatefulBrowser(Browser):
                 self.launch_browser()
             raise
 
-    def follow_link(self, link=None, *args, **kwargs):
+    def follow_link(self, link=None, *bs4_args, bs4_kwargs={},
+                    requests_kwargs={},  **kwargs):
         """Follow a link.
 
         If ``link`` is a bs4.element.Tag (i.e. from a previous call to
@@ -337,22 +338,28 @@ class StatefulBrowser(Browser):
 
         If ``link`` doesn't have a *href*-attribute or is None, treat
         ``link`` as a url_regex and look it up with :func:`find_link`.
-        Any additional arguments specified are forwarded to this function.
+        ``bs4_kwargs`` are forwarded to :func:`find_link`.
+        For backward compatibility, any excess keyword arguments
+        (aka ``**kwargs``)
+        are also forwarded to :func:`find_link`.
 
         If the link is not found, raise :class:`LinkNotFoundError`.
         Before raising, if debug is activated, list available links in the
         page and launch a browser.
 
+        ``requests_kwargs`` are forwarded to :func:`open_relative`.
+
         :return: Forwarded from :func:`open_relative`.
         """
-        link = self._find_link_internal(link, args, kwargs)
+        link = self._find_link_internal(link, bs4_args,
+                                        {**bs4_kwargs, **kwargs})
 
-        referer = self.url
-        headers = {'Referer': referer} if referer else None
+        requests_kwargs = self._merge_referer(**requests_kwargs)
 
-        return self.open_relative(link['href'], headers=headers)
+        return self.open_relative(link['href'], **requests_kwargs)
 
-    def download_link(self, link=None, file=None, *args, **kwargs):
+    def download_link(self, link=None, file=None, *bs4_args, bs4_kwargs={},
+                      requests_kwargs={}, **kwargs):
         """Downloads the contents of a link to a file. This function behaves
         similarly to :func:`follow_link`, but the browser state will
         not change when calling this function.
@@ -361,20 +368,22 @@ class StatefulBrowser(Browser):
             downloaded. If the file already exists, it will be overwritten.
 
         Other arguments are the same as :func:`follow_link` (``link``
-        can either be a bs4.element.Tag or a URL regex, other
-        arguments are forwarded to :func:`find_link`).
+        can either be a bs4.element.Tag or a URL regex.
+        ``bs4_kwargs`` arguments are forwarded to :func:`find_link`,
+        as are any excess keyword arguments (aka ``**kwargs``) for backwards
+        compatibility).
 
         :return: `requests.Response
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object.
         """
-        link = self._find_link_internal(link, args, kwargs)
+        link = self._find_link_internal(link, bs4_args,
+                                        {**bs4_kwargs, **kwargs})
         url = self.absolute_url(link['href'])
 
-        referer = self.url
-        headers = {'Referer': referer} if referer else None
+        requests_kwargs = self._merge_referer(**requests_kwargs)
 
-        response = self.session.get(url, headers=headers)
+        response = self.session.get(url, **requests_kwargs)
         if self.raise_on_404 and response.status_code == 404:
             raise LinkNotFoundError()
 

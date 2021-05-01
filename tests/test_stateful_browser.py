@@ -506,15 +506,45 @@ def test_follow_link_arg(httpbin, expected, kwargs):
     browser = mechanicalsoup.StatefulBrowser()
     html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
     browser.open_fake_page(html, httpbin.url)
-    browser.follow_link(**kwargs)
+    browser.follow_link(bs4_kwargs=kwargs)
     assert browser.url == httpbin + expected
+
+
+def test_follow_link_excess(httpbin):
+    """Ensure that excess args are passed to BeautifulSoup"""
+    browser = mechanicalsoup.StatefulBrowser()
+    html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
+    browser.open_fake_page(html, httpbin.url)
+    browser.follow_link(url_regex='get')
+    assert browser.url == httpbin + '/get'
+
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
+    with pytest.raises(ValueError, match="link parameter cannot be .*"):
+        browser.follow_link('foo', url_regex='bar')
+
+
+def test_follow_link_ua(httpbin):
+    """Tests passing requests parameters to follow_link() by
+    setting the User-Agent field."""
+    browser = mechanicalsoup.StatefulBrowser()
+    # html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
+    # browser.open_fake_page(html, httpbin.url)
+    browser.open(httpbin.url)
+    bs4_kwargs = {'url_regex': 'user-agent'}
+    requests_kwargs = {'headers': {"User-Agent": '007'}}
+    resp = browser.follow_link(bs4_kwargs=bs4_kwargs,
+                               requests_kwargs=requests_kwargs)
+    assert browser.url == httpbin + '/user-agent'
+    assert resp.json() == {'user-agent': '007'}
+    assert resp.request.headers['user-agent'] == '007'
 
 
 def test_link_arg_multiregex(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
     with pytest.raises(ValueError, match="link parameter cannot be .*"):
-        browser.follow_link('foo', url_regex='bar')
+        browser.follow_link('foo', bs4_kwargs={'url_regex': 'bar'})
 
 
 def file_get_contents(filename):
@@ -557,6 +587,58 @@ def test_download_link_nofile(httpbin):
 
     # Check that we actually downloaded a PNG file
     assert response.content[:4] == b'\x89PNG'
+
+
+def test_download_link_nofile_bs4(httpbin):
+    """Test downloading the contents of a link without saving it."""
+    browser = mechanicalsoup.StatefulBrowser()
+    open_legacy_httpbin(browser, httpbin)
+    current_url = browser.url
+    current_page = browser.page
+    response = browser.download_link(bs4_kwargs={'url_regex': 'image.png'})
+
+    # Check that the browser state has not changed
+    assert browser.url == current_url
+    assert browser.page == current_page
+
+    # Check that we actually downloaded a PNG file
+    assert response.content[:4] == b'\x89PNG'
+
+
+def test_download_link_nofile_excess(httpbin):
+    """Test downloading the contents of a link without saving it."""
+    browser = mechanicalsoup.StatefulBrowser()
+    open_legacy_httpbin(browser, httpbin)
+    current_url = browser.url
+    current_page = browser.page
+    response = browser.download_link(url_regex='image.png')
+
+    # Check that the browser state has not changed
+    assert browser.url == current_url
+    assert browser.page == current_page
+
+    # Check that we actually downloaded a PNG file
+    assert response.content[:4] == b'\x89PNG'
+
+
+def test_download_link_nofile_ua(httpbin):
+    """Test downloading the contents of a link without saving it."""
+    browser = mechanicalsoup.StatefulBrowser()
+    open_legacy_httpbin(browser, httpbin)
+    current_url = browser.url
+    current_page = browser.page
+    requests_kwargs = {'headers': {"User-Agent": '007'}}
+    response = browser.download_link(link='image/png',
+                                     requests_kwargs=requests_kwargs)
+    # Check that the browser state has not changed
+    assert browser.url == current_url
+    assert browser.page == current_page
+
+    # Check that we actually downloaded a PNG file
+    assert response.content[:4] == b'\x89PNG'
+
+    # Check that we actually set the User-agent outbound
+    assert response.request.headers['user-agent'] == '007'
 
 
 def test_download_link_to_existing_file(httpbin):
