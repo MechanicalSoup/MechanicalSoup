@@ -10,13 +10,17 @@ Main changes
 
 * Dropped support for EOL Python versions: 2.7 and 3.5.
 
+* ``StatefulBrowser`` now has a ``response`` property that stores the
+  response related to the current browser state.
+  [`#358 <https://github.com/MechanicalSoup/MechanicalSoup/issues/358>`__]
+
 * ``StatefulBrowser`` methods ``follow_link`` and ``download_link``
   now support passing a dictionary of keyword arguments to
   ``requests``, via ``requests_kwargs``. For symmetry, they also
   support passing Beautiful Soup args in as ``bs4_kwargs``, although
   any excess ``**kwargs`` are sent to Beautiful Soup as well, just as
   they were previously.
-
+  [`#362 <https://github.com/MechanicalSoup/MechanicalSoup/issues/362>`__]
 
 Version 1.0
 ===========

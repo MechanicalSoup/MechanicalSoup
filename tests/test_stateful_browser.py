@@ -35,6 +35,12 @@ def test_properties():
     assert browser.form is not None
 
 
+def test_state_has_no_response():
+    browser = mechanicalsoup.StatefulBrowser()
+    with pytest.raises(AttributeError, match="No request has been made yet."):
+        browser.response
+
+
 def test_get_selected_form_unselected():
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page('<form></form>')
@@ -167,6 +173,8 @@ def test_submit_btnName(expected_post):
     res = browser.submit_selected(btnName=expected_post[2][0])
     assert res.status_code == 200 and res.text == 'Success!'
     assert initial_state != browser._StatefulBrowser__state
+    # Make sure the returned response is stored in the browser state
+    assert res == browser.response
 
 
 def test_submit_dont_modify_kwargs():
