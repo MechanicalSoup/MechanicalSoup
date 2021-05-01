@@ -12,11 +12,19 @@ from requests.structures import CaseInsensitiveDict
 
 
 class _BrowserState:
-    def __init__(self, page=None, url=None, form=None, request=None):
-        self.page = page
-        self.url = url
-        self.form = form
-        self.request = request
+    """Internal object for storing related browser state properties given
+    a request response."""
+    def __init__(self, response=None):
+        self.form = None
+        self.response = response
+        if response is None:
+            self.page = None
+            self.url = None
+            self.request = None
+        else:
+            self.page = response.soup
+            self.url = response.url
+            self.request = response.request
 
 
 class StatefulBrowser(Browser):
@@ -107,6 +115,13 @@ class StatefulBrowser(Browser):
         return self.__state.url
 
     @property
+    def response(self):
+        """Get the current response."""
+        if self.__state.response is None:
+            raise AttributeError("No request has been made yet.")
+        return self.__state.response
+
+    @property
     def form(self):
         """Get the currently selected form as a :class:`Form` object.
         See :func:`select_form`.
@@ -146,8 +161,7 @@ class StatefulBrowser(Browser):
             print(url)
 
         resp = self.get(url, *args, **kwargs)
-        self.__state = _BrowserState(page=resp.soup, url=resp.url,
-                                     request=resp.request)
+        self.__state = _BrowserState(resp)
         return resp
 
     def open_fake_page(self, page_text, url=None, soup_config=None):
@@ -158,9 +172,9 @@ class StatefulBrowser(Browser):
         URL. Useful mainly for testing.
         """
         soup_config = soup_config or self.soup_config
-        self.__state = _BrowserState(
-            page=bs4.BeautifulSoup(page_text, **soup_config),
-            url=url)
+        self.__state = _BrowserState()
+        self.__state.page = bs4.BeautifulSoup(page_text, **soup_config)
+        self.__state.url = url
 
     def open_relative(self, url, *args, **kwargs):
         """Like :func:`open`, but ``url`` can be relative to the currently
@@ -185,8 +199,7 @@ class StatefulBrowser(Browser):
 
         resp = self.session.send(old_request)
         Browser.add_soup(resp, self.soup_config)
-        self.__state = _BrowserState(page=resp.soup, url=resp.url,
-                                     request=resp.request)
+        self.__state = _BrowserState(resp)
         return resp
 
     def select_form(self, selector="form", nr=0):
@@ -254,8 +267,7 @@ class StatefulBrowser(Browser):
         resp = self.submit(self.__state.form, url=self.__state.url,
                            **kwargs)
         if update_state:
-            self.__state = _BrowserState(page=resp.soup, url=resp.url,
-                                         request=resp.request)
+            self.__state = _BrowserState(resp)
         return resp
 
     def list_links(self, *args, **kwargs):
