@@ -2,13 +2,26 @@
 Release Notes
 =============
 
-Version 1.1 (in development)
-============================
+Version 1.1
+===========
 
 Main changes
 ------------
 
 * Dropped support for EOL Python versions: 2.7 and 3.5.
+
+* Increased minimum version requirement for requests from 2.0 to 2.22.0
+  and beautifulsoup4 from 4.4 to 4.7.
+
+* Use encoding from the HTTP request when no HTML encoding is specified.
+  [`#355 <https://github.com/MechanicalSoup/MechanicalSoup/pull/355>`__]
+
+* Added the ``put`` method to the ``Browser`` class. This is a light wrapper
+  around ``requests.Session.put``.
+  [`#359 <https://github.com/MechanicalSoup/MechanicalSoup/pull/359>`__]
+
+* Don't override ``Referer`` headers passed in by the user.
+  [`#364 <https://github.com/MechanicalSoup/MechanicalSoup/pull/364>`__]
 
 * ``StatefulBrowser`` methods ``follow_link`` and ``download_link``
   now support passing a dictionary of keyword arguments to
@@ -16,6 +29,7 @@ Main changes
   support passing Beautiful Soup args in as ``bs4_kwargs``, although
   any excess ``**kwargs`` are sent to Beautiful Soup as well, just as
   they were previously.
+  [`#368 <https://github.com/MechanicalSoup/MechanicalSoup/pull/368>`__]
 
 
 Version 1.0
