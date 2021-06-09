@@ -155,6 +155,7 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
         # create a temporary file for testing file upload
         file_content = b":-)"
         pic_filedescriptor, pic_path = tempfile.mkstemp()
+        pic_filename = os.path.basename(pic_path)
         os.write(pic_filedescriptor, file_content)
         os.close(pic_filedescriptor)
         if valid_enctype:
@@ -199,7 +200,7 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
         if valid_enctype:
             assert found_in == "files"
             if submit_file:
-                assert ("filename=\"" + pic_path + "\""
+                assert ("filename=\"" + pic_filename + "\""
                         ).encode() in response.request.body
             else:
                 assert b"filename=\"\"" in response.request.body
