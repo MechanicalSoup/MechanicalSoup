@@ -1,3 +1,4 @@
+import os
 import tempfile
 import urllib
 import weakref
@@ -228,11 +229,12 @@ class Browser:
                 # If the enctype is not multipart, the filename is put in
                 # the form as a text input and the file is not sent.
                 if tag.get("type", "").lower() == "file" and multipart:
-                    filename = value
-                    if filename != "" and isinstance(filename, str):
-                        content = open(filename, "rb")
+                    filepath = value
+                    if filepath != "" and isinstance(filepath, str):
+                        content = open(filepath, "rb")
                     else:
                         content = ""
+                    filename = os.path.basename(filepath)
                     # If value is the empty string, we still pass it
                     # for consistency with browsers (see
                     # https://github.com/MechanicalSoup/MechanicalSoup/issues/250).
