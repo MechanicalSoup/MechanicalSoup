@@ -13,6 +13,7 @@ from utils import (mock_get, open_legacy_httpbin, prepare_mock_browser,
                    setup_mock_browser)
 
 import mechanicalsoup
+import requests
 
 
 def test_request_forward():
@@ -777,6 +778,16 @@ def test_refresh_error():
     with pytest.raises(ValueError):
         browser.open_fake_page('<p>Fake empty page</p>', url='http://fake.com')
         browser.refresh()
+
+
+def test_requests_session_and_cookies(httpbin):
+    """Check that the session object passed to the constructor of
+    StatefulBrowser is actually taken into account."""
+    s = requests.Session()
+    requests.utils.add_dict_to_cookiejar(s.cookies, {'key1': 'val1'})
+    browser = mechanicalsoup.StatefulBrowser(session=s)
+    resp = browser.get(httpbin + "/cookies")
+    assert resp.json() == {'cookies': {'key1': 'val1'}}
 
 
 if __name__ == '__main__':
