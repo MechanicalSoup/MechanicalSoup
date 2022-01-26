@@ -1,7 +1,5 @@
-from distutils.version import StrictVersion
 from urllib.parse import parse_qsl
 
-import bs4
 import requests_mock
 
 import mechanicalsoup
@@ -66,12 +64,7 @@ def mock_get(mocked_adapter, url, reply, content_type='text/html', **kwargs):
 def mock_post(mocked_adapter, url, expected, reply='Success!'):
     def text_callback(request, context):
         query = parse_qsl(request.text)
-        # In bs4 4.7.0+, CSS selectors return elements in page order,
-        # but did not in earlier versions.
-        if StrictVersion(bs4.__version__) >= StrictVersion('4.7.0'):
-            assert query == expected
-        else:
-            assert sorted(query) == sorted(expected)
+        assert query == expected
         return reply
 
     mocked_adapter.register_uri('POST', url, text=text_callback)
