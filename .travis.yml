@@ -9,6 +9,7 @@ python:
   - 3.7
   - 3.8
   - 3.9
+  - 3.10
 install:
   - pip install -r requirements.txt -r tests/requirements.txt
 script:
