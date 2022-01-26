@@ -5,6 +5,11 @@ Release Notes
 Version 1.2 (in development)
 ============================
 
+Main changes
+------------
+
+* Added support for Python 3.10.
+
 Version 1.1
 ===========
 
