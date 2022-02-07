@@ -1,0 +1,38 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Build and Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10", "pypy-3.8"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
+        python -m pip install -r tests/requirements.txt
+    - name: Test with pytest without flake8 (for pypy)
+      if: startsWith(matrix.python-version, 'pypy')
+      run: |
+        # We run pytest without the lint with flake8 in the pypy version, otherwise, the worflow takes too long time to execute.
+        pytest -o 'flake8-ignore=*.py ALL' 
+    - name: Test with pytest
+      if: startsWith(matrix.python-version, 'pypy') != true
+      run: |
+        pytest
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v1
