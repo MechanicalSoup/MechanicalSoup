@@ -29,7 +29,7 @@ Installing from source (installs the version in the current working directory)::
 (In all cases, add ``--user`` to the ``install`` command to
 install in the current user's home directory.)
 
-Example code: https://github.com/MechanicalSoup/MechanicalSoup/tree/master/examples/
+Example code: https://github.com/MechanicalSoup/MechanicalSoup/tree/main/examples/
 
 .. |Latest Version| image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
    :target: https://pypi.python.org/pypi/MechanicalSoup/

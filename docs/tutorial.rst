@@ -191,7 +191,7 @@ BeautifulSoup object, but we can still see the text it contains::
   ...
 
 To sum up, here is the complete example (`examples/expl_httpbin.py
-<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/examples/expl_httpbin.py>`__):
+<https://github.com/MechanicalSoup/MechanicalSoup/blob/main/examples/expl_httpbin.py>`__):
 
 .. literalinclude:: ../examples/expl_httpbin.py
 
@@ -205,7 +205,7 @@ A more complete example: logging-in into GitHub
 The simplest way to use MechanicalSoup is to use
 the :class:`~mechanicalsoup.StatefulBrowser` class (this example is
 available as `examples/example.py
-<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/examples/example.py>`__
+<https://github.com/MechanicalSoup/MechanicalSoup/blob/main/examples/example.py>`__
 in MechanicalSoup's source code):
 
 .. literalinclude:: ../examples/example.py
@@ -216,7 +216,7 @@ which doesn't maintain a state from one call to another (i.e. the
 Browser itself doesn't remember which page you are visiting and what
 its content is, it's up to the caller to do so). This example is
 available as `examples/example_manual.py
-<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/examples/example_manual.py>`__
+<https://github.com/MechanicalSoup/MechanicalSoup/blob/main/examples/example_manual.py>`__
 in the source:
 
 .. literalinclude:: ../examples/example_manual.py
@@ -226,5 +226,5 @@ More examples
 ~~~~~~~~~~~~~
 
 For more examples, see the `examples
-<https://github.com/MechanicalSoup/MechanicalSoup/blob/master/examples/>`__
+<https://github.com/MechanicalSoup/MechanicalSoup/blob/main/examples/>`__
 directory in MechanicalSoup's source code.

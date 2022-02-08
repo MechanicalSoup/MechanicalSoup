@@ -21,11 +21,11 @@ Hints on Development
 |LGTM Alerts|
 |LGTM Grade|
 
-Python version support in the current master branch may differ from the
+Python version support in the current main branch may differ from the
 latest release in
 `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__. Please inspect
 ``.travis.yml`` or run ``python setup.py --classifiers`` to see which
-versions of Python are supported in the current master branch.
+versions of Python are supported in the current main branch.
 
 Installing dependencies and running tests can be done with:
 
@@ -94,7 +94,7 @@ At each release:
     git commit -m "Release X.Y.Z"
     git branch vX.Y
     git tag vX.Y.Z
-    git push origin master vX.Y vX.Y.Z
+    git push origin main vX.Y vX.Y.Z
 
 - Visit the `release page on GitHub
   <https://github.com/MechanicalSoup/MechanicalSoup/releases>`__, copy
@@ -112,12 +112,12 @@ Right after the release:
 - Create a new ``(in development)`` section in ``docs/ChangeLog.rst``.
 - ``git commit -m "Prepare for next release" && git push``
 
-.. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master
+.. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=main
    :target: https://travis-ci.org/MechanicalSoup/MechanicalSoup
-.. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg
+.. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/MechanicalSoup/MechanicalSoup
-.. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master
-   :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
+.. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=main
+   :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=main
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
 .. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge

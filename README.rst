@@ -125,12 +125,12 @@ Read the `FAQ
    :target: https://pypi.python.org/pypi/MechanicalSoup/
 .. |Supported Versions| image:: https://img.shields.io/pypi/pyversions/mechanicalsoup.svg
    :target: https://pypi.python.org/pypi/MechanicalSoup/
-.. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=master
+.. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=main
    :target: https://travis-ci.org/MechanicalSoup/MechanicalSoup
-.. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/master/graph/badge.svg
+.. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/MechanicalSoup/MechanicalSoup
-.. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=master
-   :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=master
+.. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=main
+   :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=main
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
 .. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge

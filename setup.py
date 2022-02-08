@@ -20,7 +20,7 @@ def read(fname, URL, URLImage):
         readme = readme.decode('utf8')
     # turn relative links into absolute ones
     readme = re.sub(r'`<([^>]*)>`__',
-                    r'`\1 <' + URL + r"/blob/master/\1>`__",
+                    r'`\1 <' + URL + r"/blob/main/\1>`__",
                     readme)
     readme = re.sub(r"\.\. image:: /", ".. image:: " + URLImage + "/", readme)
 

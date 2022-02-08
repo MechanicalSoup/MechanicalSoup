@@ -5,4 +5,4 @@ __github_url__ = 'https://github.com/MechanicalSoup/MechanicalSoup'
 __version__ = '1.2.0-dev'
 __license__ = 'MIT'
 __github_assets_absoluteURL__ = """\
-https://raw.githubusercontent.com/MechanicalSoup/MechanicalSoup/master"""
+https://raw.githubusercontent.com/MechanicalSoup/MechanicalSoup/main"""
