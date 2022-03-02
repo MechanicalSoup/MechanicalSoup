@@ -125,8 +125,8 @@ Read the `FAQ
    :target: https://pypi.python.org/pypi/MechanicalSoup/
 .. |Supported Versions| image:: https://img.shields.io/pypi/pyversions/mechanicalsoup.svg
    :target: https://pypi.python.org/pypi/MechanicalSoup/
-.. |Build Status| image:: https://travis-ci.org/MechanicalSoup/MechanicalSoup.svg?branch=main
-   :target: https://travis-ci.org/MechanicalSoup/MechanicalSoup
+.. |Build Status| image:: https://github.com/MechanicalSoup/MechanicalSoup/actions/workflows/python-package.yml/badge.svg?branch=main
+   :target: https://github.com/MechanicalSoup/MechanicalSoup/actions/workflows/python-package.yml?query=branch%3Amain
 .. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/MechanicalSoup/MechanicalSoup
 .. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=main
