@@ -49,6 +49,9 @@ setup(
     long_description=read('README.rst', about['__github_url__'], about[
         '__github_assets_absoluteURL__']),
     url=about['__url__'],
+    project_urls={
+        'Source': 'https://github.com/MechanicalSoup/MechanicalSoup',
+    },
 
     license=about['__license__'],
 
