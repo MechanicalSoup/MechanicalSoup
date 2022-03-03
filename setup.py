@@ -50,7 +50,7 @@ setup(
         '__github_assets_absoluteURL__']),
     url=about['__url__'],
     project_urls={
-        'Source': 'https://github.com/MechanicalSoup/MechanicalSoup',
+        'Source': about['__github_url__'],
     },
 
     license=about['__license__'],
