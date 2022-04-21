@@ -426,6 +426,30 @@ def test_select_form_tag_object():
             browser.select_form(soup.find("p"))
 
 
+def test_select_form_associated_elements():
+    """Test associated elements outside the form tag"""
+    forms = """<form id="a"><input><textarea></form><input form="a">
+               <textarea form="a"/><input form="b">
+               <form id="ab" action="/test.php"><input></form>
+               <textarea form="ab"></textarea>
+            """
+    with mechanicalsoup.StatefulBrowser() as browser:
+        browser.open_fake_page(forms)
+        elements_form_a = set([
+            "<input/>", "<textarea></textarea>",
+            '<input form="a"/>', '<textarea form="a"></textarea>'])
+        elements_form_ab = set(["<input/>", '<textarea form="ab"></textarea>'])
+        form_by_str = browser.select_form("#a")
+        form_by_tag = browser.select_form(browser.page.find("form", id='a'))
+        form_by_css = browser.select_form("form[action$='.php']")
+        assert set([str(element) for element in form_by_str.form.find_all((
+            "input", "textarea"))]) == elements_form_a
+        assert set([str(element) for element in form_by_tag.form.find_all((
+            "input", "textarea"))]) == elements_form_a
+        assert set([str(element) for element in form_by_css.form.find_all((
+            "input", "textarea"))]) == elements_form_ab
+
+
 def test_referer_follow_link(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
     open_legacy_httpbin(browser, httpbin)

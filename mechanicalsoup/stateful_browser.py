@@ -207,10 +207,29 @@ class StatefulBrowser(Browser):
         :return: The selected form as a soup object. It can also be
             retrieved later with the :attr:`form` attribute.
         """
+
+        def find_associated_elements(form_id):
+            """Find all elements associated to a form
+                (i.e. an element with a form attribute -> ``form=form_id``)
+            """
+
+            # Elements which can have a form owner
+            elements_with_owner_form = ("input", "button", "fieldset",
+                                        "object", "output", "select",
+                                        "textarea")
+
+            found_elements = []
+
+            for element in elements_with_owner_form:
+                found_elements.extend(
+                    self.page.find_all(element, form=form_id)
+                )
+            return found_elements
+
         if isinstance(selector, bs4.element.Tag):
             if selector.name != "form":
                 raise LinkNotFoundError
-            self.__state.form = Form(selector)
+            form = selector
         else:
             # nr is a 0-based index for consistency with mechanize
             found_forms = self.page.select(selector,
@@ -220,7 +239,15 @@ class StatefulBrowser(Browser):
                     print('select_form failed for', selector)
                     self.launch_browser()
                 raise LinkNotFoundError()
-            self.__state.form = Form(found_forms[-1])
+
+            form = found_forms[-1]
+
+        if form and form.has_attr('id'):
+            form_id = form["id"]
+            new_elements = find_associated_elements(form_id)
+            form.extend(new_elements)
+
+        self.__state.form = Form(form)
 
         return self.form
 
