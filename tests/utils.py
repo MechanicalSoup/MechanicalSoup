@@ -93,5 +93,6 @@ def open_legacy_httpbin(browser, httpbin):
             # The line above may or may not have raised the exception
             # depending on raise_on_404. Raise it unconditionally now.
             raise mechanicalsoup.LinkNotFoundError()
+        return response
     except mechanicalsoup.LinkNotFoundError:
-        browser.open(httpbin.url)
+        return browser.open(httpbin.url)
