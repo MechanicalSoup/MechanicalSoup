@@ -531,7 +531,7 @@ def test_follow_link_ua(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
     # html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
     # browser.open_fake_page(html, httpbin.url)
-    browser.open(httpbin.url)
+    open_legacy_httpbin(browser, httpbin)
     bs4_kwargs = {'url_regex': 'user-agent'}
     requests_kwargs = {'headers': {"User-Agent": '007'}}
     resp = browser.follow_link(bs4_kwargs=bs4_kwargs,
