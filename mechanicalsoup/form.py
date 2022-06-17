@@ -306,9 +306,10 @@ class Form:
     def choose_submit(self, submit):
         """Selects the input (or button) element to use for form submission.
 
-        :param submit: The bs4.element.Tag (or just its *name*-attribute) that
-            identifies the submit element to use. If ``None``, will choose the
-            first valid submit element in the form, if one exists.
+        :param submit: The :class:`bs4.element.Tag` (or just its
+            *name*-attribute) that identifies the submit element to use. If
+            ``None``, will choose the first valid submit element in the form,
+            if one exists.
 
         To simulate a normal web browser, only one submit element must be
         sent. Therefore, this does not need to be called if there is only
