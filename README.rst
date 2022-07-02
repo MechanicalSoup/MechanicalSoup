@@ -51,7 +51,6 @@ Installing from source (installs the version in the current working directory)::
 (In all cases, add ``--user`` to the ``install`` command to
 install in the current user's home directory.)
 
-
 Documentation
 -------------
 
@@ -71,21 +70,21 @@ a Qwant search:
     """Example usage of MechanicalSoup to get the results from the Qwant
     search engine.
     """
-    
+
     import re
     import mechanicalsoup
     import html
     import urllib.parse
-    
-    # Connect to duckduckgo
+
+    # Connect to Qwant
     browser = mechanicalsoup.StatefulBrowser(user_agent='MechanicalSoup')
     browser.open("https://lite.qwant.com/")
-    
+
     # Fill-in the search form
     browser.select_form('#search-form')
     browser["q"] = "MechanicalSoup"
     browser.submit_selected()
-    
+
     # Display the results
     for link in browser.page.select('.result a'):
         # Qwant shows redirection links, not the actual URL, so extract
@@ -119,7 +118,6 @@ Common problems
 
 Read the `FAQ
 <https://mechanicalsoup.readthedocs.io/en/stable/faq.html>`__.
-
 
 .. |Latest Version| image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
    :target: https://pypi.python.org/pypi/MechanicalSoup/

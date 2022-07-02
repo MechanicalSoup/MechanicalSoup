@@ -28,7 +28,7 @@ class StatefulBrowser(Browser):
         constructing a new one.
     :param soup_config: Configuration passed to BeautifulSoup to affect
         the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
-        If overriden, it is highly recommended to `specify a parser
+        If overridden, it is highly recommended to `specify a parser
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
         Otherwise, BeautifulSoup will issue a warning and pick one for
         you, but the parser it chooses may be different on different
@@ -253,7 +253,7 @@ class StatefulBrowser(Browser):
 
     def _merge_referer(self, **kwargs):
         """Helper function to set the Referer header in kwargs passed to
-        requests, if it has not already been overriden by the user."""
+        requests, if it has not already been overridden by the user."""
 
         referer = self.url
         headers = CaseInsensitiveDict(kwargs.get('headers', {}))
@@ -270,7 +270,7 @@ class StatefulBrowser(Browser):
 
         If there are multiple submit input/button elements, passes ``btnName``
         to :func:`Form.choose_submit` on the current form to choose between
-        them. If `update_state` is False, form will be submited but the browser
+        them. If `update_state` is False, form will be submitted but the browser
         state will remain unchanged. This is useful for forms that result in
         a download of a file. All other arguments are forwarded to
         :func:`Browser.submit`.

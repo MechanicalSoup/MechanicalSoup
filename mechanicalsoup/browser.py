@@ -23,7 +23,7 @@ class Browser:
         constructing a new one.
     :param soup_config: Configuration passed to BeautifulSoup to affect
         the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
-        If overriden, it is highly recommended to `specify a parser
+        If overridden, it is highly recommended to `specify a parser
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
         Otherwise, BeautifulSoup will issue a warning and pick one for
         you, but the parser it chooses may be different on different
