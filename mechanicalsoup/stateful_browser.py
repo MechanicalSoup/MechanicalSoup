@@ -270,9 +270,9 @@ class StatefulBrowser(Browser):
 
         If there are multiple submit input/button elements, passes ``btnName``
         to :func:`Form.choose_submit` on the current form to choose between
-        them. If `update_state` is False, form will be submitted but the browser
-        state will remain unchanged. This is useful for forms that result in
-        a download of a file. All other arguments are forwarded to
+        them. If `update_state` is False, form will be submitted but the
+        browser state will remain unchanged. This is useful for forms that
+        result in a download of a file. All other arguments are forwarded to
         :func:`Browser.submit`.
         """
         self.form.choose_submit(btnName)
