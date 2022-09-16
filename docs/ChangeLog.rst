@@ -2,13 +2,26 @@
 Release Notes
 =============
 
-Version 1.2 (in development)
-============================
+Version 1.2
+===========
 
 Main changes
 ------------
 
 * Added support for Python 3.10.
+
+* Add support for HTML form-associated elements (i.e. input elements that are
+  associated with a form by a ``form`` attribute, but are not a child element
+  of the form.)
+  [`#380 <https://github.com/MechanicalSoup/MechanicalSoup/issues/380>`__]
+
+Bug fixes
+---------
+
+* When uploading a file, only the filename is now submitted to the server.
+  Previously, the full file path was being submitted, which exposed more
+  local information than users may have been expecting.
+  [`#375 <https://github.com/MechanicalSoup/MechanicalSoup/pull/375>`__]
 
 Version 1.1
 ===========
