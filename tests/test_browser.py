@@ -262,7 +262,7 @@ def test_no_404(httpbin):
 def test_404(httpbin):
     browser = mechanicalsoup.Browser(raise_on_404=True)
     with pytest.raises(mechanicalsoup.LinkNotFoundError):
-        resp = browser.get(httpbin + "/nosuchpage")
+        browser.get(httpbin + "/nosuchpage")
     resp = browser.get(httpbin.url)
     assert resp.status_code == 200
 
