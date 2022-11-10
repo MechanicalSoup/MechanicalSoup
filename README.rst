@@ -104,11 +104,10 @@ and `<tests/test_form.py>`__.
 Development
 -----------
 
-|Build Status| |Coverage Status|
-|Requirements Status| |Documentation Status|
+|Build Status|
+|Coverage Status|
+|Documentation Status|
 |CII Best Practices|
-|LGTM Alerts|
-|LGTM Grade|
 
 Instructions for building, testing and contributing to MechanicalSoup:
 see `<CONTRIBUTING.rst>`__.
@@ -127,15 +126,9 @@ Read the `FAQ
    :target: https://github.com/MechanicalSoup/MechanicalSoup/actions/workflows/python-package.yml?query=branch%3Amain
 .. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/MechanicalSoup/MechanicalSoup
-.. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=main
-   :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=main
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
 .. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge
    :target: https://bestpractices.coreinfrastructure.org/projects/1334
 .. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.svg
    :target: https://gitter.im/MechanicalSoup/Lobby
-.. |LGTM Alerts| image:: https://img.shields.io/lgtm/alerts/g/MechanicalSoup/MechanicalSoup.svg
-   :target: https://lgtm.com/projects/g/MechanicalSoup/MechanicalSoup/
-.. |LGTM Grade| image:: https://img.shields.io/lgtm/grade/python/g/MechanicalSoup/MechanicalSoup.svg
-   :target: https://lgtm.com/projects/g/MechanicalSoup/MechanicalSoup/

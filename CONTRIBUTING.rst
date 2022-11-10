@@ -15,11 +15,10 @@ Code should be flake8-clean and the test coverage is and should remain
 Hints on Development
 --------------------
 
-|Build Status| |Coverage Status|
-|Requirements Status| |Documentation Status|
+|Build Status|
+|Coverage Status|
+|Documentation Status|
 |CII Best Practices|
-|LGTM Alerts|
-|LGTM Grade|
 
 Python version support in the current main branch may differ from the
 latest release in
@@ -117,13 +116,7 @@ Right after the release:
    :target: https://github.com/MechanicalSoup/MechanicalSoup/actions/workflows/python-package.yml?query=branch%3Amain
 .. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/MechanicalSoup/MechanicalSoup
-.. |Requirements Status| image:: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements.svg?branch=main
-   :target: https://requires.io/github/MechanicalSoup/MechanicalSoup/requirements/?branch=main
 .. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
    :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
 .. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge
    :target: https://bestpractices.coreinfrastructure.org/projects/1334
-.. |LGTM Alerts| image:: https://img.shields.io/lgtm/alerts/g/MechanicalSoup/MechanicalSoup.svg
-   :target: https://lgtm.com/projects/g/MechanicalSoup/MechanicalSoup/
-.. |LGTM Grade| image:: https://img.shields.io/lgtm/grade/python/g/MechanicalSoup/MechanicalSoup.svg
-   :target: https://lgtm.com/projects/g/MechanicalSoup/MechanicalSoup/
