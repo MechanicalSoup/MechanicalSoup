@@ -371,8 +371,8 @@ def test_upload_file(httpbin):
     # Create two temporary files to upload
     def make_file(content):
         path = tempfile.mkstemp()[1]
-        with open(path, "w") as f:
-            f.write(content)
+        with open(path, "w") as fd:
+            fd.write(content)
         return path
     path1, path2 = (make_file(content) for content in
                     ("first file content", "second file content"))
@@ -573,8 +573,8 @@ def test_link_arg_multiregex(httpbin):
 
 
 def file_get_contents(filename):
-    with open(filename, "rb") as f:
-        return f.read()
+    with open(filename, "rb") as fd:
+        return fd.read()
 
 
 def test_download_link(httpbin):
@@ -672,8 +672,8 @@ def test_download_link_to_existing_file(httpbin):
     open_legacy_httpbin(browser, httpbin)
     tmpdir = tempfile.mkdtemp()
     tmpfile = tmpdir + '/existing.png'
-    with open(tmpfile, "w") as f:
-        f.write("initial content")
+    with open(tmpfile, "w") as fd:
+        fd.write("initial content")
     current_url = browser.url
     current_page = browser.page
     response = browser.download_link('image/png', tmpfile)
@@ -725,8 +725,8 @@ def test_download_link_referer(httpbin):
     assert browser.page == current_page
 
     # Check that the file was downloaded
-    with open(tmpfile.name) as f:
-        json_data = json.load(f)
+    with open(tmpfile.name) as fd:
+        json_data = json.load(fd)
     headers = json_data["headers"]
     assert headers["Referer"] == ref
 

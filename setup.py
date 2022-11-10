@@ -8,15 +8,15 @@ from setuptools import setup  # Always prefer setuptools over distutils
 
 def requirements_from_file(filename):
     """Parses a pip requirements file into a list."""
-    with open(filename, 'r') as fid:
-        return [line.strip() for line in fid
+    with open(filename, 'r') as fd:
+        return [line.strip() for line in fd
                 if line.strip() and not line.strip().startswith('--')]
 
 
 def read(fname, URL, URLImage):
     """Read the content of a file."""
-    with open(path.join(path.dirname(__file__), fname)) as fid:
-        readme = fid.read()
+    with open(path.join(path.dirname(__file__), fname)) as fd:
+        readme = fd.read()
     if hasattr(readme, 'decode'):
         # In Python 3, turn bytes into str.
         readme = readme.decode('utf8')
@@ -33,8 +33,8 @@ here = path.abspath(path.dirname(__file__))
 
 about = {}
 with open(path.join(here, 'mechanicalsoup', '__version__.py'),
-          'r', 'utf-8') as f:
-    exec(f.read(), about)
+          'r', 'utf-8') as fd:
+    exec(fd.read(), about)
 
 # Don't install pytest-runner on every setup.py run, just for tests.
 # See https://pypi.org/project/pytest-runner/#conditional-requirement
