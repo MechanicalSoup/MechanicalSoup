@@ -8,13 +8,15 @@ from setuptools import setup  # Always prefer setuptools over distutils
 
 def requirements_from_file(filename):
     """Parses a pip requirements file into a list."""
-    return [line.strip() for line in open(filename, 'r')
-            if line.strip() and not line.strip().startswith('--')]
+    with open(filename, 'r') as fid:
+        return [line.strip() for line in fid
+                if line.strip() and not line.strip().startswith('--')]
 
 
 def read(fname, URL, URLImage):
     """Read the content of a file."""
-    readme = open(path.join(path.dirname(__file__), fname)).read()
+    with open(path.join(path.dirname(__file__), fname)) as fid:
+        readme = fid.read()
     if hasattr(readme, 'decode'):
         # In Python 3, turn bytes into str.
         readme = readme.decode('utf8')
