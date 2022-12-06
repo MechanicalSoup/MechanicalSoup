@@ -170,6 +170,31 @@ def test_submit_btnName(expected_post):
     assert initial_state != browser._StatefulBrowser__state
 
 
+@pytest.mark.parametrize("expected_post", [
+    pytest.param(
+        [
+            ('text', 'Setting some text!'),
+            ('comment', 'Selecting an input submit'),
+        ], id='input'),
+    pytest.param(
+        [
+            ('text', '= Heading =\n\nNew page here!\n'),
+            ('comment', 'Selecting a button submit'),
+        ], id='button'),
+])
+def test_submit_no_btn(expected_post):
+    '''Tests that no submit inputs are posted when btnName=False.'''
+    browser, url = setup_mock_browser(expected_post=expected_post)
+    browser.open(url)
+    browser.select_form('#choose-submit-form')
+    browser['text'] = dict(expected_post)['text']
+    browser['comment'] = dict(expected_post)['comment']
+    initial_state = browser._StatefulBrowser__state
+    res = browser.submit_selected(btnName=False)
+    assert res.status_code == 200 and res.text == 'Success!'
+    assert initial_state != browser._StatefulBrowser__state
+
+
 def test_submit_dont_modify_kwargs():
     """Test that submit_selected() doesn't modify the caller's passed-in
     kwargs, for example when adding a Referer header.
