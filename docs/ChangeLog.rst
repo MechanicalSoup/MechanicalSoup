@@ -5,6 +5,11 @@ Release Notes
 Version 1.3 (in development)
 ============================
 
+Main changes
+------------
+
+* Added support for Python 3.11.
+
 Version 1.2
 ===========
 
