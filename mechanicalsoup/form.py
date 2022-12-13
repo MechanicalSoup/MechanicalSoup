@@ -306,9 +306,11 @@ class Form:
     def choose_submit(self, submit):
         """Selects the input (or button) element to use for form submission.
 
-        :param submit: The bs4.element.Tag (or just its *name*-attribute) that
-            identifies the submit element to use. If ``None``, will choose the
-            first valid submit element in the form, if one exists.
+        :param submit: The :class:`bs4.element.Tag` (or just its
+            *name*-attribute) that identifies the submit element to use. If
+            ``None``, will choose the first valid submit element in the form,
+            if one exists. If ``False``, will not use any submit element;
+            this is useful for simulating AJAX requests, for example.
 
         To simulate a normal web browser, only one submit element must be
         sent. Therefore, this does not need to be called if there is only
@@ -361,7 +363,7 @@ class Form:
                 # omitted from the submitted form data.
                 del inp['name']
 
-        if not found and submit is not None:
+        if not found and submit is not None and submit is not False:
             raise LinkNotFoundError(
                 f"Specified submit element not found: {submit}"
             )

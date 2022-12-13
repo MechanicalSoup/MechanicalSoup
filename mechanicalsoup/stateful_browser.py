@@ -268,12 +268,17 @@ class StatefulBrowser(Browser):
 
         :return: Forwarded from :func:`Browser.submit`.
 
-        If there are multiple submit input/button elements, passes ``btnName``
-        to :func:`Form.choose_submit` on the current form to choose between
-        them. If `update_state` is False, form will be submitted but the
-        browser state will remain unchanged. This is useful for forms that
-        result in a download of a file. All other arguments are forwarded to
-        :func:`Browser.submit`.
+        :param btnName: Passed to :func:`Form.choose_submit` to choose the
+            element of the current form to use for submission. If ``None``,
+            will choose the first valid submit element in the form, if one
+            exists. If ``False``, will not use any submit element; this is
+            useful for simulating AJAX requests, for example.
+
+        :param update_state: If False, the form will be submitted but the
+            browser state will remain unchanged; this is useful for forms that
+            result in a download of a file, for example.
+
+        All other arguments are forwarded to :func:`Browser.submit`.
         """
         self.form.choose_submit(btnName)
 
