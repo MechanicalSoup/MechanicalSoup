@@ -14,6 +14,7 @@ class InvalidFormMethod(LinkNotFoundError):
     It is derived from :class:`LinkNotFoundError` so that a single base class
     can be used to catch all exceptions specific to this module.
     """
+
     pass
 
 
@@ -63,7 +64,6 @@ class Form:
         value ``username``, and the input element named "password" and
         give it the value ``password``.
         """
-
         for (name, value) in data.items():
             i = self.form.find("input", {"name": name})
             if not i:
@@ -113,7 +113,7 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=checkbox
-            selector = 'input[type="checkbox" i][name="{}"]'.format(name)
+            selector = f'input[type="checkbox" i][name="{name}"]'
             checkboxes = self.form.select(selector)
             if not checkboxes:
                 raise InvalidFormMethod("No input checkbox named " + name)
@@ -134,17 +134,16 @@ class Form:
                         checkbox["checked"] = ""
                         break
                     # Allow specifying True or False to check/uncheck
-                    elif choice is True:
+                    if choice is True:
                         checkbox["checked"] = ""
                         break
-                    elif choice is False:
+                    if choice is False:
                         if "checked" in checkbox.attrs:
                             del checkbox.attrs["checked"]
                         break
                 else:
                     raise LinkNotFoundError(
-                        "No input checkbox named %s with choice %s" %
-                        (name, choice)
+                        f"No input checkbox named {name} with choice {choice}",
                     )
 
     def set_radio(self, data):
@@ -158,7 +157,7 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=radio
-            selector = 'input[type="radio" i][name="{}"]'.format(name)
+            selector = f'input[type="radio" i][name="{name}"]'
             radios = self.form.select(selector)
             if not radios:
                 raise InvalidFormMethod("No input radio named " + name)
@@ -173,7 +172,7 @@ class Form:
                     break
             else:
                 raise LinkNotFoundError(
-                    f"No input radio named {name} with choice {value}"
+                    f"No input radio named {name} with choice {value}",
                 )
 
     def set_textarea(self, data):
@@ -228,7 +227,7 @@ class Form:
 
                 if not option:
                     raise LinkNotFoundError(
-                        f'Option {choice} not found for select {name}'
+                        f'Option {choice} not found for select {name}',
                     )
 
                 option.attrs["selected"] = "selected"
@@ -332,8 +331,7 @@ class Form:
         if self._submit_chosen:
             if submit is None:
                 return
-            else:
-                raise Exception('Submit already chosen. Cannot change submit!')
+            raise Exception('Submit already chosen. Cannot change submit!')
 
         # All buttons NOT of type (button,reset) are valid submits
         # Case-insensitive search for type=submit
@@ -349,7 +347,7 @@ class Form:
             if (inp.has_attr('name') and inp['name'] == submit):
                 if found:
                     raise LinkNotFoundError(
-                        f"Multiple submit elements match: {submit}"
+                        f"Multiple submit elements match: {submit}",
                     )
                 found = True
             elif inp == submit:
@@ -365,7 +363,7 @@ class Form:
 
         if not found and submit is not None and submit is not False:
             raise LinkNotFoundError(
-                f"Specified submit element not found: {submit}"
+                f"Specified submit element not found: {submit}",
             )
         self._submit_chosen = True
 

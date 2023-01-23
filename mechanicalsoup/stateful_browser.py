@@ -3,12 +3,11 @@ import sys
 import urllib
 
 import bs4
+from requests.structures import CaseInsensitiveDict
 
 from .browser import Browser
 from .form import Form
 from .utils import LinkNotFoundError
-
-from requests.structures import CaseInsensitiveDict
 
 
 class _BrowserState:
@@ -177,6 +176,7 @@ class StatefulBrowser(Browser):
             using the shallow ``Browser`` wrapper functions.
 
         :return: Response of the request."""
+
         old_request = self.__state.request
         if old_request is None:
             raise ValueError('The current page is not refreshable. Either no '
@@ -212,7 +212,6 @@ class StatefulBrowser(Browser):
             """Find all elements associated to a form
                 (i.e. an element with a form attribute -> ``form=form_id``)
             """
-
             # Elements which can have a form owner
             elements_with_owner_form = ("input", "button", "fieldset",
                                         "object", "output", "select",
@@ -222,7 +221,7 @@ class StatefulBrowser(Browser):
 
             for element in elements_with_owner_form:
                 found_elements.extend(
-                    self.page.find_all(element, form=form_id)
+                    self.page.find_all(element, form=form_id),
                 )
             return found_elements
 
@@ -253,8 +252,8 @@ class StatefulBrowser(Browser):
 
     def _merge_referer(self, **kwargs):
         """Helper function to set the Referer header in kwargs passed to
-        requests, if it has not already been overridden by the user."""
-
+        requests, if it has not already been overridden by the user.
+        """
         referer = self.url
         headers = CaseInsensitiveDict(kwargs.get('headers', {}))
         if referer is not None and 'Referer' not in headers:
@@ -328,8 +327,7 @@ class StatefulBrowser(Browser):
         links = self.links(*args, **kwargs)
         if len(links) == 0:
             raise LinkNotFoundError()
-        else:
-            return links[0]
+        return links[0]
 
     def _find_link_internal(self, link, args, kwargs):
         """Wrapper around find_link that deals with convenience special-cases:
@@ -349,7 +347,7 @@ class StatefulBrowser(Browser):
             raise ValueError('link parameter cannot be treated as '
                              'url_regex because url_regex is already '
                              'present in keyword arguments')
-        elif link:
+        if link:
             kwargs['url_regex'] = link
 
         try:
@@ -362,7 +360,7 @@ class StatefulBrowser(Browser):
             raise
 
     def follow_link(self, link=None, *bs4_args, bs4_kwargs={},
-                    requests_kwargs={},  **kwargs):
+                    requests_kwargs={}, **kwargs):
         """Follow a link.
 
         If ``link`` is a bs4.element.Tag (i.e. from a previous call to

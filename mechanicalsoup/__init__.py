@@ -4,6 +4,5 @@ from .form import Form, InvalidFormMethod
 from .stateful_browser import StatefulBrowser
 from .utils import LinkNotFoundError
 
-
 __all__ = ['StatefulBrowser', 'LinkNotFoundError', 'Browser', 'Form',
            'InvalidFormMethod', '__version__']

@@ -2,7 +2,6 @@ import re
 
 import mechanicalsoup
 
-
 # Connect to Google
 browser = mechanicalsoup.StatefulBrowser()
 browser.open("https://www.google.com/")

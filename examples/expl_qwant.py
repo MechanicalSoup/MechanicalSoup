@@ -7,7 +7,6 @@ import urllib.parse
 
 import mechanicalsoup
 
-
 # Connect to duckduckgo
 browser = mechanicalsoup.StatefulBrowser(user_agent='MechanicalSoup')
 browser.open("https://lite.qwant.com/")
