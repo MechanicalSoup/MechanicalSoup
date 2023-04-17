@@ -3,7 +3,7 @@ import sys
 import tempfile
 
 import pytest
-# import setpath  # noqa:F401, must come before 'import mechanicalsoup'
+import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 from bs4 import BeautifulSoup
 from requests.cookies import RequestsCookieJar
 from utils import mock_get, prepare_mock_browser
