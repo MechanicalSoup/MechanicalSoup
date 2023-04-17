@@ -1,10 +1,10 @@
 """Example app to login to GitHub, using the plain Browser class.
 
-See example.py for an example using the more advanced StatefulBrowser."""
+See example.py for an example using the more advanced StatefulBrowser.
+"""
 import argparse
 
 import mechanicalsoup
-
 
 parser = argparse.ArgumentParser(description="Login to GitHub.")
 parser.add_argument("username")

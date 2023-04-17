@@ -1,12 +1,12 @@
 """Example app to login to GitHub using the StatefulBrowser class.
 
-NOTE: This example will not work if the user has 2FA enabled."""
+NOTE: This example will not work if the user has 2FA enabled.
+"""
 
 import argparse
 from getpass import getpass
 
 import mechanicalsoup
-
 
 parser = argparse.ArgumentParser(description="Login to GitHub.")
 parser.add_argument("username")

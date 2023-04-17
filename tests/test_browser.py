@@ -12,7 +12,7 @@ import mechanicalsoup
 
 
 def test_submit_online(httpbin):
-    """Complete and submit the pizza form at http://httpbin.org/forms/post """
+    """Complete and submit the pizza form at http://httpbin.org/forms/post"""
     browser = mechanicalsoup.Browser()
     page = browser.get(httpbin + "/forms/post")
     form = page.soup.form
@@ -37,8 +37,8 @@ def test_submit_online(httpbin):
     assert data["topping"] == ["cheese", "onion"]
     assert data["comments"] == "freezer"
 
-    assert json["headers"]["User-Agent"].startswith('python-requests/')
-    assert 'MechanicalSoup' in json["headers"]["User-Agent"]
+    assert json["headers"]["User-Agent"].startswith("python-requests/")
+    assert "MechanicalSoup" in json["headers"]["User-Agent"]
 
 
 def test_get_request_kwargs(httpbin):
@@ -106,7 +106,7 @@ def test__request(httpbin):
     browser = mechanicalsoup.Browser()
     response = browser._request(form)
 
-    data = response.json()['form']
+    data = response.json()["form"]
     assert data["customer"] == "Philip J. Fry"
     assert data["telephone"] == "555"
     assert data["comments"] == "freezer"
@@ -114,29 +114,29 @@ def test__request(httpbin):
     assert data["topping"] == ["bacon", "onion"]
     assert data["shape"] == "square"
 
-    assert "application/x-www-form-urlencoded" in response.request.headers[
-        "Content-Type"]
+    assert (
+        "application/x-www-form-urlencoded" in response.request.headers["Content-Type"]
+    )
 
 
-valid_enctypes_file_submit = {"multipart/form-data": True,
-                              "application/x-www-form-urlencoded": False
-                              }
+valid_enctypes_file_submit = {
+    "multipart/form-data": True,
+    "application/x-www-form-urlencoded": False,
+}
 
 default_enctype = "application/x-www-form-urlencoded"
 
 
-@pytest.mark.parametrize("file_field", [
-  """<input name="pic" type="file" />""",
-  ""])
-@pytest.mark.parametrize("submit_file", [
-    True,
-    False
-])
-@pytest.mark.parametrize("enctype", [
-  pytest.param("multipart/form-data"),
-  pytest.param("application/x-www-form-urlencoded"),
-  pytest.param("Invalid enctype")
-])
+@pytest.mark.parametrize("file_field", ["""<input name="pic" type="file" />""", ""])
+@pytest.mark.parametrize("submit_file", [True, False])
+@pytest.mark.parametrize(
+    "enctype",
+    [
+        pytest.param("multipart/form-data"),
+        pytest.param("application/x-www-form-urlencoded"),
+        pytest.param("Invalid enctype"),
+    ],
+)
 def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
     # test if enctype is respected when specified
     # and if files are processed correctly
@@ -148,8 +148,9 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
     """
     form = BeautifulSoup(form_html, "lxml").form
 
-    valid_enctype = (enctype in valid_enctypes_file_submit and
-                     valid_enctypes_file_submit[enctype])
+    valid_enctype = (
+        enctype in valid_enctypes_file_submit and valid_enctypes_file_submit[enctype]
+    )
     expected_content = b""  # default
     if submit_file and file_field:
         # create a temporary file for testing file upload
@@ -200,10 +201,11 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
         if valid_enctype:
             assert found_in == "files"
             if submit_file:
-                assert ("filename=\"" + pic_filename + "\""
-                        ).encode() in response.request.body
+                assert (
+                    'filename="' + pic_filename + '"'
+                ).encode() in response.request.body
             else:
-                assert b"filename=\"\"" in response.request.body
+                assert b'filename=""' in response.request.body
         else:
             assert found_in == "form"
 
@@ -213,7 +215,8 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
 
 def test__request_select_none(httpbin):
     """Make sure that a <select> with no options selected
-    submits the first option, as it does in a browser."""
+    submits the first option, as it does in a browser.
+    """
     form_html = f"""
     <form method="post" action={httpbin.url}/post>
       <select name="shape">
@@ -225,7 +228,7 @@ def test__request_select_none(httpbin):
     form = BeautifulSoup(form_html, "lxml").form
     browser = mechanicalsoup.Browser()
     response = browser._request(form)
-    assert response.json()['form'] == {'shape': 'round'}
+    assert response.json()["form"] == {"shape": "round"}
 
 
 def test__request_disabled_attr(httpbin):
@@ -237,20 +240,24 @@ def test__request_disabled_attr(httpbin):
 
     browser = mechanicalsoup.Browser()
     response = browser._request(BeautifulSoup(form_html, "lxml").form)
-    assert response.json()['form'] == {}
+    assert response.json()["form"] == {}
 
 
-@pytest.mark.parametrize("keyword", [
-    pytest.param('method'),
-    pytest.param('url'),
-])
+@pytest.mark.parametrize(
+    "keyword",
+    [
+        pytest.param("method"),
+        pytest.param("url"),
+    ],
+)
 def test_request_keyword_error(keyword):
     """Make sure exception is raised if kwargs duplicates an arg."""
     form_html = "<form></form>"
     browser = mechanicalsoup.Browser()
     with pytest.raises(TypeError, match="multiple values for"):
-        browser._request(BeautifulSoup(form_html, "lxml").form,
-                         'myurl', **{keyword: 'somevalue'})
+        browser._request(
+            BeautifulSoup(form_html, "lxml").form, "myurl", **{keyword: "somevalue"},
+        )
 
 
 def test_no_404(httpbin):
@@ -271,88 +278,83 @@ def test_set_cookiejar(httpbin):
     """Set cookies locally and test that they are received remotely."""
     # construct a phony cookiejar and attach it to the session
     jar = RequestsCookieJar()
-    jar.set('field', 'value')
-    assert jar.get('field') == 'value'
+    jar.set("field", "value")
+    assert jar.get("field") == "value"
 
     browser = mechanicalsoup.Browser()
     browser.set_cookiejar(jar)
     resp = browser.get(httpbin + "/cookies")
-    assert resp.json() == {'cookies': {'field': 'value'}}
+    assert resp.json() == {"cookies": {"field": "value"}}
 
 
 def test_get_cookiejar(httpbin):
     """Test that cookies set by the remote host update our session."""
     browser = mechanicalsoup.Browser()
     resp = browser.get(httpbin + "/cookies/set?k1=v1&k2=v2")
-    assert resp.json() == {'cookies': {'k1': 'v1', 'k2': 'v2'}}
+    assert resp.json() == {"cookies": {"k1": "v1", "k2": "v2"}}
 
     jar = browser.get_cookiejar()
-    assert jar.get('k1') == 'v1'
-    assert jar.get('k2') == 'v2'
+    assert jar.get("k1") == "v1"
+    assert jar.get("k2") == "v2"
 
 
 def test_post(httpbin):
     browser = mechanicalsoup.Browser()
-    data = {'color': 'blue', 'colorblind': 'True'}
+    data = {"color": "blue", "colorblind": "True"}
     resp = browser.post(httpbin + "/post", data)
-    assert resp.status_code == 200 and resp.json()['form'] == data
+    assert resp.status_code == 200 and resp.json()["form"] == data
 
 
 def test_put(httpbin):
     browser = mechanicalsoup.Browser()
-    data = {'color': 'blue', 'colorblind': 'True'}
+    data = {"color": "blue", "colorblind": "True"}
     resp = browser.put(httpbin + "/put", data)
-    assert resp.status_code == 200 and resp.json()['form'] == data
+    assert resp.status_code == 200 and resp.json()["form"] == data
 
 
-@pytest.mark.parametrize("http_html_expected_encoding", [
-    pytest.param((None, 'utf-8', 'utf-8')),
-    pytest.param(('utf-8', 'utf-8', 'utf-8')),
-    pytest.param(('utf-8', None, 'utf-8')),
-    pytest.param(('utf-8', 'ISO-8859-1', 'utf-8')),
-])
+@pytest.mark.parametrize(
+    "http_html_expected_encoding",
+    [
+        pytest.param((None, "utf-8", "utf-8")),
+        pytest.param(("utf-8", "utf-8", "utf-8")),
+        pytest.param(("utf-8", None, "utf-8")),
+        pytest.param(("utf-8", "ISO-8859-1", "utf-8")),
+    ],
+)
 def test_encoding(httpbin, http_html_expected_encoding):
     http_encoding = http_html_expected_encoding[0]
     html_encoding = http_html_expected_encoding[1]
     expected_encoding = http_html_expected_encoding[2]
 
-    url = 'mock://encoding'
+    url = "mock://encoding"
     text = (
-        '<!doctype html>'
+        "<!doctype html>"
         + '<html lang="fr">'
         + (
             (
                 '<head><meta charset="'
                 + html_encoding
                 + '"><title>Titleéàè</title></head>'
-            ) if html_encoding
-            else ''
+            )
+            if html_encoding
+            else ""
         )
-        + '<body></body>'
-        + '</html>'
+        + "<body></body>"
+        + "</html>"
     )
 
     browser, adapter = prepare_mock_browser()
     mock_get(
         adapter,
         url=url,
-        reply=(
-            text.encode(http_encoding)
-            if http_encoding
-            else text.encode("utf-8")
-        ),
+        reply=(text.encode(http_encoding) if http_encoding else text.encode("utf-8")),
         content_type=(
-            'text/html'
-            + (
-                ';charset=' + http_encoding
-                if http_encoding
-                else ''
-            )
-        )
+            "text/html" + (";charset=" + http_encoding if http_encoding else "")
+        ),
     )
     browser.open(url)
     assert browser.page.original_encoding == expected_encoding
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pytest.main(sys.argv)

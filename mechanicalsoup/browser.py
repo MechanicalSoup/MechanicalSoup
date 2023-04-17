@@ -35,6 +35,7 @@ class Browser:
     :param user_agent: Set the user agent header to this value.
 
     """
+
     def __init__(self, session=None, soup_config={'features': 'lxml'},
                  requests_adapters=None,
                  raise_on_404=False, user_agent=None):
@@ -81,7 +82,7 @@ class Browser:
             )
             html_encoding = bs4.dammit.EncodingDetector.find_declared_encoding(
                 response.content,
-                is_html=True
+                is_html=True,
             )
             # See https://www.w3.org/International/questions/qa-html-encoding-declarations.en#httphead  # noqa: E501
             # > The HTTP header has a higher precedence than the in-document
@@ -90,7 +91,7 @@ class Browser:
             response.soup = bs4.BeautifulSoup(
                 response.content,
                 from_encoding=encoding,
-                **soup_config
+                **soup_config,
             )
         else:
             response.soup = None
@@ -245,8 +246,7 @@ class Browser:
             elif tag.name == "button":
                 if tag.get("type", "").lower() in ("button", "reset"):
                     continue
-                else:
-                    data.append((name, tag.get("value", "")))
+                data.append((name, tag.get("value", "")))
 
             elif tag.name == "textarea":
                 data.append((name, tag.text))
@@ -298,7 +298,7 @@ class Browser:
         return self.session.request(**request_kwargs)
 
     def submit(self, form, url=None, **kwargs):
-        """Prepares and sends a form request.
+        r"""Prepares and sends a form request.
 
         NOTE: To submit a form with a :class:`StatefulBrowser` instance, it is
         recommended to use :func:`StatefulBrowser.submit_selected` instead of

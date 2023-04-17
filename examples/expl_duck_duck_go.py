@@ -1,9 +1,6 @@
-"""
-Example usage of MechanicalSoup to get the results from DuckDuckGo.
-"""
+"""Example usage of MechanicalSoup to get the results from DuckDuckGo."""
 
 import mechanicalsoup
-
 
 # Connect to duckduckgo
 browser = mechanicalsoup.StatefulBrowser(user_agent="MechanicalSoup")

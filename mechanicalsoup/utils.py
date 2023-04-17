@@ -13,4 +13,5 @@ class LinkNotFoundError(Exception):
       (e.g. browser["name"] = "val" with browser being a
       StatefulBrowser).
     """
+
     pass

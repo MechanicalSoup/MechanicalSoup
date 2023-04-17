@@ -4,12 +4,11 @@ import requests_mock
 
 import mechanicalsoup
 
-
 """
 Utilities for testing MechanicalSoup.
 """
 
-choose_submit_form = '''
+choose_submit_form = """
 <html>
   <body>
     <!-- vaguely based on Trac edit-page form -->
@@ -31,48 +30,50 @@ choose_submit_form = '''
     </form>
   </body>
 </html>
-'''
+"""
 
 
 def setup_mock_browser(expected_post=None, text=choose_submit_form):
-    url = 'mock://form.com'
+    url = "mock://form.com"
     browser, mock = prepare_mock_browser()
     mock_get(mock, url, text)
 
     if expected_post is not None:
-        mock_post(mock, url + '/post', expected_post)
+        mock_post(mock, url + "/post", expected_post)
 
     return browser, url
 
 
-def prepare_mock_browser(scheme='mock'):
+def prepare_mock_browser(scheme="mock"):
     mock = requests_mock.Adapter()
     browser = mechanicalsoup.StatefulBrowser(requests_adapters={scheme: mock})
 
     return browser, mock
 
 
-def mock_get(mocked_adapter, url, reply, content_type='text/html', **kwargs):
-    headers = {'Content-Type': content_type}
+def mock_get(mocked_adapter, url, reply, content_type="text/html", **kwargs):
+    headers = {"Content-Type": content_type}
     if isinstance(reply, str):
-        kwargs['text'] = reply
+        kwargs["text"] = reply
     else:
-        kwargs['content'] = reply
-    mocked_adapter.register_uri('GET', url, headers=headers, **kwargs)
+        kwargs["content"] = reply
+    mocked_adapter.register_uri("GET", url, headers=headers, **kwargs)
 
 
-def mock_post(mocked_adapter, url, expected, reply='Success!'):
+def mock_post(mocked_adapter, url, expected, reply="Success!"):
     def text_callback(request, context):
         query = parse_qsl(request.text)
         assert query == expected
         return reply
 
-    mocked_adapter.register_uri('POST', url, text=text_callback)
+    mocked_adapter.register_uri("POST", url, text=text_callback)
 
 
 class HttpbinRemote:
     """Drop-in replacement for pytest-httpbin's httpbin fixture
-    that uses the remote httpbin server instead of a local one."""
+    that uses the remote httpbin server instead of a local one.
+    """
+
     def __init__(self):
         self.url = "http://httpbin.org"
 
