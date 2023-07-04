@@ -164,8 +164,9 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
         else:
             # Encoding doesn't allow sending the content, we expect
             # the filename as a normal text field.
-            expected_content = pic_path.encode()
-        form.find("input", {"name": "pic"})["value"] = pic_path
+            expected_content = os.path.basename(pic_path.encode())
+        tag = form.find("input", {"name": "pic"})
+        tag["value"] = open(pic_path, "rb")
 
     browser = mechanicalsoup.Browser()
     response = browser._request(form)

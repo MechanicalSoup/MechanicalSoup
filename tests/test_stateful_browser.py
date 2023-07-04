@@ -391,7 +391,12 @@ def test_form_multiple():
 
 def test_upload_file(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
-    browser.open(httpbin + "/forms/post")
+    url = httpbin + "/post"
+    file_input_form = f"""
+    <form method="post" action="{url}" enctype="multipart/form-data">
+        <input type="file" name="first" />
+    </form>
+    """
 
     # Create two temporary files to upload
     def make_file(content):
@@ -399,22 +404,62 @@ def test_upload_file(httpbin):
         with open(path, "w") as fd:
             fd.write(content)
         return path
-    path1, path2 = (make_file(content) for content in
-                    ("first file content", "second file content"))
+    path1 = make_file("first file content")
+    path2 = make_file("second file content")
 
-    # The form doesn't have a type=file field, but the target action
-    # does show it => add the fields ourselves, and add enctype too.
+    value1 = open(path1, "rb")
+    value2 = open(path2, "rb")
+
+    browser.open_fake_page(file_input_form)
     browser.select_form()
-    browser._StatefulBrowser__state.form.form[
-      "enctype"] = "multipart/form-data"
-    browser.new_control("file", "first", path1)
-    browser.new_control("file", "second", "")
-    browser["second"] = path2
-    browser.form.print_summary()
+
+    # Test filling an existing input and creating a new input
+    browser["first"] = value1
+    browser.new_control("file", "second", value2)
+
     response = browser.submit_selected()
     files = response.json()["files"]
     assert files["first"] == "first file content"
     assert files["second"] == "second file content"
+
+
+def test_upload_file_with_malicious_default(httpbin):
+    """Check for CVE-2023-34457 by setting the form input value directly to a
+    file that the user does not explicitly consent to upload, as a malicious
+    server might do.
+    """
+    browser = mechanicalsoup.StatefulBrowser()
+    sensitive_path = tempfile.mkstemp()[1]
+    with open(sensitive_path, "w") as fd:
+        fd.write("Some sensitive information")
+    url = httpbin + "/post"
+    malicious_html = f"""
+    <form method="post" action="{url}" enctype="multipart/form-data">
+        <input type="file" name="malicious" value="{sensitive_path}" />
+    </form>
+    """
+    browser.open_fake_page(malicious_html)
+    browser.select_form()
+    response = browser.submit_selected()
+    assert response.json()["files"] == {"malicious": ""}
+
+
+def test_upload_file_raise_on_string_input():
+    """Check for use of the file upload API that was modified to remediate
+    CVE-2023-34457. Users must now open files manually to upload them.
+    """
+    browser = mechanicalsoup.StatefulBrowser()
+    file_input_form = """
+    <form enctype="multipart/form-data">
+        <input type="file" name="upload" />
+    </form>
+    """
+    browser.open_fake_page(file_input_form)
+    browser.select_form()
+    with pytest.raises(ValueError, match="CVE-2023-34457"):
+        browser["upload"] = "/path/to/file"
+    with pytest.raises(ValueError, match="CVE-2023-34457"):
+        browser.new_control("file", "upload2", "/path/to/file")
 
 
 def test_with():

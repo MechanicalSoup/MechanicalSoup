@@ -14,3 +14,10 @@ class LinkNotFoundError(Exception):
       StatefulBrowser).
     """
     pass
+
+
+def is_multipart_file_upload(form, tag):
+    return (
+        form.get("enctype", "") == "multipart/form-data" and
+        tag.get("type", "").lower() == "file"
+    )

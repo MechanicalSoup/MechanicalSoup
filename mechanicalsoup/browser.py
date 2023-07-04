@@ -1,3 +1,4 @@
+import io
 import os
 import tempfile
 import urllib
@@ -10,7 +11,7 @@ import requests
 
 from .__version__ import __title__, __version__
 from .form import Form
-from .utils import LinkNotFoundError
+from .utils import LinkNotFoundError, is_multipart_file_upload
 
 
 class Browser:
@@ -228,18 +229,20 @@ class Browser:
 
                 # If the enctype is not multipart, the filename is put in
                 # the form as a text input and the file is not sent.
-                if tag.get("type", "").lower() == "file" and multipart:
-                    filepath = value
-                    if filepath != "" and isinstance(filepath, str):
-                        content = open(filepath, "rb")
+                if is_multipart_file_upload(form, tag):
+                    if isinstance(value, io.IOBase):
+                        content = value
+                        filename = os.path.basename(getattr(value, "name", ""))
                     else:
                         content = ""
-                    filename = os.path.basename(filepath)
-                    # If value is the empty string, we still pass it
+                        filename = os.path.basename(value)
+                    # If content is the empty string, we still pass it
                     # for consistency with browsers (see
                     # https://github.com/MechanicalSoup/MechanicalSoup/issues/250).
                     files[name] = (filename, content)
                 else:
+                    if isinstance(value, io.IOBase):
+                        value = os.path.basename(getattr(value, "name", ""))
                     data.append((name, value))
 
             elif tag.name == "button":
