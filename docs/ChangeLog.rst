@@ -2,13 +2,35 @@
 Release Notes
 =============
 
-Version 1.3 (in development)
-============================
+Version 1.3
+===========
+
+Breaking changes
+----------------
+
+* To prevent malicious web servers from reading arbitrary files from the
+  client, files must now be opened explicitly by the user in order to
+  upload their contents in form submission. For example, instead of:
+
+    browser["upload"] = "/path/to/file"
+
+  you would now use:
+
+    browser["upload"] = open("/path/to/file", "rb")
+
+  This remediates
+  `CVE-2023-34457 <https://github.com/MechanicalSoup/MechanicalSoup/security/advisories/GHSA-x456-3ccm-m6j4>`__.
+  Our thanks to @e-c-d for reporting and helping to fix the vulnerability!
 
 Main changes
 ------------
 
 * Added support for Python 3.11.
+
+* Allow submitting a form with no submit element. This can be achieved by
+  passing ``submit=False`` to ``StatefulBrowser.submit_selected``. Thanks
+  @alexreg!
+  [`#480 <https://github.com/MechanicalSoup/MechanicalSoup/pull/411`__]
 
 Version 1.2
 ===========
