@@ -605,6 +605,15 @@ def test_follow_link_arg(httpbin, expected, kwargs):
     assert browser.url == httpbin + expected
 
 
+def test_follow_link_from_tag(httpbin):
+    browser = mechanicalsoup.StatefulBrowser()
+    html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
+    browser.open_fake_page(html, httpbin.url)
+    tag = browser.links()[1]
+    browser.follow_link(link=tag)
+    assert browser.url == httpbin + '/get'
+
+
 def test_follow_link_excess(httpbin):
     """Ensure that excess args are passed to BeautifulSoup"""
     browser = mechanicalsoup.StatefulBrowser()
