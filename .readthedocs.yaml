@@ -13,3 +13,7 @@ build:
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
   configuration: docs/conf.py
+
+python:
+  install:
+  - requirements: requirements.txt
