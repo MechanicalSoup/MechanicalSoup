@@ -605,7 +605,7 @@ def test_follow_link_arg(httpbin, expected, kwargs):
     assert browser.url == httpbin + expected
 
 
-def test_follow_link_from_tag():
+def test_follow_link_from_tag(httpbin):
     browser = mechanicalsoup.StatefulBrowser()
     html = '<a href="/foo">Bar</a><a href="/get">Link</a>'
     browser.open_fake_page(html, httpbin.url)
