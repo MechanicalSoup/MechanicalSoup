@@ -6,11 +6,15 @@ from os import path
 from setuptools import setup  # Always prefer setuptools over distutils
 
 
+def strip(line):
+    """Strip comments and whitespace from a line of text."""
+    return line.split('#', 1)[0].strip()
+
+
 def requirements_from_file(filename):
     """Parses a pip requirements file into a list."""
     with open(filename, 'r') as fd:
-        return [line.strip() for line in fd
-                if line.strip() and not line.strip().startswith('--')]
+        return [strip(line) for line in fd if strip(line)]
 
 
 def read(fname, URL, URLImage):
