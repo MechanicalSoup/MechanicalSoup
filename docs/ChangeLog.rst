@@ -5,6 +5,8 @@ Release Notes
 Version 1.4 (in development)
 ============================
 
+* Removed support for end of life python versions 3.6 and 3.7.
+
 Version 1.3
 ===========
 
