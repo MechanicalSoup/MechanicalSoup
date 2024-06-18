@@ -3,3 +3,4 @@ beautifulsoup4 >= 4.7
 lxml
 certifi>=2022.12.7  # not directly required (indirect dependency from requests),
                     # pinned by Snyk to avoid a vulnerability
+urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
