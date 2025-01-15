@@ -1,0 +1,32 @@
+name: Scrape and Insert Data
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs at midnight daily
+  workflow_dispatch:
+
+jobs:
+  scrape_and_insert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright prisma
+
+      - name: Install Playwright browsers
+        run: playwright install
+
+      - name: Run scraping and insertion script
+        run: python /workspaces/MechanicalSoup/process_and_insert.py
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

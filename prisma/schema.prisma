@@ -1,0 +1,32 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-py"
+}
+
+model Metrics {
+  id           Int      @id @default(autoincrement())
+  totalRevenue Float
+  totalUsers   Int
+  createdAt    DateTime @default(now())
+}
+
+model Earnings {
+  id        Int      @id @default(autoincrement())
+  value     Float
+  createdAt DateTime @default(now())
+}
+
+model Products {
+  id         Int      @id @default(autoincrement())
+  name       String
+  text_medium String?
+  price      Float
+  time_range String
+  whop_rank  Int
+  logo       String
+  createdAt  DateTime @default(now())
+}
