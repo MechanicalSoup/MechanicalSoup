@@ -1,9 +1,9 @@
 from playwright.sync_api import sync_playwright
 import time
 
-def find_selectors():
+def find_product_selectors():
     """
-    Interactive script to find selectors for desired elements.
+    Interactive script to find selectors for product elements.
     """
     with sync_playwright() as p:
         # Launch browser in non-headless mode
@@ -24,12 +24,12 @@ def find_selectors():
                 });
             }""")
 
-            print("Click on the elements you want to scrape. The script will log their selectors.")
+            print("Click on the product elements you want to scrape. The script will log their selectors.")
 
             # Set up a loop to listen for clicks and log selectors
             while True:
                 # Wait for the user to click an element
-                print("Click on an element to get its selector (or press Ctrl+C to exit)...")
+                print("Click on a product element to get its selector (or press Ctrl+C to exit)...")
                 try:
                     # Wait for a click event
                     page.wait_for_event("click", timeout=0)
@@ -80,4 +80,4 @@ def find_selectors():
             browser.close()
 
 if __name__ == "__main__":
-    find_selectors()
+    find_product_selectors()

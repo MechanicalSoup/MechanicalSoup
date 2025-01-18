@@ -1,9 +1,19 @@
 from playwright.sync_api import sync_playwright
 import json
+from firecrawl import FirecrawlApp
+from pydantic import BaseModel
+
+class ProductSchema(BaseModel):
+    name: str
+    description: str
+    price: str
+    ranking: str
+    time_range: str
+    logo: str
 
 def scrape_affiliate_revenue():
     """
-    Scrapes affiliate revenue data using Playwright.
+    Scrapes affiliate revenue data using Playwright and Firecrawl.dev API.
     Returns revenue data as a dictionary.
     """
     with sync_playwright() as p:
@@ -46,30 +56,26 @@ def scrape_affiliate_revenue():
                     print(f"Error parsing element: {e}")
                     continue
 
-            # Extract additional product information
-            product_elements = page.query_selector_all('.product-card')  # Replace with the actual selector for product containers
-            for product_element in product_elements:
-                try:
-                    name = product_element.query_selector('.name')  # Replace with the actual selector for product name
-                    text_medium = product_element.query_selector('.text-medium')  # Replace with the actual selector for text-medium
-                    price_element = product_element.query_selector('number-flow-react')
-                    time_range = product_element.query_selector('.time-range')  # Replace with the actual selector for time range
-                    whop_rank = product_element.query_selector('.rank')  # Replace with the actual selector for Whop rank
-                    logo = product_element.query_selector('img')  # Replace with the actual selector for logo
+            # Use Firecrawl.dev API to extract product information
+            api_key = "fc-26d2bf277d8647a3a1c01203a536d757"
+            app = FirecrawlApp(api_key=api_key)
+            response = app.scrape_url(
+                'https://whop.com/discover/f/most_affiliate_earnings_24_hours/',
+                params={
+                    'formats': ['extract'],
+                    'extract': {
+                        'schema': ProductSchema.model_json_schema(),
+                    }
+                }
+            )
 
-                    if name and price_element and time_range and whop_rank and logo:
-                        price_data = json.loads(price_element.get_attribute('data'))
-                        products.append({
-                            "name": name.inner_text(),
-                            "text_medium": text_medium.inner_text() if text_medium else None,
-                            "price": float(price_data['valueAsString'].replace('$', '').replace(',', '')),
-                            "time_range": time_range.inner_text(),
-                            "whop_rank": int(whop_rank.inner_text().strip()),
-                            "logo": logo.get_attribute('src')
-                        })
-                except Exception as e:
-                    print(f"Error parsing product element: {e}")
-                    continue
+            if response['success']:
+                data = response['data']
+                products = data.get("extract", [])
+                with open('scraped_data.json', 'w') as f:
+                    json.dump(data, f, indent=2)
+            else:
+                print(f"Error fetching data: {response}")
 
             print(f"\nFound metrics: {platform_metrics}")  # Debug print
             print(f"Found earnings: {affiliate_earnings}")  # Debug print
