@@ -1,6 +1,8 @@
 from scrape_affiliate_revenue import scrape_affiliate_revenue
 from typing import List, Dict
 import re
+import os
+import json
 
 def clean_monetary_value(value: str) -> float:
     """Convert string monetary values to float"""
@@ -9,18 +11,28 @@ def clean_monetary_value(value: str) -> float:
     return float(re.sub(r'[^\d.]', '', value))
 
 def process_revenue_data() -> Dict:
-    """Process scraped revenue data"""
+    """Process scraped revenue data and combine affiliate earnings with communities"""
     raw_data = scrape_affiliate_revenue()
     
+    if raw_data is None:
+        data_path = os.path.join(os.path.dirname(__file__), 'data', 'scraped_data.json')
+        try:
+            with open(data_path, 'r') as f:
+                raw_data = json.load(f)
+        except Exception as e:
+            print(f"Error loading saved data: {e}")
+            return {}
+
+    # Clean and process platform metrics
     clean_data = {
         "platform_metrics": {
             "total_revenue": None,
             "total_users": None
         },
-        "affiliate_earnings": set()
+        "top_communities": []  # Changed back to top_communities to match desired format
     }
 
-    # Handle platform metrics
+    # Process platform metrics
     if raw_data.get("platform_metrics"):
         metrics = raw_data["platform_metrics"]
         if metrics["total_revenue"]:
@@ -28,38 +40,38 @@ def process_revenue_data() -> Dict:
         if metrics["total_users"]:
             clean_data["platform_metrics"]["total_users"] = int(re.sub(r'[^\d]', '', metrics["total_users"]))
 
-    # Handle affiliate earnings
-    for value in raw_data.get("affiliate_earnings", []):
-        try:
-            cleaned_value = clean_monetary_value(value)
-            if cleaned_value > 0 and cleaned_value < 500000:  # Sanity check
-                clean_data["affiliate_earnings"].add(cleaned_value)
-        except ValueError:
-            continue
+    # Get raw data lists
+    earnings = raw_data.get("affiliate_earnings", [])
+    communities = raw_data.get("top_communities", [])
+    
+    # Merge data while keeping original string format of earnings
+    for idx, community in enumerate(communities):
+        if idx < len(earnings):
+            community_copy = dict(community)
+            # Add affiliate_earnings in the original string format
+            community_copy["affiliate_earnings"] = earnings[idx]
+            clean_data["top_communities"].append(community_copy)
+    
+    # Save processed data
+    output_path = os.path.join(os.path.dirname(__file__), 'data', 'processed_data.json')
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
+    with open(output_path, 'w') as f:
+        json.dump(clean_data, f, indent=2)
+        print(f"Processed data saved to {output_path}")
 
-    return {
-        "platform_metrics": clean_data["platform_metrics"],
-        "affiliate_earnings": sorted(list(clean_data["affiliate_earnings"]), reverse=True)
-    }
+    return clean_data
 
 if __name__ == "__main__":
     results = process_revenue_data()
     
-    # Check if we have valid data
     if results["platform_metrics"]["total_revenue"] is not None:
-        print("\nPlatform Metrics:")
+        print("\nPlatform Summary:")
         print(f"Total Revenue: ${results['platform_metrics']['total_revenue']:,.2f}")
         print(f"Total Users: {results['platform_metrics']['total_users']:,}")
-    else:
-        print("No platform metrics found!")
-
-    if results["affiliate_earnings"]:
-        print("\nAffiliate Earnings:")
-        for earning in results["affiliate_earnings"]:
-            print(f"${earning:,.2f}")
-    else:
-        print("No affiliate earnings found!")
-
-    # Debug info
-    print("\nRaw results:")
-    print(results)
+        print(f"\nTop Communities: {len(results['top_communities'])}")
+        
+        for community in results['top_communities']:
+            print(f"\n{community['name']}:")
+            print(f"  Earnings: ${community['affiliate_earnings']}")
+            print(f"  Rank: #{community['rank']}")

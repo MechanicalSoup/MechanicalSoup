@@ -1,0 +1,415 @@
+{
+  "platform_metrics": {
+    "total_revenue": "774,986,535",
+    "total_users": "5,739,906"
+  },
+  "affiliate_earnings": [
+    "1,123.65",
+    "951.55",
+    "753.75",
+    "618.75",
+    "539.05",
+    "526.50",
+    "525.00",
+    "501.60",
+    "478.00",
+    "319.00",
+    "309.00",
+    "283.17",
+    "277.91",
+    "266.89",
+    "265.50",
+    "265.00",
+    "262.35",
+    "253.30",
+    "244.32",
+    "239.00",
+    "237.00",
+    "237.00",
+    "230.10",
+    "202.50",
+    "188.10",
+    "187.50",
+    "181.50",
+    "181.25",
+    "180.75",
+    "176.50",
+    "174.39",
+    "171.00",
+    "169.72",
+    "168.00",
+    "166.00",
+    "163.75",
+    "161.81",
+    "160.00",
+    "160.00",
+    "160.00",
+    "158.00",
+    "157.70",
+    "154.96",
+    "151.35",
+    "150.30"
+  ],
+  "top_communities": [
+    {
+      "name": "Potion Discord Access",
+      "price_per_unit": "$60.00 / week",
+      "logo": "https://img-v2-prod.whop.com/Zrt3ex3SyT6ZBAfD12EK-9NgVjhQjjHyZ_vBUlK36qI/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTEwLTE3L3VzZXJfNDA3NjE0N185NTFjMzAxYS0zNDA2LTQ1N2YtYThmNC1hYWJjNDZkNWRiMjguanBlZw",
+      "title": "The One Stop Shop For Memecoins",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#5"
+    },
+    {
+      "name": "ParlayScience Discord Access",
+      "price_per_unit": "$25.00 / 2 weeks",
+      "logo": "https://img-v2-prod.whop.com/grCh9qnwJxt_N0uvT8oY1kb3dNAIInycqeJeFdm1pOk/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vYm90cy9pbWFnZXMvMzE5OTcub3JpZ2luYWwucG5n",
+      "title": "The Leader in Sports Betting",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#13"
+    },
+    {
+      "name": "Social Army",
+      "price_per_unit": "$49.00 / month",
+      "logo": "https://img-v2-prod.whop.com/T9uK6c3mDsoqLfJLnx78VlgtKszDdgQbv5QYN7NqocA/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTEyLTI1L3VzZXJfMzY1MjUzMl8wMjIxNjcyNC00OGNjLTQwMzgtOGI0NC1jOTQ0ZGRkZWQ2YWYucG5n",
+      "title": "Ready To Start Earning More as a TikTok Shop Affiliate?",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#84"
+    },
+    {
+      "name": "GOAT Sports Bets Membership",
+      "price_per_unit": "$35.00 / week",
+      "logo": "https://img-v2-prod.whop.com/h_4pFAM5WBlnHtLSPbMk7aD4mM-9pn7q1Zg8cuwG0zg/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA2LTI2L3VzZXJfMzczNTYxMF9lN2NmNDQ4OS0yMGQxLTRkNjEtYTEwNi01MmU1YzZlZDg5MDguZ2lm.jpg",
+      "title": "Start Tailing the GOATS",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#24"
+    },
+    {
+      "name": "Divine Premium Access",
+      "price_per_unit": "$69.99 / month",
+      "logo": "https://img-v2-prod.whop.com/T9uK6c3mDsoqLfJLnx78VlgtKszDdgQbv5QYN7NqocA/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA2LTI2L3VzZXJfMzczNTYxMF9lN2NmNDQ4OS0yMGQxLTRkNjEtYTEwNi01MmU1YzZlZDg5MDguZ2lm.jpg",
+      "title": "JOIN THE #1 GROUP FREE",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#35"
+    },
+    {
+      "name": "Sharpshooter's Sports Picks",
+      "price_per_unit": "$25.00 / month",
+      "logo": "https://img-v2-prod.whop.com/To4fKleQkTSoS3j6LiT2HFgGnmwJSxIAgFjluWEDYkM/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI1LTAxLTExL3VzZXJfMzExMjc0Nl80NTViZGFmNS1jODRmLTRmNmQtODVmZS00YmY0ZTZiZjlhZTkuanBlZw",
+      "title": "$1,000 Giveaway Sunday! Come enter!",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#17"
+    },
+    {
+      "name": "The Haven",
+      "price_per_unit": "$250.00 / month",
+      "logo": "https://img-v2-prod.whop.com/xl1vDiCwbQWa3-GmvXUspFzLXSoLvdryWnEwoORewJM/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vYWNjZXNzX3Bhc3Nlcy9pbWFnZXMvMzMwMS5vcmlnaW5hbC4",
+      "title": "Master Crypto Trading with The Haven",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#12"
+    },
+    {
+      "name": "Kaizen Platinum",
+      "price_per_unit": "$199.00 / month",
+      "logo": "https://img-v2-prod.whop.com/Ia924Pj13X2Wp_SHwKhLQ-t8HVyDaFQvuBpGwcRs9yk/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vYm90cy9pbWFnZXMvNTIxMTUub3JpZ2luYWwucG5n",
+      "title": "We help you make money in crypto",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#6"
+    },
+    {
+      "name": "Magic Lines - Premium",
+      "price_per_unit": "$199.00 / month",
+      "logo": "https://img-v2-prod.whop.com/yA5nw_ERc3_7r249vgRM7nz6w5Z4qaTML6M81ZwMkHU/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI1LTAxLTA0L3VzZXJfNzA5MTQwX2UzYTA2NWU0LTk3NjMtNDI0Mi04YmIwLWMwYTMzYmYwZjM4MC5qcGVn",
+      "title": "An immersive trading, investing and educational experience",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "#70"
+    },
+    {
+      "name": "Josh Exclusive VIP Access",
+      "price_per_unit": "$100.00 / month",
+      "logo": "https://img-v2-prod.whop.com/ngVz41pi5_TuxTzuYZMfR-siW-cNxt7rY2ihWjdAzA4/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA2LTEwL3VzZXJfMzQ0MzY0NV9kMjkzNGNlNy00N2I3LTRlNWEtOGIzMy1iZWU4OWIxN2RmMjcucG5n",
+      "title": "Join VIP and get a front row seat in the SWJ Community!",
+      "other_information": "Affiliate earnings last 24h\nAug 8, 2024Today",
+      "whop_rank": "34"
+    },
+    {
+      "name": "Your First Dollar",
+      "price_per_unit": "$50.00 / month",
+      "logo": "https://img-v2-prod.whop.com/_O7cRbWOExbOM-0noBEpae6_CLkAHr1oZhp-FngQIM0/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA5LTAxL3VzZXJfMjE0NTgwXzQzNDdiMWI4LWNjZjMtNGU1NC05OGYyLWM3ODlkOTY0MjJjZC5wbmc",
+      "title": "Make your first $10k online",
+      "other_information": "Affiliate earnings last 24h\nAug 24, 2022Today",
+      "whop_rank": "191"
+    },
+    {
+      "name": "Trophies Discord Access",
+      "price_per_unit": "$30.00 / 2 weeks",
+      "logo": "https://img-v2-prod.whop.com/AmH6zDcUp9N739fnXwYQbJpPAOlMpapbFRJafaRJZao/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTExLTI5L3VzZXJfNDgxNjY3X2E0ZDM4NTg3LTlmMDAtNDAwMi1iM2JhLWY3MTY2ODc0MGY2Zi5qcGVn",
+      "title": "Get ready for victory with Trophies Sports Picks!",
+      "other_information": "Affiliate earnings last 24h\nOct 13, 2023Today",
+      "whop_rank": "26"
+    },
+    {
+      "name": "Viral Vision A-Z TikTok Kurs",
+      "price_per_unit": "\u20ac40.00 / month",
+      "logo": "https://img-v2-prod.whop.com/93r0FYZ5HaJMEAUR5NwmKM7NKu3MwGzouQZeNm24qss/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vYm90cy9pbWFnZXMvNTY1NTQub3JpZ2luYWwuZ2lm.jpg",
+      "title": "Starte Deine Reise zum Online-Erfolg mit TikTok",
+      "other_information": "Affiliate earnings last 24h\nDec 21, 2023Today",
+      "whop_rank": "98"
+    },
+    {
+      "name": "Exclusive Analytics VIP Bundle",
+      "price_per_unit": "$14.99 / 3 days",
+      "logo": "https://img-v2-prod.whop.com/I2BzfrXYVgLf0KOTbwEEb-43jZcHzJXrwUemhGBmED0/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTAyLTA2L3VzZXJfODU3NzM0X2Q4MWFlNTcxLTk4MTctNDliNC1iZTcxLWQyMGNkZTJjN2IwMC5naWY.jpg",
+      "title": "Access Data-Driven Expert Picks, Props, and Parlays!",
+      "other_information": "Affiliate earnings last 24h\nMar 12, 2023Today",
+      "whop_rank": "104"
+    },
+    {
+      "name": "Potion Discord Access (Crypto)",
+      "price_per_unit": "$150.00",
+      "logo": "https://img-v2-prod.whop.com/YUyH4dDPPUXDxz-BiXG8XcxQhE-5GujHVatSR_mxAX8/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA4LTI4L3VzZXJfMTc2NjE1NF9jNWQ2OTc1NS00M2M0LTQ1OGQtODc0MS1mMDU2MTQ4ZmMwNWQuanBlZw",
+      "title": "The One Stop Shop For Memecoins",
+      "other_information": "Affiliate earnings last 24h\nOct 28, 2024Today",
+      "whop_rank": "39"
+    },
+    {
+      "name": "Hold My Hand Wholesale Pass",
+      "price_per_unit": "$19.99 / month",
+      "logo": "https://img-v2-prod.whop.com/G38u_oENOiknaHdYIYC1QiP7gaAHkEAQl9UupytpkK4/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA5LTE2L3VzZXJfMzYwMDQxOV84MDVkZDY1Ni1lZjc4LTQyZjAtOGNhMi1jOTkyMTkwY2Y1YzEucG5n",
+      "title": "Learn how to wholesale real estate and buy your own property",
+      "other_information": "Affiliate earnings last 24h\nJul 10, 2023Today",
+      "whop_rank": "15"
+    },
+    {
+      "name": "6-Figure Creator Program",
+      "price_per_unit": "$99.00 / month",
+      "logo": "https://img-v2-prod.whop.com/KeNPHO3vsX2pyb3t-76vFTVjfgF7DLCLGcahmMkOjPk/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA5LTE2L3VzZXJfMzYwMDQxOV84MDVkZDY1Ni1lZjc4LTQyZjAtOGNhMi1jOTkyMTkwY2Y1YzEucG5n",
+      "title": "Struggling to go viral, think of content, and make sales?",
+      "other_information": "Affiliate earnings last 24h\nJul 20, 2024Today",
+      "whop_rank": "448"
+    },
+    {
+      "name": "Honeycomb Options Trading",
+      "price_per_unit": "$149.00 / month",
+      "logo": "https://img-v2-prod.whop.com/MJKMrRHWcDwpWK5rjmjDM4ge9OpKF2Xlh6NNja_F1mg/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA3LTI0L3VzZXJfMjU0NDA4N180YTA0ZmE4Ny0wZTRmLTQ5NGItYTdlOS0xNGJkNmM1YzA2ZjgucG5n",
+      "title": "LEVEL UP your side hustle and JOIN OUR TRADING FLOOR",
+      "other_information": "Affiliate earnings last 24h\nAug 8, 2023Today",
+      "whop_rank": "289"
+    },
+    {
+      "name": "Shadow Box Captain Pass",
+      "price_per_unit": "$25.00 / month",
+      "logo": "https://img-v2-prod.whop.com/SjPfWQscRBA0qLDMwZLsRplpMjOIcQCAOGZ-rjq9I-c/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTA1LTEyL3VzZXJfMzQ3MDY1XzM3ZWI1ZmRiLTFiOTQtNGNjMC04YmVhLWVkZDU3NTNlNWI3Ny5wbmc",
+      "title": "Join the #1 E-commerce Tools Community",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #241"
+    },
+    {
+      "name": "Shocked",
+      "price_per_unit": "$40.00 / week",
+      "logo": "https://img-v2-prod.whop.com/r57ufZ2mUIK_aqll4CvyIAVQt2ky0KU7ibBYHi0uEzA/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vYm90cy9pbWFnZXMvMTAwODQub3JpZ2luYWwuZ2lm.jpg",
+      "title": "The only group that excels in both reselling and trading.",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #25"
+    },
+    {
+      "name": "Strike Access Full Access",
+      "price_per_unit": "$50.00 / month",
+      "logo": "https://img-v2-prod.whop.com/t4fDUnWhaWmNj6uD6XwrvttV6WpUcIzXKcaK6HVTo-w/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDIzLTEyLTMxL3VzZXJfMzAwMDlfYTY5MmYyNjYtOGEzZS00MDU3LWEwYjgtYTlhN2Q3ODliMDYyLnBuZw",
+      "title": "Unlock $1,000+ in reselling profits",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #62"
+    },
+    {
+      "name": "CHEESELOCKS",
+      "price_per_unit": "$30.00 / week",
+      "logo": "https://img-v2-prod.whop.com/KoZMdMab-X2qdrcuwc4MLYj_aDzU_jac5epOeiaXd7U/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI1LTAxLTE2L3VzZXJfNDA5MTY5Nl9lYmI5OGE0OS1kOWRiLTRkNTItOGFhYS0wN2ZiMDg5Yzc3YmEucG5n",
+      "title": "Win big on bets and grow your wealth with Cheeselocks!",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #32"
+    },
+    {
+      "name": "CFU Full Membership",
+      "price_per_unit": "$59.00 / month",
+      "logo": "https://img-v2-prod.whop.com/EOV9_j7qcSD1EfcCFFcGLneZl1rvmWphoCHEIkkQMUE/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTExLTE1L3VzZXJfODMxNDEzXzM3YmQ2ZjJjLTg3YTAtNGQ4Yi1iZmZmLTAyMTU3MGI0YTY0OS5wbmc",
+      "title": "Learn how to make steady profits trading stock options",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #231"
+    },
+    {
+      "name": "Team rawr",
+      "price_per_unit": "$150.00 / month",
+      "logo": "https://img-v2-prod.whop.com/5xgDY3QsKYxBkEMYXQJKbbe9fleJYGrdxUVquJc_aLc/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI0LTAxLTIxL3VzZXJfMTI5MzA3NV83M2EwZmM3YS0xYjdjLTQwZDQtODNkYS03MTQ4NjkzYjQ5YTcuanBlZw",
+      "title": "Real-time 0DTE Options Trading Alert System",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #59"
+    },
+    {
+      "name": "Mind Gains - Memecoin Mastery",
+      "price_per_unit": "$99.00 / month",
+      "logo": "https://img-v2-prod.whop.com/Q53w0F90sopL4i422YzAIV3phEZ0aGmhON8_opB64IQ/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI1LTAxLTAyL3VzZXJfNzU0MDMxMF9mYWUwOTcyMS0zM2ZlLTRiMGQtOGI1OC0xYjNlNWE0NjQwMDcuanBlZw",
+      "title": "Master your mind. Master the trenches.",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #134"
+    },
+    {
+      "name": "Vip+ iBet membership",
+      "price_per_unit": "$150.00 / week",
+      "logo": "https://img-v2-prod.whop.com/OHJisb3hy2KR34oArXtwn6Ib7stJHMFjgpFquZlGArc/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vdXBsb2Fkcy8yMDI1LTAxLTA5L3VzZXJfNzY0NzI5Ml85OTdkN2E0OC04NTMzLTRiMTMtOGI5NS02OWZhNTRjYTc3MWYuanBlZw",
+      "title": "Vip members only",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #48"
+    },
+    {
+      "name": "BetRecaps VIP Discord",
+      "price_per_unit": "$30.00 / month",
+      "logo": "https://img-v2-prod.whop.com/V6iSDQKcMXhXKdrh-Wd4THjoq1sh9Sl-ytj2cM4FTPk/rs:fill:48:48/el:1/dpr:2/aHR0cHM6Ly9hc3NldHMud2hvcC5jb20vYm90cy9pbWFnZXMvMzk1MDMub3JpZ2luYWwuanBlZw",
+      "title": "Dominate the Sportsbooks with Profitable +EV Plays",
+      "other_information": "Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #267"
+    },
+    {
+      "name": "Basic Membership",
+      "price_per_unit": "$50.00 / month",
+      "logo": "",
+      "title": "Unlock Hidden Clearance Deals + Money Making Opportunities",
+      "other_information": "$181.25 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #36"
+    },
+    {
+      "name": "Crystal Academy Membership",
+      "price_per_unit": "$50.00 / month",
+      "logo": "",
+      "title": "Making trading crystal clear!",
+      "other_information": "$180.75 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #93"
+    },
+    {
+      "name": "Hidden Society Full Membership",
+      "price_per_unit": "$79.99 / month",
+      "logo": "",
+      "title": "The Most Exclusive, Life-Changing Community Since 2020.",
+      "other_information": "$176.50 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #43"
+    },
+    {
+      "name": "BlitzerSports VIP",
+      "price_per_unit": "$19.99 / week",
+      "logo": "",
+      "title": "Unlock Profitable Sports Betting with Blitzer Sports",
+      "other_information": "$174.39 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #21"
+    },
+    {
+      "name": "VIP",
+      "price_per_unit": "$60.00 / week",
+      "logo": "",
+      "title": "Unlock Profitable Opportunities Now!",
+      "other_information": "$171.00 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #161"
+    },
+    {
+      "name": "TMS+ VIP Access \ud83d\udcca",
+      "price_per_unit": "$9.99 / week",
+      "logo": "",
+      "title": "REAL $5,000 - $50,000 BET SLIPS DAILY FROM LAS VEGAS!",
+      "other_information": "$169.72 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #54"
+    },
+    {
+      "name": "Capital Hill Trading Bootcamp",
+      "price_per_unit": "$799.99",
+      "logo": "",
+      "title": "Break the Cycle, Master Trading",
+      "other_information": "$168.00 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #308"
+    },
+    {
+      "name": "Degen Tavern Standard Access",
+      "price_per_unit": "$35.00 / week",
+      "logo": "",
+      "title": "Take your Degen Status to Unforseen Heights",
+      "other_information": "$166.00 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #83"
+    },
+    {
+      "name": "Juiced Bets VIP Discord",
+      "price_per_unit": "$29.99 / 2 weeks",
+      "logo": "",
+      "title": "The #1 +EV Betting Group",
+      "other_information": "$163.75 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #154"
+    },
+    {
+      "name": "12 MESI DI OPTIMAL COACHING",
+      "price_per_unit": "\u20ac699.00",
+      "logo": "",
+      "title": "Il coaching definitivo, un\u2019eccellenza scientifica e tecnica.",
+      "other_information": "$161.81 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #163"
+    },
+    {
+      "name": "Moon Trades Monthly",
+      "price_per_unit": "$79.99 / month",
+      "logo": "",
+      "title": "Join Moon Trades for Exclusive Insights",
+      "other_information": "$160.00 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #468"
+    },
+    {
+      "name": "Aurora Professional Zones",
+      "price_per_unit": "$44.99 / month",
+      "logo": "",
+      "title": "Maximize Profits with Elite Supply & Demand Indicators!",
+      "other_information": "$160.00 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #344"
+    },
+    {
+      "name": "MTMVERSE Premium Stocks",
+      "price_per_unit": "$125.00 / 2 weeks",
+      "logo": "",
+      "title": "Unlock Profit with MTMVERSE Expertise",
+      "other_information": "$160.00 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #390"
+    },
+    {
+      "name": "PropFellas VIP",
+      "price_per_unit": "$40.00 / month",
+      "logo": "",
+      "title": "Join The Winning Team!",
+      "other_information": "$158.00 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #82"
+    },
+    {
+      "name": "Cook The Books VIP Access",
+      "price_per_unit": "$30.00 / 2 weeks",
+      "logo": "",
+      "title": "Bet Smarter, Win Bigger",
+      "other_information": "$157.70 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #41"
+    },
+    {
+      "name": "Sindbad KI [Kryptoanalyse]",
+      "price_per_unit": "\u20ac25.00 / month",
+      "logo": "",
+      "title": "Spare Zeit, lass die KI deine Crypto-Recherche machen!",
+      "other_information": "$154.96 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #106"
+    },
+    {
+      "name": "50x Club",
+      "price_per_unit": "$89.00 / month",
+      "logo": "",
+      "title": "Private Crypto Community",
+      "other_information": "$151.35 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #542"
+    },
+    {
+      "name": "Peachy Investor Trading School",
+      "price_per_unit": "$167.00 / month",
+      "logo": "",
+      "title": "Simple Trading Strategies & Education for all Skill Levels",
+      "other_information": "$150.30 Affiliate earnings last 24h",
+      "whop_rank": "Whop Ranking #60"
+    }
+  ]
+}

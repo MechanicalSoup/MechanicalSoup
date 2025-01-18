@@ -1,99 +1,186 @@
 from playwright.sync_api import sync_playwright
-import json
 from firecrawl import FirecrawlApp
-from pydantic import BaseModel
+import json
+import os
+from dotenv import load_dotenv
 
-class ProductSchema(BaseModel):
-    name: str
-    description: str
-    price: str
-    ranking: str
-    time_range: str
-    logo: str
+# Load environment variables
+load_dotenv()
 
-def scrape_affiliate_revenue():
-    """
-    Scrapes affiliate revenue data using Playwright and Firecrawl.dev API.
-    Returns revenue data as a dictionary.
-    """
+def scrape_metrics_with_playwright():
+    """Scrape revenue metrics and affiliate earnings from all pages"""
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
         
+        platform_metrics = {"total_revenue": None, "total_users": None}
+        all_affiliate_earnings = []
+        
         try:
-            # Navigate to the URL
+            # Get platform metrics from first page only
             page.goto("https://whop.com/discover/f/most_affiliate_earnings_24_hours/")
-
-            # Wait for and extract number-flow-react elements
             elements = page.query_selector_all('number-flow-react')
-            platform_metrics = {
-                "total_revenue": None,
-                "total_users": None
-            }
-            affiliate_earnings = []
-            products = []
-
+            
+            # Process first page metrics
             for element in elements:
                 try:
-                    # Get data attribute from shadow DOM element
                     data_attr = element.get_attribute('data')
                     if data_attr:
                         data = json.loads(data_attr)
                         value = data.get('valueAsString') or data.get('value')
-                        print(f"Found value: {value}")  # Debug print
                         
-                        # Classify the values
                         if value and isinstance(value, str):
                             value = value.replace('$', '')
-                            if float(value.replace(',', '')) > 500000:  # Likely platform metric
-                                if ',' in value and len(value) > 10:  # Total revenue
+                            if float(value.replace(',', '')) > 500000:
+                                if ',' in value and len(value) > 10:
                                     platform_metrics["total_revenue"] = value
-                                else:  # User count
+                                else:
                                     platform_metrics["total_users"] = value
-                            else:  # Regular affiliate earning
-                                affiliate_earnings.append(value)
+                            else:
+                                all_affiliate_earnings.append(value)
                 except Exception as e:
                     print(f"Error parsing element: {e}")
-                    continue
 
-            # Use Firecrawl.dev API to extract product information
-            api_key = "fc-26d2bf277d8647a3a1c01203a536d757"
-            app = FirecrawlApp(api_key=api_key)
-            response = app.scrape_url(
-                'https://whop.com/discover/f/most_affiliate_earnings_24_hours/',
-                params={
-                    'formats': ['extract'],
-                    'extract': {
-                        'schema': ProductSchema.model_json_schema(),
-                    }
-                }
-            )
-
-            if response['success']:
-                data = response['data']
-                products = data.get("extract", [])
-                with open('scraped_data.json', 'w') as f:
-                    json.dump(data, f, indent=2)
-            else:
-                print(f"Error fetching data: {response}")
-
-            print(f"\nFound metrics: {platform_metrics}")  # Debug print
-            print(f"Found earnings: {affiliate_earnings}")  # Debug print
-            print(f"Found products: {products}")  # Debug print
+            # Scrape additional pages
+            for page_num in range(2, 6):  # Pages 2-5
+                url = f"https://whop.com/discover/f/most_affiliate_earnings_24_hours/p/{page_num}/"
+                print(f"Scraping page {page_num}: {url}")
+                
+                page.goto(url)
+                elements = page.query_selector_all('number-flow-react')
+                
+                # Process affiliate earnings from additional pages
+                for element in elements:
+                    try:
+                        data_attr = element.get_attribute('data')
+                        if data_attr:
+                            data = json.loads(data_attr)
+                            value = data.get('valueAsString') or data.get('value')
+                            if value and isinstance(value, str):
+                                value = value.replace('$', '')
+                                if float(value.replace(',', '')) < 500000:  # Only affiliate earnings
+                                    all_affiliate_earnings.append(value)
+                    except Exception as e:
+                        print(f"Error parsing element on page {page_num}: {e}")
             
-            return {
-                "platform_metrics": platform_metrics,
-                "affiliate_earnings": affiliate_earnings,
-                "products": products
-            }
-
-        except Exception as e:
-            print(f"Error during scraping: {e}")
-            return {}
+            return platform_metrics, all_affiliate_earnings
+                    
         finally:
             browser.close()
 
+def scrape_products_with_firecrawl():
+    """Scrape products from all pages using Firecrawl"""
+    try:
+        app = FirecrawlApp(api_key=os.getenv('FIRECRAWL_API_KEY'))
+        all_communities = []
+
+        # Scrape each page
+        for page_num in range(1, 6):  # Pages 1-5
+            url = f"https://whop.com/discover/f/most_affiliate_earnings_24_hours/"
+            if page_num > 1:
+                url += f"p/{page_num}/"
+                
+            print(f"Scraping communities from page {page_num}: {url}")
+            
+            params = {
+                'formats': ['extract'],
+                'extract': {
+                    'schema': {
+                        "type": "object",
+                        "properties": {
+                            "top_communities": {
+                                "type": "array",
+                                "selector": "div[class*='product-card']",  # Updated selector
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "selector": "div[class*='fui-Text']"  # Updated selector
+                                        },
+                                        "price_per_unit": {
+                                            "type": "string",
+                                            "selector": "number-flow-react",
+                                            "attribute": "data"
+                                        },
+                                        "logo": {
+                                            "type": "string",
+                                            "selector": "img",
+                                            "attribute": "src"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "selector": "div[class*='whitespace-pre-wrap']"  # Updated selector
+                                        },
+                                        "other_information": {
+                                            "type": "string",
+                                            "selector": "span[class*='text-medium']"  # Updated selector
+                                        },
+                                        "whop_rank": {
+                                            "type": "string",
+                                            "selector": "span[class*='flex items-center gap-1']"  # Updated selector
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "required": ["top_communities"]
+                    }
+                }
+            }
+            
+            response = app.scrape_url(url, params=params)
+            
+            # Extract communities from this page
+            communities = response.get('extract', {}).get('top_communities', [])
+            if not communities:
+                communities = response.get('data', {}).get('extract', {}).get('top_communities', [])
+            
+            if communities:
+                all_communities.extend(communities)
+            
+            print(f"Found {len(communities)} communities on page {page_num}")
+            
+        return all_communities
+        
+    except Exception as e:
+        print(f"Error during Firecrawl scraping: {e}")
+        return []
+
+def scrape_affiliate_revenue():
+    """Main scraping function combining both methods"""
+    try:
+        platform_metrics, affiliate_earnings = scrape_metrics_with_playwright()
+        
+        # Get and validate communities data
+        communities = scrape_products_with_firecrawl()
+        if not communities and os.path.exists('debug_scraped_data.json'):
+            # Try to recover communities from debug file if scraping failed
+            with open('debug_scraped_data.json', 'r') as f:
+                debug_data = json.load(f)
+                communities = debug_data.get('extract', {}).get('top_communities', [])
+        
+        result = {
+            "platform_metrics": platform_metrics,
+            "affiliate_earnings": affiliate_earnings,
+            "top_communities": communities
+        }
+        
+        # Save raw data with absolute path
+        output_path = os.path.join(os.path.dirname(__file__), 'data', 'scraped_data.json')
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        with open(output_path, 'w') as f:
+            json.dump(result, f, indent=2)
+            print(f"Data saved to {output_path}")
+            
+        return result
+
+    except Exception as e:
+        print(f"Error in scrape_affiliate_revenue: {e}")
+        return None
+
 if __name__ == "__main__":
-    result = scrape_affiliate_revenue()  # Store the result
+    result = scrape_affiliate_revenue()
     print("\nRaw scraped data:")
-    print(json.dumps(result, indent=2))  # Print formatted output
+    print(json.dumps(result, indent=2))

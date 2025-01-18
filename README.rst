@@ -1,134 +1,139 @@
-.. image:: /assets/mechanical-soup-logo.png
-   :alt: MechanicalSoup. A Python library for automating website interaction.
+SDKs
+Python
+Firecrawl Python SDK is a wrapper around the Firecrawl API to help you easily turn websites into markdown.
 
-Home page
----------
-
-https://mechanicalsoup.readthedocs.io/
-
-Overview
---------
-
-A Python library for automating interaction with websites.
-MechanicalSoup automatically stores and sends cookies, follows
-redirects, and can follow links and submit forms. It doesn't do
-JavaScript.
-
-MechanicalSoup was created by `M Hickford
-<https://github.com/hickford/>`__, who was a fond user of the
-`Mechanize <https://github.com/jjlee/mechanize>`__ library.
-Unfortunately, Mechanize was `incompatible with Python 3 until 2019
-<https://github.com/python-mechanize/mechanize/issues/9>`__ and its development
-stalled for several years. MechanicalSoup provides a similar API, built on Python
-giants `Requests <http://docs.python-requests.org/en/latest/>`__ (for
-HTTP sessions) and `BeautifulSoup
-<https://www.crummy.com/software/BeautifulSoup/>`__ (for document
-navigation). Since 2017 it is a project actively maintained by a small
-team including `@hemberger <https://github.com/hemberger>`__ and `@moy
-<https://github.com/moy/>`__.
-
-|Gitter Chat|
-
+​
 Installation
-------------
+To install the Firecrawl Python SDK, you can use pip:
 
-|Latest Version| |Supported Versions|
+Python
 
-PyPy3 is also supported (and tested against).
+pip install firecrawl-py
+​
+Usage
+Get an API key from firecrawl.dev
+Set the API key as an environment variable named FIRECRAWL_API_KEY or pass it as a parameter to the FirecrawlApp class.
+Here’s an example of how to use the SDK:
 
-Download and install the latest released version from `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__::
+Python
 
-  pip install MechanicalSoup
+from firecrawl import FirecrawlApp
 
-Download and install the development version from `GitHub <https://github.com/MechanicalSoup/MechanicalSoup>`__::
+app = FirecrawlApp(api_key="fc-YOUR_API_KEY")
 
-  pip install git+https://github.com/MechanicalSoup/MechanicalSoup
+# Scrape a website:
+scrape_status = app.scrape_url(
+  'https://firecrawl.dev', 
+  params={'formats': ['markdown', 'html']}
+)
+print(scrape_status)
 
-Installing from source (installs the version in the current working directory)::
+# Crawl a website:
+crawl_status = app.crawl_url(
+  'https://firecrawl.dev', 
+  params={
+    'limit': 100, 
+    'scrapeOptions': {'formats': ['markdown', 'html']}
+  }
+)
+print(crawl_status)
+​
+Scraping a URL
+To scrape a single URL, use the scrape_url method. It takes the URL as a parameter and returns the scraped data as a dictionary.
 
-  python setup.py install
+Python
 
-(In all cases, add ``--user`` to the ``install`` command to
-install in the current user's home directory.)
+# Scrape a website:
+scrape_result = app.scrape_url('firecrawl.dev', params={'formats': ['markdown', 'html']})
+print(scrape_result)
+​
+Crawling a Website
+To crawl a website, use the crawl_url method. It takes the starting URL and optional parameters as arguments. The params argument allows you to specify additional options for the crawl job, such as the maximum number of pages to crawl, allowed domains, and the output format.
 
-Documentation
--------------
+Python
 
-The full documentation is available on
-https://mechanicalsoup.readthedocs.io/. You may want to jump directly to
-the `automatically generated API
-documentation <https://mechanicalsoup.readthedocs.io/en/stable/mechanicalsoup.html>`__.
+crawl_status = app.crawl_url(
+  'https://firecrawl.dev', 
+  params={
+    'limit': 100, 
+    'scrapeOptions': {'formats': ['markdown', 'html']}
+  }, 
+  poll_interval=30
+)
+print(crawl_status)
+​
+Asynchronous Crawling
+To crawl a website asynchronously, use the crawl_url_async method. It returns the crawl ID which you can use to check the status of the crawl job. It takes the starting URL and optional parameters as arguments. The params argument allows you to specify additional options for the crawl job, such as the maximum number of pages to crawl, allowed domains, and the output format.
 
-Example
--------
+Python
 
-From `<examples/expl_qwant.py>`__, code to get the results from
-a Qwant search:
+crawl_status = app.async_crawl_url(
+  'https://firecrawl.dev', 
+  params={
+    'limit': 100, 
+    'scrapeOptions': {'formats': ['markdown', 'html']}
+  }
+)
+print(crawl_status)
+​
+Checking Crawl Status
+To check the status of a crawl job, use the check_crawl_status method. It takes the job ID as a parameter and returns the current status of the crawl job.
 
-.. code:: python
+Python
 
-    """Example usage of MechanicalSoup to get the results from the Qwant
-    search engine.
-    """
+crawl_status = app.check_crawl_status("<crawl_id>")
+print(crawl_status)
+​
+Cancelling a Crawl
+To cancel an asynchronous crawl job, use the cancel_crawl method. It takes the job ID of the asynchronous crawl as a parameter and returns the cancellation status.
 
-    import re
-    import mechanicalsoup
-    import html
-    import urllib.parse
+Python
 
-    # Connect to Qwant
-    browser = mechanicalsoup.StatefulBrowser(user_agent='MechanicalSoup')
-    browser.open("https://lite.qwant.com/")
+cancel_crawl = app.cancel_crawl(id)
+print(cancel_crawl)
+​
+Map a Website
+Use map_url to generate a list of URLs from a website. The params argument let you customize the mapping process, including options to exclude subdomains or to utilize the sitemap.
 
-    # Fill-in the search form
-    browser.select_form('#search-form')
-    browser["q"] = "MechanicalSoup"
-    browser.submit_selected()
+Python
 
-    # Display the results
-    for link in browser.page.select('.result a'):
-        # Qwant shows redirection links, not the actual URL, so extract
-        # the actual URL from the redirect link:
-        href = link.attrs['href']
-        m = re.match(r"^/redirect/[^/]*/(.*)$", href)
-        if m:
-            href = urllib.parse.unquote(m.group(1))
-        print(link.text, '->', href)
+# Map a website:
+map_result = app.map_url('https://firecrawl.dev')
+print(map_result)
+​
+Crawling a Website with WebSockets
+To crawl a website with WebSockets, use the crawl_url_and_watch method. It takes the starting URL and optional parameters as arguments. The params argument allows you to specify additional options for the crawl job, such as the maximum number of pages to crawl, allowed domains, and the output format.
 
-More examples are available in `<examples/>`__.
+Python
 
-For an example with a more complex form (checkboxes, radio buttons and
-textareas), read `<tests/test_browser.py>`__
-and `<tests/test_form.py>`__.
+# inside an async function...
+nest_asyncio.apply()
 
-Development
------------
+# Define event handlers
+def on_document(detail):
+    print("DOC", detail)
 
-|Build Status|
-|Coverage Status|
-|Documentation Status|
-|CII Best Practices|
+def on_error(detail):
+    print("ERR", detail['error'])
 
-Instructions for building, testing and contributing to MechanicalSoup:
-see `<CONTRIBUTING.rst>`__.
+def on_done(detail):
+    print("DONE", detail['status'])
 
-Common problems
----------------
+    # Function to start the crawl and watch process
+async def start_crawl_and_watch():
+    # Initiate the crawl job and get the watcher
+    watcher = app.crawl_url_and_watch('firecrawl.dev', { 'excludePaths': ['blog/*'], 'limit': 5 })
 
-Read the `FAQ
-<https://mechanicalsoup.readthedocs.io/en/stable/faq.html>`__.
+    # Add event listeners
+    watcher.add_event_listener("document", on_document)
+    watcher.add_event_listener("error", on_error)
+    watcher.add_event_listener("done", on_done)
 
-.. |Latest Version| image:: https://img.shields.io/pypi/v/MechanicalSoup.svg
-   :target: https://pypi.python.org/pypi/MechanicalSoup/
-.. |Supported Versions| image:: https://img.shields.io/pypi/pyversions/mechanicalsoup.svg
-   :target: https://pypi.python.org/pypi/MechanicalSoup/
-.. |Build Status| image:: https://github.com/MechanicalSoup/MechanicalSoup/actions/workflows/python-package.yml/badge.svg?branch=main
-   :target: https://github.com/MechanicalSoup/MechanicalSoup/actions/workflows/python-package.yml?query=branch%3Amain
-.. |Coverage Status| image:: https://codecov.io/gh/MechanicalSoup/MechanicalSoup/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/MechanicalSoup/MechanicalSoup
-.. |Documentation Status| image:: https://readthedocs.org/projects/mechanicalsoup/badge/?version=latest
-   :target: https://mechanicalsoup.readthedocs.io/en/latest/?badge=latest
-.. |CII Best Practices| image:: https://bestpractices.coreinfrastructure.org/projects/1334/badge
-   :target: https://bestpractices.coreinfrastructure.org/projects/1334
-.. |Gitter Chat| image:: https://badges.gitter.im/MechanicalSoup/MechanicalSoup.svg
-   :target: https://gitter.im/MechanicalSoup/Lobby
+    # Start the watcher
+    await watcher.connect()
+
+# Run the event loop
+await start_crawl_and_watch()
+​
+Error Handling
+The SDK handles errors returned by the Firecrawl API and raises appropriate exceptions. If an error occurs during a request, an exception will be raised with a descriptive error message.
