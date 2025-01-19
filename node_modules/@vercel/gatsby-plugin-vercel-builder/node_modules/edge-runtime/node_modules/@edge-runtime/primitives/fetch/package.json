@@ -1,0 +1,4 @@
+{
+  "main": "../dist/fetch.js",
+  "types": "../types/fetch.d.ts"
+}

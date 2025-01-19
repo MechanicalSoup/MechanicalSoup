@@ -4,14 +4,8 @@ import re
 import os
 import json
 
-def clean_monetary_value(value: str) -> float:
-    """Convert string monetary values to float"""
-    if isinstance(value, (int, float)):
-        return float(value)
-    return float(re.sub(r'[^\d.]', '', value))
-
 def process_revenue_data() -> Dict:
-    """Process scraped revenue data and combine affiliate earnings with communities"""
+    """Process scraped revenue data into final combined format"""
     raw_data = scrape_affiliate_revenue()
     
     if raw_data is None:
@@ -23,55 +17,32 @@ def process_revenue_data() -> Dict:
             print(f"Error loading saved data: {e}")
             return {}
 
-    # Clean and process platform metrics
-    clean_data = {
-        "platform_metrics": {
-            "total_revenue": None,
-            "total_users": None
-        },
-        "top_communities": []  # Changed back to top_communities to match desired format
+    combined_data = {
+        "platform_metrics": raw_data.get("platform_metrics", {}),
+        "top_communities": []
     }
-
-    # Process platform metrics
-    if raw_data.get("platform_metrics"):
-        metrics = raw_data["platform_metrics"]
-        if metrics["total_revenue"]:
-            clean_data["platform_metrics"]["total_revenue"] = clean_monetary_value(metrics["total_revenue"])
-        if metrics["total_users"]:
-            clean_data["platform_metrics"]["total_users"] = int(re.sub(r'[^\d]', '', metrics["total_users"]))
 
     # Get raw data lists
     earnings = raw_data.get("affiliate_earnings", [])
     communities = raw_data.get("top_communities", [])
     
-    # Merge data while keeping original string format of earnings
+    # Merge communities with their earnings and add rank
     for idx, community in enumerate(communities):
         if idx < len(earnings):
             community_copy = dict(community)
-            # Add affiliate_earnings in the original string format
             community_copy["affiliate_earnings"] = earnings[idx]
-            clean_data["top_communities"].append(community_copy)
+            community_copy["rank"] = idx + 1
+            combined_data["top_communities"].append(community_copy)
     
-    # Save processed data
-    output_path = os.path.join(os.path.dirname(__file__), 'data', 'processed_data.json')
+    # Save combined data
+    output_path = os.path.join(os.path.dirname(__file__), 'data', 'combined_data.json')
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
     with open(output_path, 'w') as f:
-        json.dump(clean_data, f, indent=2)
-        print(f"Processed data saved to {output_path}")
+        json.dump(combined_data, f, indent=2)
+        print(f"Combined data saved to {output_path}")
 
-    return clean_data
+    return combined_data
 
 if __name__ == "__main__":
-    results = process_revenue_data()
-    
-    if results["platform_metrics"]["total_revenue"] is not None:
-        print("\nPlatform Summary:")
-        print(f"Total Revenue: ${results['platform_metrics']['total_revenue']:,.2f}")
-        print(f"Total Users: {results['platform_metrics']['total_users']:,}")
-        print(f"\nTop Communities: {len(results['top_communities'])}")
-        
-        for community in results['top_communities']:
-            print(f"\n{community['name']}:")
-            print(f"  Earnings: ${community['affiliate_earnings']}")
-            print(f"  Rank: #{community['rank']}")
+    process_revenue_data()

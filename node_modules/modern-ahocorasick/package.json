@@ -1,0 +1,81 @@
+{
+  "name": "modern-ahocorasick",
+  "version": "1.1.0",
+  "description": "modern-ahocorasick",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "dev": "tsup --watch --sourcemap",
+    "build:dev": "tsup --sourcemap",
+    "build": "tsup",
+    "test:dev": "vitest",
+    "test": "vitest run",
+    "init:rename": "node scripts/init/rename.js",
+    "init:bin": "node scripts/init/bin.js",
+    "clean": "node scripts/clean.js",
+    "format": "pnpm prettier --check \"src/**/*.{ts,js}\" -w",
+    "ls:pack": "npm pack --dry-run",
+    "semantic-release": "semantic-release",
+    "sync": "cnpm sync modern-ahocorasick"
+  },
+  "packageManager": "pnpm@9.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sonofmagic/modern-ahocorasick.git"
+  },
+  "files": [
+    "dist",
+    "types"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [],
+  "author": "SonOfMagic <qq1324318532@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sonofmagic/modern-ahocorasick/issues"
+  },
+  "homepage": "https://github.com/sonofmagic/modern-ahocorasick#readme",
+  "devDependencies": {
+    "@icebreakers/eslint-config": "^0.1.0",
+    "@tsconfig/recommended": "^1.0.6",
+    "@types/klaw": "^3.0.6",
+    "@types/lodash": "^4.17.1",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.12.12",
+    "@types/semantic-release": "^20.0.6",
+    "@vitest/coverage-v8": "^1.6.0",
+    "cross-env": "^7.0.3",
+    "defu": "^6.1.4",
+    "del": "^7.1.0",
+    "eslint": "9.2.0",
+    "klaw": "^4.1.0",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "semantic-release": "^23.1.1",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}

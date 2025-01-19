@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node",
+      "config": {
+        "nodeVersion": "20.x"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/whop-data",
+      "dest": "/api/get-whop-data.js"
+    },
+    {
+      "src": "/api/update",
+      "dest": "/api/update-data.js"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/update",
+      "schedule": "0 0 * * *"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@database_url",
+    "FIRECRAWL_API_KEY": "@firecrawl_api_key"
+  },
+  "devCommand": "npm run dev"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "deep-object-diff",
+  "version": "1.1.9",
+  "description": "Deep diffs two objects, including nested structures of arrays and objects, and return the difference.",
+  "main": "cjs/index.js",
+  "module": "mjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./mjs/index.js",
+      "require": "./cjs/index.js",
+      "types": "./index.d.ts"
+    }
+  },
+  "types": "./index.d.ts",
+  "author": "Matt Phillips",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattphillips/deep-object-diff.git"
+  },
+  "keywords": [
+    "diff",
+    "object",
+    "deep",
+    "difference"
+  ],
+  "bugs": {
+    "url": "https://github.com/mattphillips/deep-object-diff/issues"
+  },
+  "homepage": "https://github.com/mattphillips/deep-object-diff#readme"
+}

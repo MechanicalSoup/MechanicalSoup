@@ -1,0 +1,4 @@
+{
+  "main": "../dist/blob.js",
+  "types": "../types/blob.d.ts"
+}

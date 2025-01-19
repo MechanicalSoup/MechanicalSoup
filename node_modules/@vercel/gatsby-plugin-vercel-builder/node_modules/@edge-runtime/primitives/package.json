@@ -1,0 +1,67 @@
+{
+  "name": "@edge-runtime/primitives",
+  "description": "A set of primitives to build Vercel Edge Runtime.",
+  "homepage": "https://edge-runtime.vercel.app/packages/primitives",
+  "version": "2.0.0",
+  "main": "dist/index.js",
+  "repository": {
+    "directory": "packages/primitives",
+    "type": "git",
+    "url": "git+https://github.com/vercel/edge-runtime.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vercel/edge-runtime/issues"
+  },
+  "keywords": [
+    "apis",
+    "edge",
+    "functions",
+    "primites",
+    "runtime",
+    "standard",
+    "web"
+  ],
+  "devDependencies": {
+    "@edge-runtime/format": "1.1.0",
+    "@peculiar/webcrypto": "1.4.0",
+    "@ungap/structured-clone": "1.0.1",
+    "aggregate-error-ponyfill": "1.1.0",
+    "blob-polyfill": "7.0.20220408",
+    "esbuild-plugin-alias": "latest",
+    "event-target-shim": "6.0.2",
+    "formdata-node": "4.4.1",
+    "text-encoding": "0.7.0",
+    "tsup": "6",
+    "undici": "5.11.0",
+    "urlpattern-polyfill": "6.0.1",
+    "web-streams-polyfill": "4.0.0-beta.3",
+    "whatwg-url": "11.0.0"
+  },
+  "files": [
+    "abort-controller",
+    "blob",
+    "cache",
+    "console",
+    "crypto",
+    "dist",
+    "encoding",
+    "events",
+    "fetch",
+    "streams",
+    "structured-clone",
+    "types",
+    "url"
+  ],
+  "license": "MPLv2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "ts-node scripts/build.ts",
+    "clean:build": "rm -rf dist abort-controller blob cache console crypto encoding events fetch streams structured-clone url",
+    "clean:node": "rm -rf node_modules",
+    "prebuild": "pnpm run clean:build",
+    "test": "jest"
+  }
+}

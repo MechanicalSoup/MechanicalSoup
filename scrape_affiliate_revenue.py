@@ -1,3 +1,8 @@
+# This file contains the scraping logic but is not directly executed
+# All functionality is accessed through process_revenue_data.py which generates combined_data.json
+
+# ...existing code commented out...
+
 from playwright.sync_api import sync_playwright
 from firecrawl import FirecrawlApp
 import json

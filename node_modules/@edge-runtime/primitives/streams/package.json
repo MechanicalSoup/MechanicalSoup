@@ -1,0 +1,4 @@
+{
+  "main": "../dist/streams.js",
+  "types": "../types/streams.d.ts"
+}

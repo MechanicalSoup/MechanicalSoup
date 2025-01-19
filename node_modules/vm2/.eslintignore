@@ -1,0 +1,4 @@
+/test.js
+/node-*
+/lib/events.js
+/test/additional-modules/my-es-module/index.js

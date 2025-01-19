@@ -1,0 +1,4 @@
+{
+  "main": "../dist/encoding.js",
+  "types": "../types/encoding.d.ts"
+}

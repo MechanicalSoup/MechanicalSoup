@@ -1,0 +1,95 @@
+{
+  "name": "git-hooks-list",
+  "version": "1.0.3",
+  "description": "List of Git hooks",
+  "keywords": [
+    "git",
+    "hooks",
+    "list"
+  ],
+  "homepage": "https://github.com/fisker/git-hooks-list#readme",
+  "bugs": {
+    "url": "https://github.com/fisker/git-hooks-list/issues"
+  },
+  "repository": "fisker/git-hooks-list",
+  "funding": "https://github.com/fisker/git-hooks-list?sponsor=1",
+  "license": "MIT",
+  "author": {
+    "name": "fisker Cheung",
+    "email": "lionkay@gmail.com",
+    "url": "https://www.fiskercheung.com/"
+  },
+  "sideEffects": false,
+  "main": "index.json",
+  "jsdelivr": "index.json",
+  "unpkg": "index.json",
+  "browser": "index.json",
+  "files": [
+    "index.json"
+  ],
+  "scripts": {
+    "clean": "run-p clean:*",
+    "clean:dist": "del-cli dist",
+    "dist": "run-p dist:*",
+    "dist:npm": "np --yolo --no-yarn",
+    "format": "run-p format:*",
+    "format:eslint": "yarn lint:eslint --fix",
+    "format:markdown": "yarn lint:markdown --fix",
+    "format:package-json": "sort-package-json \"package.json\" \"packages/*/package.json\"",
+    "format:prettier": "yarn lint:prettier --write",
+    "lint": "run-p lint:*",
+    "lint:eslint": "eslint \"**/*.{js,mjs,vue}\"",
+    "lint:markdown": "markdownlint \"**/*.md\" --ignore \"**/node_modules/**\"",
+    "lint:package-json": "yarn run format:package-json --check",
+    "lint:prettier": "prettier \"**/*.{css,html,js,json,less,md,scss,ts,vue,yaml,yml}\" --check",
+    "release": "run-s lint test format dist",
+    "test": "ava",
+    "test-coverage": "nyc yarn test",
+    "update": "node -r esm scripts/update.js"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ],
+    "verbose": true
+  },
+  "nyc": {
+    "reporter": [
+      "text",
+      "lcov"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "8.3.5",
+    "@fisker/commitlint-config": "1.1.7",
+    "@fisker/eslint-config": "1.6.6",
+    "@fisker/husky-config": "1.1.9",
+    "@fisker/lint-staged-config": "1.0.11",
+    "@fisker/prettier-config": "1.0.28",
+    "ava": "3.3.0",
+    "cheerio": "1.0.0-rc.3",
+    "cz-conventional-changelog": "3.1.0",
+    "del-cli": "3.0.0",
+    "eslint": "6.8.0",
+    "eslint-config-fisker": "4.5.0",
+    "esm": "3.2.25",
+    "got": "10.5.7",
+    "husky": "4.2.3",
+    "lint-staged": "10.0.7",
+    "markdownlint-cli": "0.22.0",
+    "npm-run-all": "4.1.5",
+    "nyc": "15.0.0",
+    "prettier": "1.19.1",
+    "sort-package-json": "1.40.0",
+    "write-prettier-file": "1.2.6"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

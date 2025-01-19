@@ -1,0 +1,4 @@
+{
+  "main": "../dist/crypto.js",
+  "types": "../types/crypto.d.ts"
+}

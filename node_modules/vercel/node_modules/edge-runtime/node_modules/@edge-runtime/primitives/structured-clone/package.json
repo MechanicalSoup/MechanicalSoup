@@ -1,0 +1,4 @@
+{
+  "main": "../dist/structured-clone.js",
+  "types": "../types/structured-clone.d.ts"
+}

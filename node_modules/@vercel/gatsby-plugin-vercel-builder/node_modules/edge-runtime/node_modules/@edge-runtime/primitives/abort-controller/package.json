@@ -1,0 +1,4 @@
+{
+  "main": "../dist/abort-controller.js",
+  "types": "../types/abort-controller.d.ts"
+}

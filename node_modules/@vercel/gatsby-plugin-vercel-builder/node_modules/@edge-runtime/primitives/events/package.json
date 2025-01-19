@@ -1,0 +1,4 @@
+{
+  "main": "../dist/events.js",
+  "types": "../types/events.d.ts"
+}

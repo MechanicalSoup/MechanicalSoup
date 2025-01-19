@@ -1,0 +1,4 @@
+{
+  "main": "../dist/cache.js",
+  "types": "../types/cache.d.ts"
+}
