@@ -4,29 +4,27 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-py"
+  provider = "prisma-client-js"
 }
 
-model Metrics {
-  id           Int      @id @default(autoincrement())
-  totalRevenue Float
-  totalUsers   Int
-  createdAt    DateTime @default(now())
+model WhopData {
+  id           Int         @id @default(autoincrement())
+  totalRevenue String
+  totalUsers   String
+  createdAt    DateTime    @default(now())
+  communities  Community[]
 }
 
-model Earnings {
-  id        Int      @id @default(autoincrement())
-  value     Float
-  createdAt DateTime @default(now())
-}
-
-model Products {
-  id         Int      @id @default(autoincrement())
-  name       String
-  text_medium String?
-  price      Float
-  time_range String
-  whop_rank  Int
-  logo       String
-  createdAt  DateTime @default(now())
+model Community {
+  id               Int      @id @default(autoincrement())
+  whopDataId       Int
+  name             String
+  pricePerUnit     String
+  logo             String?
+  title            String
+  otherInformation String
+  whopRank         String
+  affiliateEarnings String
+  rank             Int
+  whopData         WhopData @relation(fields: [whopDataId], references: [id])
 }

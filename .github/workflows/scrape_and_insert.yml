@@ -1,16 +1,19 @@
-name: Generate Combined Data
+name: Scrape and Insert Data
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: '0 0 * * *'  # Runs at midnight daily
   workflow_dispatch:
 
 jobs:
-  generate_combined_data:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -24,7 +27,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Generate combined data
-        run: python process_revenue_data.py
+        run: python process_and_insert.py
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+
+      - name: Deploy to Vercel
+        run: vercel --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
