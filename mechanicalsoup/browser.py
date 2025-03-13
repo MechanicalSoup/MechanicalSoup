@@ -59,7 +59,7 @@ class Browser:
         self.soup_config = soup_config or dict()
 
     @staticmethod
-    def __looks_like_html(response):
+    def __looks_like_html(response: requests.Response):
         """Guesses entity type when Content-Type header is missing.
         Since Content-Type is not strictly required, some servers leave it out.
         """
@@ -67,7 +67,7 @@ class Browser:
         return text.startswith('<html') or text.startswith('<!doctype')
 
     @staticmethod
-    def add_soup(response, soup_config):
+    def add_soup(response: requests.Response, soup_config):
         """Attaches a soup object to a requests response."""
         if ("text/html" in response.headers.get("Content-Type", "") or
                 Browser.__looks_like_html(response)):
@@ -121,7 +121,7 @@ class Browser:
         # the requests module uses a case-insensitive dict for session headers
         self.session.headers['User-agent'] = user_agent
 
-    def request(self, *args, **kwargs):
+    def request(self, *args, **kwargs) -> requests.Response:
         """Straightforward wrapper around `requests.Session.request
         <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
 
@@ -138,7 +138,7 @@ class Browser:
         Browser.add_soup(response, self.soup_config)
         return response
 
-    def get(self, *args, **kwargs):
+    def get(self, *args, **kwargs) -> requests.Response:
         """Straightforward wrapper around `requests.Session.get
         <http://docs.python-requests.org/en/master/api/#requests.Session.get>`__.
 
@@ -152,7 +152,7 @@ class Browser:
         Browser.add_soup(response, self.soup_config)
         return response
 
-    def post(self, *args, **kwargs):
+    def post(self, *args, **kwargs) -> requests.Response:
         """Straightforward wrapper around `requests.Session.post
         <http://docs.python-requests.org/en/master/api/#requests.Session.post>`__.
 
@@ -164,7 +164,7 @@ class Browser:
         Browser.add_soup(response, self.soup_config)
         return response
 
-    def put(self, *args, **kwargs):
+    def put(self, *args, **kwargs) -> requests.Response:
         """Straightforward wrapper around `requests.Session.put
         <http://docs.python-requests.org/en/master/api/#requests.Session.put>`__.
 
