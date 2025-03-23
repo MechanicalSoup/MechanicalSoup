@@ -69,7 +69,24 @@ class Browser:
     @staticmethod
     def add_soup(response, soup_config):
         """Attaches a soup object to a requests response."""
-        if ("text/html" in response.headers.get("Content-Type", "") or
+        content_type_string = response.headers.get("Content-Type", "")
+        # Parsing Content-Type can be relatively complicated;
+        # most modern browsers use the MIME sniffing
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing
+        # in the absence of an X-Content-Type-Options header indicating not to
+        # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+        # although we do not do this.
+        #
+        # The MIME sniffing standard
+        # https://mimesniff.spec.whatwg.org/#parsing-a-mime-type
+        # specifies a fairly low-level set of 12 steps (plus 10 substeps),
+        # which is needlessly complicated for our needs.
+        #
+        # Instead, leverage requests' internal function, which is borrowed from
+        # cgi.py in their d8666e190631b5330c2851bd354d07831afba114.
+        content_type, parameters = requests.utils._parse_content_type_header(
+            content_type_string)
+        if (content_type == "text/html" or
                 Browser.__looks_like_html(response)):
             # Note: By default (no charset provided in HTTP headers), requests
             # returns 'ISO-8859-1' which is the default for HTML4, even if HTML
@@ -77,7 +94,7 @@ class Browser:
             # resort to bs4 sniffing, hence the special handling here.
             http_encoding = (
                 response.encoding
-                if 'charset' in response.headers.get("Content-Type", "")
+                if 'charset' in parameters
                 else None
             )
             html_encoding = bs4.dammit.EncodingDetector.find_declared_encoding(
