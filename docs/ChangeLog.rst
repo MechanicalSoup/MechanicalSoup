@@ -2,10 +2,15 @@
 Release Notes
 =============
 
-Version 1.4 (in development)
-============================
+Version 1.4
+===========
 
-* Removed support for end of life python versions 3.6 and 3.7.
+* Added support for Python 3.12 and 3.13.
+
+* Removed support for end of life python versions 3.6, 3.7, and 3.8.
+
+* Minimum versions of dependencies ``urllib3`` and ``certifi`` have been
+  specified to mitigate security vulnerabilities.
 
 Version 1.3
 ===========
