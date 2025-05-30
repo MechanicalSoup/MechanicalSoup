@@ -407,17 +407,15 @@ def test_upload_file(httpbin):
     path1 = make_file("first file content")
     path2 = make_file("second file content")
 
-    value1 = open(path1, "rb")
-    value2 = open(path2, "rb")
-
     browser.open_fake_page(file_input_form)
     browser.select_form()
 
     # Test filling an existing input and creating a new input
-    browser["first"] = value1
-    browser.new_control("file", "second", value2)
+    with open(path1, "rb") as value1, open(path2, "rb") as value2:
+        browser["first"] = value1
+        browser.new_control("file", "second", value2)
+        response = browser.submit_selected()
 
-    response = browser.submit_selected()
     files = response.json()["files"]
     assert files["first"] == "first file content"
     assert files["second"] == "second file content"

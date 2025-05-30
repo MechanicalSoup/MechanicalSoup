@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 import os
 import sys
 import tempfile
@@ -150,7 +151,6 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
 
     valid_enctype = (enctype in valid_enctypes_file_submit and
                      valid_enctypes_file_submit[enctype])
-    expected_content = b""  # default
     if submit_file and file_field:
         # create a temporary file for testing file upload
         file_content = b":-)"
@@ -165,11 +165,17 @@ def test_enctype_and_file_submit(httpbin, enctype, submit_file, file_field):
             # Encoding doesn't allow sending the content, we expect
             # the filename as a normal text field.
             expected_content = os.path.basename(pic_path.encode())
-        tag = form.find("input", {"name": "pic"})
-        tag["value"] = open(pic_path, "rb")
+    else:
+        pic_path = None
+        expected_content = b""
 
+    # update the form (if needed) and submit
     browser = mechanicalsoup.Browser()
-    response = browser._request(form)
+    with open(pic_path, "rb") if pic_path is not None else nullcontext() as fd:
+        if pic_path is not None:
+            tag = form.find("input", {"name": "pic"})
+            tag["value"] = fd
+        response = browser._request(form)
 
     if enctype not in valid_enctypes_file_submit:
         expected_enctype = default_enctype
