@@ -24,14 +24,14 @@ Python version support in the current main branch may differ from the
 latest release in
 `PyPI <https://pypi.python.org/pypi/MechanicalSoup/>`__. Please inspect our
 `GitHub Actions workflows <https://github.com/MechanicalSoup/MechanicalSoup/actions>`__
-or run ``python setup.py --classifiers`` to see which versions of Python are
-supported in the current main branch.
 
 Installing dependencies and running tests can be done with:
 
 ::
 
-    python setup.py test
+    pip install -r requirements.txt
+    pip install -r tests/requirements.txt
+    pytest
 
 The documentation can be generated and viewed with:
 
