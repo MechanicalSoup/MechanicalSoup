@@ -46,7 +46,7 @@ Download and install the development version from `GitHub <https://github.com/Me
 
 Installing from source (installs the version in the current working directory)::
 
-  python setup.py install
+  pip install .
 
 (In all cases, add ``--user`` to the ``install`` command to
 install in the current user's home directory.)
