@@ -63,7 +63,7 @@ Installation should be as simple as:
 
 ::
 
-    python setup.py install
+    pip install .
 
 Editing the logo
 ----------------
