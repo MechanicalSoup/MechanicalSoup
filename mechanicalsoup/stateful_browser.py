@@ -8,6 +8,7 @@ from .browser import Browser
 from .form import Form
 from .utils import LinkNotFoundError
 
+import requests
 from requests.structures import CaseInsensitiveDict
 
 
@@ -133,7 +134,7 @@ class StatefulBrowser(Browser):
         """
         return urllib.parse.urljoin(self.url, url)
 
-    def open(self, url, *args, **kwargs):
+    def open(self, url, *args, **kwargs) -> requests.Response:
         """Open the URL and store the Browser's state in this object.
         All arguments are forwarded to :func:`Browser.get`.
 
