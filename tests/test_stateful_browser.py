@@ -496,7 +496,7 @@ def test_select_form_tag_object():
 
 def test_select_form_associated_elements():
     """Test associated elements outside the form tag"""
-    forms = """<form id="a"><input><textarea></form><input form="a">
+    forms = """<form id="a"><input><textarea></textarea></form><input form="a">
                <textarea form="a"/><input form="b">
                <form id="ab" action="/test.php"><input></form>
                <textarea form="ab"></textarea>
