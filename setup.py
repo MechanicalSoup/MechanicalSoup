@@ -1,5 +1,4 @@
 import re
-import sys
 from codecs import open  # To use a consistent encoding
 from os import path
 
