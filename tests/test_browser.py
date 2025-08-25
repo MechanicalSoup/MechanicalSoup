@@ -76,6 +76,19 @@ def test_get_request_kwargs_when_url_is_in_kwargs(httpbin):
         browser.get_request_kwargs(form, page.url, **kwargs)
 
 
+def test_get_request_kwargs_when_submit_element_has_formaction_attribute():
+    form_html = """
+        <form method="post" action="https://example.com/submit">
+            <button formaction="https://example.com/submit1"></button>
+        </form>
+    """
+    form = BeautifulSoup(form_html, "lxml").form
+    request_kwargs = mechanicalsoup.Browser.get_request_kwargs(
+        form, "https://example.com"
+    )
+    assert request_kwargs["url"] == "https://example.com/submit1"
+
+
 def test__request(httpbin):
     form_html = f"""
     <form method="post" action="{httpbin.url}/post">

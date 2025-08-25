@@ -190,6 +190,13 @@ class Browser:
         """Extract input data from the form."""
         method = str(form.get("method", "get"))
         action = form.get("action")
+
+        # If the form has a submit button, use its form action
+        # https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button#formaction.
+        button_submit_element = form.find("button")
+        if button_submit_element:
+            action = button_submit_element.get("formaction", action)
+
         url = urllib.parse.urljoin(url, action)
         if url is None:  # This happens when both `action` and `url` are None.
             raise ValueError('no URL to submit to')
