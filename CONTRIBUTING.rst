@@ -31,8 +31,7 @@ Installing dependencies and running tests can be done with:
 
 ::
 
-    pip install -r requirements.txt
-    pip install -r tests/requirements.txt
+    pip install -r requirements.txt -r tests/requirements.txt
     pytest
 
 The documentation can be generated and viewed with:
