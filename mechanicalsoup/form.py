@@ -359,12 +359,12 @@ class Form:
                 if found:
                     # Ignore submit element since it is an exact
                     # duplicate of the one we're looking at.
-                    del inp['name']
+                    inp.decompose()
                 found = True
             else:
                 # Delete any non-matching element's name so that it will be
                 # omitted from the submitted form data.
-                del inp['name']
+                inp.decompose()
 
         if not found and submit is not None and submit is not False:
             raise LinkNotFoundError(

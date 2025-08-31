@@ -76,6 +76,43 @@ def test_get_request_kwargs_when_url_is_in_kwargs(httpbin):
         browser.get_request_kwargs(form, page.url, **kwargs)
 
 
+def test_get_request_kwargs_when_submit_element_has_formaction_attribute():
+    form_html = """
+        <form method="post" action="https://example.com/submit">
+            <button formaction="https://example.com/submit1"></button>
+        </form>
+    """
+    form = BeautifulSoup(form_html, "lxml").form
+    request_kwargs = mechanicalsoup.Browser.get_request_kwargs(
+        form, "https://example.com"
+    )
+    assert request_kwargs["url"] == "https://example.com/submit1"
+
+
+def test_get_request_kwargs_many_submit_elements_have_formaction_attribute():
+    form_html = """
+        <form method="post" action="https://example.com/submit">
+            <button formaction="https://example.com/submit1"></button>
+            <button formaction="https://example.com/submit2"></button>
+            <button formaction="https://example.com/submit3"></button>
+        </form>
+    """
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(form_html, url="https://example.com")
+    browser.select_form()
+    chosen_button = browser.form.form.find_all(
+        "button"
+    )[1]  # Choose the second button
+    browser.form.choose_submit(
+        submit=chosen_button
+    )
+    assert len(browser.form.form.find_all("button")) == 1
+    request_kwargs = mechanicalsoup.Browser.get_request_kwargs(
+        browser.form.form, "https://example.com"
+    )
+    assert request_kwargs["url"] == "https://example.com/submit2"
+
+
 def test__request(httpbin):
     form_html = f"""
     <form method="post" action="{httpbin.url}/post">
