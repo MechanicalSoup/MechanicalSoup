@@ -43,12 +43,7 @@ class Browser:
         self.raise_on_404 = raise_on_404
         self.session = session or requests.Session()
 
-        if hasattr(weakref, 'finalize'):
-            self._finalize = weakref.finalize(self.session, self.close)
-        else:   # pragma: no cover
-            # Python < 3 does not have weakref.finalize, but these
-            # versions accept calling session.close() within __del__
-            self._finalize = self.close
+        self._finalize = weakref.finalize(self.session, self.close)
 
         self.set_user_agent(user_agent)
 
