@@ -31,7 +31,8 @@ Installing dependencies and running tests can be done with:
 
 ::
 
-    python setup.py test
+    pip install -r requirements.txt -r tests/requirements.txt
+    pytest
 
 The documentation can be generated and viewed with:
 
@@ -63,7 +64,7 @@ Installation should be as simple as:
 
 ::
 
-    python setup.py install
+    pip install .
 
 Editing the logo
 ----------------
