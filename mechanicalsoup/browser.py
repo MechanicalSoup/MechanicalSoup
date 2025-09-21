@@ -186,16 +186,15 @@ class Browser:
         return request_kwargs
 
     @classmethod
-    def get_request_kwargs(cls, form, url=None, **kwargs):
+    def get_request_kwargs(cls, form, url=None, submit=None, **kwargs):
         """Extract input data from the form."""
         method = str(form.get("method", "get"))
         action = form.get("action")
 
         # If the form has a submit button, use its form action
         # https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button#formaction.
-        button_submit_element = form.find("button")
-        if button_submit_element:
-            action = button_submit_element.get("formaction", action)
+        if isinstance(submit, bs4.element.Tag) and (submit.name == "button"):
+            action = submit.get("formaction", action)
 
         url = urllib.parse.urljoin(url, action)
         if url is None:  # This happens when both `action` and `url` are None.
@@ -218,6 +217,7 @@ class Browser:
         # skipping those tags that do not have a name-attribute.
         selector = ",".join(f"{tag}[name]" for tag in
                             ("input", "button", "textarea", "select"))
+        submit_added = False
         for tag in form.select(selector):
             name = tag.get("name")  # name-attribute of tag
 
@@ -226,7 +226,15 @@ class Browser:
                 continue
 
             if tag.name == "input":
-                if tag.get("type", "").lower() in ("radio", "checkbox"):
+                tag_type = tag.get("type", "").lower()
+                if tag_type == "submit":
+                    # Skip submit-type inputs that were not selected
+                    if submit_added or (tag != submit):
+                        continue
+                    # Avoid duplicate submits
+                    submit_added = True
+
+                if tag_type in ("radio", "checkbox"):
                     if "checked" not in tag.attrs:
                         continue
                     value = tag.get("value", "on")
@@ -253,10 +261,11 @@ class Browser:
                     data.append((name, value))
 
             elif tag.name == "button":
-                if tag.get("type", "").lower() in ("button", "reset"):
+                # Buttons are only included if they are the selected submit
+                if submit_added or (tag != submit):
                     continue
-                else:
-                    data.append((name, tag.get("value", "")))
+                submit_added = True
+                data.append((name, tag.get("value", "")))
 
             elif tag.name == "textarea":
                 data.append((name, tag.text))
@@ -302,12 +311,12 @@ class Browser:
 
         return cls._get_request_kwargs(method, url, files=files, **kwargs)
 
-    def _request(self, form, url=None, **kwargs):
+    def _request(self, form, url=None, submit=None, **kwargs):
         """Extract input data from the form to pass to a Requests session."""
-        request_kwargs = Browser.get_request_kwargs(form, url, **kwargs)
+        request_kwargs = self.get_request_kwargs(form, url, submit, **kwargs)
         return self.session.request(**request_kwargs)
 
-    def submit(self, form, url=None, **kwargs):
+    def submit(self, form, url=None, btnName=None, **kwargs):
         """Prepares and sends a form request.
 
         NOTE: To submit a form with a :class:`StatefulBrowser` instance, it is
@@ -317,6 +326,9 @@ class Browser:
         :param form: The filled-out form.
         :param url: URL of the page the form is on. If the form action is a
             relative path, then this must be specified.
+        :param btnName: Passed to :func:`Form.choose_submit` to choose the
+            element of the form to use for submission. If not ``None``, will
+            override any existing chosen submit in the form.
         :param \\*\\*kwargs: Arguments forwarded to `requests.Session.request
             <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
             If `files`, `params` (with GET), or `data` (with POST) are
@@ -326,9 +338,13 @@ class Browser:
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
         """
-        if isinstance(form, Form):
-            form = form.form
-        response = self._request(form, url, **kwargs)
+        if not isinstance(form, Form):
+            form = Form(form)
+        submit = form.submit_chosen
+        if (submit is None) or (btnName is not None):
+            submit = form.choose_submit(btnName)
+
+        response = self._request(form.form, url, submit, **kwargs)
         Browser.add_soup(response, self.soup_config)
         return response
 
