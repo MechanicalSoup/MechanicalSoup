@@ -100,7 +100,8 @@ def test_choose_submit(expected_post):
     form = browser.select_form('#choose-submit-form')
     browser['text'] = dict(expected_post)['text']
     browser['comment'] = dict(expected_post)['comment']
-    form.choose_submit(expected_post[2][0])
+    submit = form.choose_submit(expected_post[2][0])
+    assert submit == form.submit_chosen
     res = browser.submit_selected()
     assert res.status_code == 200 and res.text == 'Success!'
 
@@ -147,11 +148,11 @@ def test_choose_submit_fail(select_name):
         with pytest.raises(mechanicalsoup.utils.LinkNotFoundError):
             form.choose_submit(select_name['name'])
     else:
-        form.choose_submit(select_name['name'])
+        assert form.form.input == form.choose_submit(select_name['name'])
 
 
 def test_choose_submit_twice():
-    """Test that calling choose_submit twice fails."""
+    """Test that choose_submit can be used multiple times."""
     text = '''
     <form>
       <input type="submit" name="test1" value="Test1" />
@@ -160,10 +161,9 @@ def test_choose_submit_twice():
     '''
     soup = bs4.BeautifulSoup(text, 'lxml')
     form = mechanicalsoup.Form(soup.form)
-    form.choose_submit('test1')
-    expected_msg = 'Submit already chosen. Cannot change submit!'
-    with pytest.raises(Exception, match=expected_msg):
-        form.choose_submit('test2')
+    test1 = form.choose_submit('test1')
+    test2 = form.choose_submit('test2')
+    assert test1 != test2
 
 
 choose_submit_multiple_match_form = '''
