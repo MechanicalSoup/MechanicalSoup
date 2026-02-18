@@ -548,5 +548,138 @@ def test_option_without_value(fail, selected, expected_post):
         assert res.status_code == 200 and res.text == 'Success!'
 
 
+getitem_form = '''
+<html>
+  <body>
+    <form id="getitem-form" method="post" action="mock://form.com/post">
+      <input type="text" name="username" value="ada" />
+      <input type="password" name="password" value="secret" />
+      <input type="hidden" name="token" value="abc123" />
+      <input type="checkbox" name="color" value="red" checked />
+      <input type="checkbox" name="color" value="blue" />
+      <input type="checkbox" name="color" value="green" checked />
+      <input type="radio" name="size" value="small" />
+      <input type="radio" name="size" value="medium" checked />
+      <input type="radio" name="size" value="large" />
+      <input type="radio" name="unset_radio" value="a" />
+      <select name="country">
+        <option value="us">United States</option>
+        <option value="uk" selected>United Kingdom</option>
+        <option value="de">Germany</option>
+      </select>
+      <select name="langs" multiple>
+        <option value="py" selected>Python</option>
+        <option value="js">JavaScript</option>
+        <option value="rs" selected>Rust</option>
+      </select>
+      <textarea name="bio">Hello world</textarea>
+      <input type="submit" value="Go" />
+    </form>
+  </body>
+</html>
+'''
+
+
+def test_form_getitem_text_inputs():
+    """__getitem__ returns text/password/hidden input values."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert form["username"] == "ada"
+    assert form["password"] == "secret"
+    assert form["token"] == "abc123"
+
+
+def test_form_getitem_checkbox():
+    """__getitem__ returns a list of checked checkbox values."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert form["color"] == ["red", "green"]
+
+
+def test_form_getitem_radio():
+    """__getitem__ returns the selected radio value."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert form["size"] == "medium"
+
+
+def test_form_getitem_radio_none_selected():
+    """__getitem__ returns None when no radio button is checked."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert form["unset_radio"] is None
+
+
+def test_form_getitem_select():
+    """__getitem__ returns the selected option value for a single select."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert form["country"] == "uk"
+
+
+def test_form_getitem_select_multiple():
+    """__getitem__ returns a list of selected option values for a multi-select."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert form["langs"] == ["py", "rs"]
+
+
+def test_form_getitem_textarea():
+    """__getitem__ returns the current textarea content."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert form["bio"] == "Hello world"
+
+
+def test_form_getitem_keyerror():
+    """__getitem__ raises KeyError for unknown field names."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    with pytest.raises(KeyError):
+        _ = form["nonexistent"]
+
+
+def test_form_getitem_reflects_setitem():
+    """After __setitem__, __getitem__ returns the updated value."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    form["username"] = "bob"
+    assert form["username"] == "bob"
+
+
+def test_form_keys():
+    """keys() returns all unique named field names in document order."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    k = form.keys()
+    assert isinstance(k, list)
+    # All named fields are present
+    for name in ("username", "password", "token", "color", "size",
+                 "unset_radio", "country", "langs", "bio"):
+        assert name in k
+    # Each name appears only once
+    assert len(k) == len(set(k))
+    # Document order: username before password before token
+    assert k.index("username") < k.index("password") < k.index("token")
+
+
+def test_form_iter():
+    """__iter__ yields the same names as keys()."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(getitem_form)
+    form = browser.select_form('#getitem-form')
+    assert list(form) == form.keys()
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)

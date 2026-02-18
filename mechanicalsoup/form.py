@@ -241,6 +241,88 @@ class Form:
         """
         return self.set(name, value)
 
+    def __getitem__(self, name):
+        """Get the current value of the named form field.
+
+        Returns the value that would be submitted for the given field.
+        For checkboxes, returns a list of checked values.
+        For radio buttons, returns the selected value or ``None`` if none
+        is selected.
+        Raises ``KeyError`` if no field with the given name exists.
+
+        Example: ::
+
+            browser.select_form()
+            browser["username"] = "ada"
+            assert browser.form["username"] == "ada"
+        """
+        # Case-insensitive search for type=checkbox
+        checkboxes = self.form.select(f'input[type="checkbox" i][name="{name}"]')
+        if checkboxes:
+            return [cb.get("value", "on") for cb in checkboxes if "checked" in cb.attrs]
+
+        # Case-insensitive search for type=radio
+        radios = self.form.select(f'input[type="radio" i][name="{name}"]')
+        if radios:
+            for r in radios:
+                if "checked" in r.attrs:
+                    return r.get("value", "on")
+            return None
+
+        # Regular input (text, password, hidden, email, etc.)
+        inp = self.form.find("input", {"name": name})
+        if inp:
+            return inp.get("value", "")
+
+        # Select element
+        select = self.form.find("select", {"name": name})
+        if select:
+            if "multiple" in select.attrs:
+                return [
+                    o.get("value", o.get_text())
+                    for o in select.find_all("option")
+                    if "selected" in o.attrs
+                ]
+            selected = select.find("option", attrs={"selected": True})
+            if not selected:
+                selected = select.find("option")  # first option is the default
+            return selected.get("value", selected.get_text().strip()) if selected else ""
+
+        # Textarea element
+        ta = self.form.find("textarea", {"name": name})
+        if ta:
+            return ta.string or ""
+
+        raise KeyError(f"No field named: {name}")
+
+    def __iter__(self):
+        """Iterate over the names of all named fields in the form.
+
+        Yields each unique field name once, in document order.
+
+        Example: ::
+
+            field_names = list(form)
+        """
+        seen = set()
+        for el in self.form.find_all(["input", "select", "textarea"]):
+            name = el.get("name")
+            if name and name not in seen:
+                seen.add(name)
+                yield name
+
+    def keys(self):
+        """Return the names of all named fields in the form.
+
+        Returns a list of unique field names, in document order.
+
+        Example: ::
+
+            if "username" in form.keys():
+                form["username"] = "ada"
+        """
+        return list(self.__iter__())
+
     def set(self, name, value, force=False):
         """Set a form element identified by ``name`` to a specified ``value``.
         The type of element (input, textarea, select, ...) does not
