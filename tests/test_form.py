@@ -622,8 +622,27 @@ def test_form_getitem_select():
     assert form["country"] == "uk"
 
 
+def test_form_getitem_select_default():
+    """__getitem__ returns the first option when none is selected."""
+    html = '''
+    <html><body>
+    <form id="f" method="post" action="mock://form.com/post">
+      <select name="fruit">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+      </select>
+    </form>
+    </body></html>
+    '''
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page(html)
+    form = browser.select_form('#f')
+    assert form["fruit"] == "apple"
+
+
 def test_form_getitem_select_multiple():
-    """__getitem__ returns a list of selected option values for a multi-select."""
+    """__getitem__ returns a list of selected values
+    for a multi-select."""
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page(getitem_form)
     form = browser.select_form('#getitem-form')

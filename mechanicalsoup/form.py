@@ -257,12 +257,22 @@ class Form:
             assert browser.form["username"] == "ada"
         """
         # Case-insensitive search for type=checkbox
-        checkboxes = self.form.select(f'input[type="checkbox" i][name="{name}"]')
+        selector = (
+            f'input[type="checkbox" i][name="{name}"]'
+        )
+        checkboxes = self.form.select(selector)
         if checkboxes:
-            return [cb.get("value", "on") for cb in checkboxes if "checked" in cb.attrs]
+            return [
+                cb.get("value", "on")
+                for cb in checkboxes
+                if "checked" in cb.attrs
+            ]
 
         # Case-insensitive search for type=radio
-        radios = self.form.select(f'input[type="radio" i][name="{name}"]')
+        selector = (
+            f'input[type="radio" i][name="{name}"]'
+        )
+        radios = self.form.select(selector)
         if radios:
             for r in radios:
                 if "checked" in r.attrs:
@@ -286,7 +296,11 @@ class Form:
             selected = select.find("option", attrs={"selected": True})
             if not selected:
                 selected = select.find("option")  # first option is the default
-            return selected.get("value", selected.get_text().strip()) if selected else ""
+            if not selected:
+                return ""
+            return selected.get(
+                "value", selected.get_text().strip()
+            )
 
         # Textarea element
         ta = self.form.find("textarea", {"name": name})
