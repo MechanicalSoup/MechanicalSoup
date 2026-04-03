@@ -891,5 +891,14 @@ def test_requests_session_and_cookies(httpbin):
     assert resp.json() == {'cookies': {'key1': 'val1'}}
 
 
+def test_submit_error():
+    """Check that we are prevented from directly calling the submit method."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open_fake_page('<form></form>')
+    browser.select_form()
+    with pytest.raises(UserWarning, match="To submit a form"):
+        browser.submit(browser.form)
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
