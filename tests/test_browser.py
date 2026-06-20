@@ -12,6 +12,15 @@ from utils import mock_get, prepare_mock_browser
 import mechanicalsoup
 
 
+def test_default_soup_config_not_shared_between_browsers():
+    browser = mechanicalsoup.Browser()
+    browser.soup_config["custom"] = True
+
+    other_browser = mechanicalsoup.Browser()
+
+    assert other_browser.soup_config == {'features': 'lxml'}
+
+
 def test_submit_online(httpbin):
     """Complete and submit the pizza form at http://httpbin.org/forms/post """
     browser = mechanicalsoup.Browser()
