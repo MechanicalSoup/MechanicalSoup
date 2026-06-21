@@ -174,7 +174,7 @@ to use, like::
 Or if you don't have the parser `lxml
 <http://lxml.de/installation.html>`__ installed::
 
-    mechanicalsoup.StatefulBrowser(soup_config={'features': 'parser.html', ...})
+    mechanicalsoup.StatefulBrowser(soup_config={'features': 'html.parser', ...})
 
 See also
 https://www.crummy.com/software/BeautifulSoup/bs4/doc/#you-need-a-parser
