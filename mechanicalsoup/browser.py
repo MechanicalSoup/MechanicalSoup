@@ -24,11 +24,17 @@ class Browser:
         constructing a new one.
     :param soup_config: Configuration passed to BeautifulSoup to affect
         the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
-        If overridden, it is highly recommended to `specify a parser
-        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
-        Otherwise, BeautifulSoup will issue a warning and pick one for
-        you, but the parser it chooses may be different on different
-        machines.
+        If overridden, it is highly recommended to specify a parser
+        explicitly. The ``features`` argument to BeautifulSoup may be
+        the name of a specific parser (``"lxml"``, ``"lxml-xml"``,
+        ``"html.parser"``, or ``"html5lib"``), or the type of markup
+        to be parsed (``"html"``, ``"html5"``, ``"xml"``).
+        See the `BeautifulSoup documentation
+        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__
+        for details.
+        If not specified, BeautifulSoup will issue a warning and pick
+        one for you, but the parser it chooses may differ across
+        platforms and virtual environments.
     :param requests_adapters: Configuration passed to requests, to affect
         the way HTTP requests are performed.
     :param raise_on_404: If True, raise :class:`LinkNotFoundError`
