@@ -314,12 +314,24 @@ class Browser:
 
         return cls._get_request_kwargs(method, url, files=files, **kwargs)
 
-    def _request(self, form, url=None, submit=None, **kwargs) -> requests.Response:
+    def _request(
+        self,
+        form,
+        url=None,
+        submit=None,
+        **kwargs,
+    ) -> requests.Response:
         """Extract input data from the form to pass to a Requests session."""
         request_kwargs = self.get_request_kwargs(form, url, submit, **kwargs)
         return self.session.request(**request_kwargs)
 
-    def submit(self, form, url=None, btnName=None, **kwargs) -> ResponseWithSoup:
+    def submit(
+        self,
+        form,
+        url=None,
+        btnName=None,
+        **kwargs,
+    ) -> ResponseWithSoup:
         """Prepares and sends a form request.
 
         NOTE: To submit a form with a :class:`StatefulBrowser` instance, it is
