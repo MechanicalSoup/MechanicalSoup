@@ -1,6 +1,7 @@
 import io
 import os
 import tempfile
+from typing import cast
 import urllib
 import weakref
 import webbrowser
@@ -12,6 +13,10 @@ import requests
 from .__version__ import __title__, __version__
 from .form import Form
 from .utils import LinkNotFoundError, is_multipart_file_upload
+
+
+class ResponseWithSoup(requests.Response):
+    soup: bs4.BeautifulSoup | None
 
 
 class Browser:
@@ -36,10 +41,14 @@ class Browser:
     :param user_agent: Set the user agent header to this value.
 
     """
-    def __init__(self, session=None, soup_config={'features': 'lxml'},
-                 requests_adapters=None,
-                 raise_on_404=False, user_agent=None):
-
+    def __init__(
+        self,
+        session: requests.Session | None = None,
+        soup_config={'features': 'lxml'},
+        requests_adapters=None,
+        raise_on_404=False,
+        user_agent=None,
+    ):
         self.raise_on_404 = raise_on_404
         self.session = session or requests.Session()
 
@@ -54,7 +63,7 @@ class Browser:
         self.soup_config = soup_config or dict()
 
     @staticmethod
-    def __looks_like_html(response):
+    def __looks_like_html(response: requests.Response) -> bool:
         """Guesses entity type when Content-Type header is missing.
         Since Content-Type is not strictly required, some servers leave it out.
         """
@@ -62,8 +71,10 @@ class Browser:
         return text.startswith('<html') or text.startswith('<!doctype')
 
     @staticmethod
-    def add_soup(response, soup_config):
+    def add_soup(response: requests.Response, soup_config) -> ResponseWithSoup:
         """Attaches a soup object to a requests response."""
+        response.__class__ = ResponseWithSoup
+        response = cast(ResponseWithSoup, response)
         if ("text/html" in response.headers.get("Content-Type", "") or
                 Browser.__looks_like_html(response)):
             # Note: By default (no charset provided in HTTP headers), requests
@@ -90,6 +101,7 @@ class Browser:
             )
         else:
             response.soup = None
+        return response
 
     def set_cookiejar(self, cookiejar):
         """Replaces the current cookiejar in the requests session. Since the
@@ -116,7 +128,7 @@ class Browser:
         # the requests module uses a case-insensitive dict for session headers
         self.session.headers['User-agent'] = user_agent
 
-    def request(self, *args, **kwargs):
+    def request(self, *args, **kwargs) -> ResponseWithSoup:
         """Straightforward wrapper around `requests.Session.request
         <http://docs.python-requests.org/en/master/api/#requests.Session.request>`__.
 
@@ -130,10 +142,9 @@ class Browser:
         example.
         """
         response = self.session.request(*args, **kwargs)
-        Browser.add_soup(response, self.soup_config)
-        return response
+        return Browser.add_soup(response, self.soup_config)
 
-    def get(self, *args, **kwargs):
+    def get(self, *args, **kwargs) -> ResponseWithSoup:
         """Straightforward wrapper around `requests.Session.get
         <http://docs.python-requests.org/en/master/api/#requests.Session.get>`__.
 
@@ -144,10 +155,9 @@ class Browser:
         response = self.session.get(*args, **kwargs)
         if self.raise_on_404 and response.status_code == 404:
             raise LinkNotFoundError()
-        Browser.add_soup(response, self.soup_config)
-        return response
+        return Browser.add_soup(response, self.soup_config)
 
-    def post(self, *args, **kwargs):
+    def post(self, *args, **kwargs) -> ResponseWithSoup:
         """Straightforward wrapper around `requests.Session.post
         <http://docs.python-requests.org/en/master/api/#requests.Session.post>`__.
 
@@ -156,10 +166,9 @@ class Browser:
             object with a *soup*-attribute added by :func:`add_soup`.
         """
         response = self.session.post(*args, **kwargs)
-        Browser.add_soup(response, self.soup_config)
-        return response
+        return Browser.add_soup(response, self.soup_config)
 
-    def put(self, *args, **kwargs):
+    def put(self, *args, **kwargs) -> ResponseWithSoup:
         """Straightforward wrapper around `requests.Session.put
         <http://docs.python-requests.org/en/master/api/#requests.Session.put>`__.
 
@@ -168,8 +177,7 @@ class Browser:
             object with a *soup*-attribute added by :func:`add_soup`.
         """
         response = self.session.put(*args, **kwargs)
-        Browser.add_soup(response, self.soup_config)
-        return response
+        return Browser.add_soup(response, self.soup_config)
 
     @staticmethod
     def _get_request_kwargs(method, url, **kwargs):
@@ -306,12 +314,12 @@ class Browser:
 
         return cls._get_request_kwargs(method, url, files=files, **kwargs)
 
-    def _request(self, form, url=None, submit=None, **kwargs):
+    def _request(self, form, url=None, submit=None, **kwargs) -> requests.Response:
         """Extract input data from the form to pass to a Requests session."""
         request_kwargs = self.get_request_kwargs(form, url, submit, **kwargs)
         return self.session.request(**request_kwargs)
 
-    def submit(self, form, url=None, btnName=None, **kwargs):
+    def submit(self, form, url=None, btnName=None, **kwargs) -> ResponseWithSoup:
         """Prepares and sends a form request.
 
         NOTE: To submit a form with a :class:`StatefulBrowser` instance, it is
@@ -340,8 +348,7 @@ class Browser:
             submit = form.choose_submit(btnName)
 
         response = self._request(form.form, url, submit, **kwargs)
-        Browser.add_soup(response, self.soup_config)
-        return response
+        return Browser.add_soup(response, self.soup_config)
 
     def launch_browser(self, soup):
         """Launch a browser to display a page, for debugging purposes.
