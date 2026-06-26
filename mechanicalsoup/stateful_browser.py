@@ -272,7 +272,12 @@ class StatefulBrowser(Browser):
             use `Browser.submit(br, ...)` (where `br` is a StatefulBrowser).
         """)
 
-    def submit_selected(self, btnName=None, update_state=True, **kwargs) -> ResponseWithSoup:
+    def submit_selected(
+        self,
+        btnName=None,
+        update_state=True,
+        **kwargs,
+    ) -> ResponseWithSoup:
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
