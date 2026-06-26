@@ -3,8 +3,9 @@ import sys
 import urllib
 
 import bs4
+import requests
 
-from .browser import Browser
+from .browser import Browser, ResponseWithSoup
 from .form import Form
 from .utils import LinkNotFoundError
 
@@ -133,7 +134,7 @@ class StatefulBrowser(Browser):
         """
         return urllib.parse.urljoin(self.url, url)
 
-    def open(self, url, *args, **kwargs):
+    def open(self, url, *args, **kwargs) -> ResponseWithSoup:
         """Open the URL and store the Browser's state in this object.
         All arguments are forwarded to :func:`Browser.get`.
 
@@ -162,13 +163,13 @@ class StatefulBrowser(Browser):
             page=bs4.BeautifulSoup(page_text, **soup_config),
             url=url)
 
-    def open_relative(self, url, *args, **kwargs):
+    def open_relative(self, url, *args, **kwargs) -> ResponseWithSoup:
         """Like :func:`open`, but ``url`` can be relative to the currently
         visited page.
         """
         return self.open(self.absolute_url(url), *args, **kwargs)
 
-    def refresh(self):
+    def refresh(self) -> ResponseWithSoup:
         """Reload the current page with the same request as originally done.
         Any change (`select_form`, or any value filled-in in the form) made to
         the current page before refresh is discarded.
@@ -184,7 +185,7 @@ class StatefulBrowser(Browser):
                              'were used to do so')
 
         resp = self.session.send(old_request)
-        Browser.add_soup(resp, self.soup_config)
+        resp = Browser.add_soup(resp, self.soup_config)
         self.__state = _BrowserState(page=resp.soup, url=resp.url,
                                      request=resp.request)
         return resp
@@ -271,7 +272,12 @@ class StatefulBrowser(Browser):
             use `Browser.submit(br, ...)` (where `br` is a StatefulBrowser).
         """)
 
-    def submit_selected(self, btnName=None, update_state=True, **kwargs):
+    def submit_selected(
+        self,
+        btnName=None,
+        update_state=True,
+        **kwargs,
+    ) -> ResponseWithSoup:
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
@@ -371,7 +377,7 @@ class StatefulBrowser(Browser):
             raise
 
     def follow_link(self, link=None, *bs4_args, bs4_kwargs={},
-                    requests_kwargs={},  **kwargs):
+                    requests_kwargs={},  **kwargs) -> ResponseWithSoup:
         """Follow a link.
 
         If ``link`` is a bs4.element.Tag (i.e. from a previous call to
@@ -400,7 +406,7 @@ class StatefulBrowser(Browser):
         return self.open_relative(link['href'], **requests_kwargs)
 
     def download_link(self, link=None, file=None, *bs4_args, bs4_kwargs={},
-                      requests_kwargs={}, **kwargs):
+                      requests_kwargs={}, **kwargs) -> requests.Response:
         """Downloads the contents of a link to a file. This function behaves
         similarly to :func:`follow_link`, but the browser state will
         not change when calling this function.
