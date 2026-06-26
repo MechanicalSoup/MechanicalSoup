@@ -13,7 +13,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -53,3 +52,14 @@ jobs:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
         verbose: true
+
+  mypy:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip
+            python -m pip install mypy -r requirements.txt
+      - name: Run mypy
+        run: mypy mechanicalsoup
