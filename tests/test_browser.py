@@ -83,8 +83,9 @@ def test_get_request_kwargs_when_submit_element_has_formaction_attribute():
         </form>
     """
     form = BeautifulSoup(form_html, "lxml").form
+    submit = form.button
     request_kwargs = mechanicalsoup.Browser.get_request_kwargs(
-        form, "https://example.com"
+        form, "https://example.com", submit
     )
     assert request_kwargs["url"] == "https://example.com/submit1"
 
@@ -97,18 +98,10 @@ def test_get_request_kwargs_many_submit_elements_have_formaction_attribute():
             <button formaction="https://example.com/submit3"></button>
         </form>
     """
-    browser = mechanicalsoup.StatefulBrowser()
-    browser.open_fake_page(form_html, url="https://example.com")
-    browser.select_form()
-    chosen_button = browser.form.form.find_all(
-        "button"
-    )[1]  # Choose the second button
-    browser.form.choose_submit(
-        submit=chosen_button
-    )
-    assert len(browser.form.form.find_all("button")) == 1
+    form = BeautifulSoup(form_html, "lxml").form
+    submit = form.find_all("button")[1]  # Choose the second button
     request_kwargs = mechanicalsoup.Browser.get_request_kwargs(
-        browser.form.form, "https://example.com"
+        form, "https://example.com", submit
     )
     assert request_kwargs["url"] == "https://example.com/submit2"
 
