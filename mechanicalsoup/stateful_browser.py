@@ -262,17 +262,23 @@ class StatefulBrowser(Browser):
             kwargs['headers'] = headers
         return kwargs
 
-    def submit_selected(self, btnName=None, update_state=True,
-                        **kwargs):
+    def submit(self, form, url=None, btnName=None, **kwargs):
+        """This override prevents accidental calls to Browser.submit."""
+        raise UserWarning("""
+            To submit a form with a StatefulBrowser instance, it is recommended
+            to use `submit_selected` instead of this method so that the browser
+            state is correctly updated. If you must call this method, you can
+            use `Browser.submit(br, ...)` (where `br` is a StatefulBrowser).
+        """)
+
+    def submit_selected(self, btnName=None, update_state=True, **kwargs):
         """Submit the form that was selected with :func:`select_form`.
 
         :return: Forwarded from :func:`Browser.submit`.
 
         :param btnName: Passed to :func:`Form.choose_submit` to choose the
-            element of the current form to use for submission. If ``None``,
-            will choose the first valid submit element in the form, if one
-            exists. If ``False``, will not use any submit element; this is
-            useful for simulating AJAX requests, for example.
+            element of the current form to use for submission. If not ``None``,
+            will override any existing chosen submit in the form.
 
         :param update_state: If False, the form will be submitted but the
             browser state will remain unchanged; this is useful for forms that
@@ -280,11 +286,14 @@ class StatefulBrowser(Browser):
 
         All other arguments are forwarded to :func:`Browser.submit`.
         """
-        self.form.choose_submit(btnName)
-
         kwargs = self._merge_referer(**kwargs)
-        resp = self.submit(self.__state.form, url=self.__state.url,
-                           **kwargs)
+        resp = Browser.submit(
+            self,
+            form=self.form,
+            url=self.url,
+            btnName=btnName,
+            **kwargs,
+        )
         if update_state:
             self.__state = _BrowserState(page=resp.soup, url=resp.url,
                                          request=resp.request)

@@ -43,13 +43,18 @@ class Form:
                 "MechanicalSoup.", FutureWarning)
 
         self.form = form
-        self._submit_chosen = False
+        self._submit_chosen = None
 
         # Aliases for backwards compatibility
         # (Included specifically in __init__ to suppress them in Sphinx docs)
         self.attach = self.set_input
         self.input = self.set_input
         self.textarea = self.set_textarea
+
+    @property
+    def submit_chosen(self):
+        """Get the currently selected submit element."""
+        return self._submit_chosen
 
     def set_input(self, data):
         """Fill-in a set of fields in a form.
@@ -330,47 +335,41 @@ class Form:
             form.choose_submit('form_name_attr')
             browser.submit_selected()
         """
-        # Since choose_submit is destructive, it doesn't make sense to call
-        # this method twice unless no submit is specified.
-        if self._submit_chosen:
-            if submit is None:
-                return
-            else:
-                raise Exception('Submit already chosen. Cannot change submit!')
+        if submit is False:
+            self._submit_chosen = False
+            return self._submit_chosen
 
         # All buttons NOT of type (button,reset) are valid submits
         # Case-insensitive search for type=submit
         inps = [i for i in self.form.select('input[type="submit" i], button')
                 if i.get("type", "").lower() not in ('button', 'reset')]
 
+        submit_chosen = None
+
         # If no submit specified, choose the first one
         if submit is None and inps:
-            submit = inps[0]
+            submit_chosen = inps[0]
 
-        found = False
         for inp in inps:
             if (inp.has_attr('name') and inp['name'] == submit):
-                if found:
+                # Found the tag element by name
+                if submit_chosen is not None:
                     raise LinkNotFoundError(
                         f"Multiple submit elements match: {submit}"
                     )
-                found = True
+                submit_chosen = inp
             elif inp == submit:
-                if found:
-                    # Ignore submit element since it is an exact
-                    # duplicate of the one we're looking at.
-                    inp.decompose()
-                found = True
-            else:
-                # Delete any non-matching element's name so that it will be
-                # omitted from the submitted form data.
-                inp.decompose()
+                # Found the exact input tag element
+                submit_chosen = inp
+                break
 
-        if not found and submit is not None and submit is not False:
+        if submit_chosen is None and submit not in (None, False):
             raise LinkNotFoundError(
                 f"Specified submit element not found: {submit}"
             )
-        self._submit_chosen = True
+        self._submit_chosen = submit_chosen
+
+        return self._submit_chosen
 
     def print_summary(self):
         """Print a summary of the form.
