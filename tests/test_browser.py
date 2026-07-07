@@ -277,6 +277,35 @@ def test__request_disabled_attr(httpbin):
     assert response.json()['form'] == {}
 
 
+def test__request_disabled_fieldset(httpbin):
+    """Controls inside a disabled <fieldset> must not be submitted, but the
+    fieldset's first <legend> stays enabled (per the HTML specification)."""
+    form_html = f"""
+    <form method="post" action="{httpbin.url}/post">
+      <input name="enabled" value="1" />
+      <fieldset disabled>
+        <legend>
+          <input name="in_legend" value="legend" />
+        </legend>
+        <input name="text" value="2" />
+        <input type="checkbox" name="check" value="on" checked />
+        <select name="sel"><option value="x" selected>x</option></select>
+        <textarea name="area">hi</textarea>
+        <button name="btn" value="go">Go</button>
+        <fieldset>
+          <input name="nested" value="3" />
+        </fieldset>
+      </fieldset>
+    </form>"""
+
+    browser = mechanicalsoup.Browser()
+    response = browser._request(BeautifulSoup(form_html, "lxml").form)
+    # Only the control outside the fieldset and the one in its first <legend>
+    # are submitted; everything else in the disabled fieldset (including a
+    # nested, non-disabled fieldset) is omitted.
+    assert response.json()['form'] == {'enabled': '1', 'in_legend': 'legend'}
+
+
 @pytest.mark.parametrize("keyword", [
     pytest.param('method'),
     pytest.param('url'),

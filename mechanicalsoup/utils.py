@@ -21,3 +21,28 @@ def is_multipart_file_upload(form, tag):
         form.get("enctype", "") == "multipart/form-data" and
         tag.get("type", "").lower() == "file"
     )
+
+
+def is_disabled(tag):
+    """Return whether a form control is disabled per the HTML specification.
+
+    A control is disabled if it carries a ``disabled`` attribute, or if it is
+    a descendant of a ``<fieldset>`` element whose ``disabled`` attribute is
+    set -- except when it is inside that fieldset's first ``<legend>`` child,
+    which stays enabled. Disabled controls are barred from submission, so
+    browsers do not include their name/value pairs in the form data.
+
+    https://html.spec.whatwg.org/multipage/form-elements.html#concept-fieldset-disabled
+    """
+    if tag.has_attr("disabled"):
+        return True
+    for fieldset in tag.find_parents("fieldset"):
+        if not fieldset.has_attr("disabled"):
+            continue
+        # Controls inside the disabled fieldset's first <legend> child are
+        # not disabled by that fieldset.
+        legend = fieldset.find("legend", recursive=False)
+        if legend is not None and any(p is legend for p in tag.parents):
+            continue
+        return True
+    return False
