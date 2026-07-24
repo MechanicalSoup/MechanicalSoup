@@ -370,8 +370,8 @@ class StatefulBrowser(Browser):
                 self.launch_browser()
             raise
 
-    def follow_link(self, link=None, *bs4_args, bs4_kwargs={},
-                    requests_kwargs={},  **kwargs):
+    def follow_link(self, link=None, *bs4_args, bs4_kwargs=(),
+                    requests_kwargs=(),  **kwargs):
         """Follow a link.
 
         If ``link`` is a bs4.element.Tag (i.e. from a previous call to
@@ -392,6 +392,9 @@ class StatefulBrowser(Browser):
 
         :return: Forwarded from :func:`open_relative`.
         """
+        bs4_kwargs = dict(bs4_kwargs or ())
+        requests_kwargs = dict(requests_kwargs or ())
+
         link = self._find_link_internal(link, bs4_args,
                                         {**bs4_kwargs, **kwargs})
 
@@ -399,8 +402,8 @@ class StatefulBrowser(Browser):
 
         return self.open_relative(link['href'], **requests_kwargs)
 
-    def download_link(self, link=None, file=None, *bs4_args, bs4_kwargs={},
-                      requests_kwargs={}, **kwargs):
+    def download_link(self, link=None, file=None, *bs4_args, bs4_kwargs=(),
+                      requests_kwargs=(), **kwargs):
         """Downloads the contents of a link to a file. This function behaves
         similarly to :func:`follow_link`, but the browser state will
         not change when calling this function.
@@ -418,6 +421,9 @@ class StatefulBrowser(Browser):
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object.
         """
+        bs4_kwargs = dict(bs4_kwargs or ())
+        requests_kwargs = dict(requests_kwargs or ())
+
         link = self._find_link_internal(link, bs4_args,
                                         {**bs4_kwargs, **kwargs})
         url = self.absolute_url(link['href'])

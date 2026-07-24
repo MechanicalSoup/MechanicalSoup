@@ -36,7 +36,7 @@ class Browser:
     :param user_agent: Set the user agent header to this value.
 
     """
-    def __init__(self, session=None, soup_config={'features': 'lxml'},
+    def __init__(self, session=None, soup_config=(('features', 'lxml'),),
                  requests_adapters=None,
                  raise_on_404=False, user_agent=None):
 
@@ -51,7 +51,7 @@ class Browser:
             for adaptee, adapter in requests_adapters.items():
                 self.session.mount(adaptee, adapter)
 
-        self.soup_config = soup_config or dict()
+        self.soup_config = dict(soup_config or ())
 
     @staticmethod
     def __looks_like_html(response):
