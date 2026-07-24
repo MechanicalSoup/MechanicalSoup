@@ -392,8 +392,8 @@ class StatefulBrowser(Browser):
 
         :return: Forwarded from :func:`open_relative`.
         """
-        bs4_kwargs = dict(bs4_kwargs or ())
-        requests_kwargs = dict(requests_kwargs or ())
+        bs4_kwargs = dict(bs4_kwargs)
+        requests_kwargs = dict(requests_kwargs)
 
         link = self._find_link_internal(link, bs4_args,
                                         {**bs4_kwargs, **kwargs})
@@ -421,8 +421,8 @@ class StatefulBrowser(Browser):
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object.
         """
-        bs4_kwargs = dict(bs4_kwargs or ())
-        requests_kwargs = dict(requests_kwargs or ())
+        bs4_kwargs = dict(bs4_kwargs)
+        requests_kwargs = dict(requests_kwargs)
 
         link = self._find_link_internal(link, bs4_args,
                                         {**bs4_kwargs, **kwargs})
