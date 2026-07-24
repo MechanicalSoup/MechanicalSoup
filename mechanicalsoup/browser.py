@@ -11,7 +11,7 @@ import requests
 
 from .__version__ import __title__, __version__
 from .form import Form
-from .utils import LinkNotFoundError, is_multipart_file_upload
+from .utils import LinkNotFoundError, is_disabled, is_multipart_file_upload
 
 
 class Browser:
@@ -217,7 +217,9 @@ class Browser:
             name = tag.get("name")  # name-attribute of tag
 
             # Skip disabled elements, since they should not be submitted.
-            if tag.has_attr('disabled'):
+            # A control is also disabled when it descends from a disabled
+            # <fieldset> (outside that fieldset's first <legend>).
+            if is_disabled(tag):
                 continue
 
             if tag.name == "input":
