@@ -2,6 +2,7 @@ from contextlib import nullcontext
 import os
 import sys
 import tempfile
+from unittest import mock
 
 import pytest
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
@@ -427,6 +428,43 @@ def test_encoding(httpbin, http_html_expected_encoding):
     )
     browser.open(url)
     assert browser.page.original_encoding == expected_encoding
+
+
+@pytest.mark.parametrize("reply, is_html", [
+    pytest.param(b'<html><body>hi</body></html>', True, id='lowercase'),
+    pytest.param(b'<HTML><BODY>hi</BODY></HTML>', True, id='uppercase'),
+    pytest.param(b'  \n<!DocType html><html></html>', True, id='doctype'),
+    pytest.param('<html><body>hi</body></html>'.encode('utf-16'), True,
+                 id='utf-16'),
+    pytest.param(b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR', False, id='png'),
+    pytest.param(b'{"key": "value"}', False, id='json'),
+])
+def test_looks_like_html_without_content_type(reply, is_html):
+    """Detect HTML from the leading bytes when Content-Type is missing."""
+    browser, adapter = prepare_mock_browser()
+    url = 'mock://looks-like-html'
+    mock_get(adapter, url=url, reply=reply, content_type='')
+    response = browser.session.get(url)
+    mechanicalsoup.Browser.add_soup(response, {'features': 'lxml'})
+    assert (response.soup is not None) == is_html
+
+
+def test_looks_like_html_does_not_decode_whole_body():
+    """Content-Type sniffing must not decode the full (possibly huge) body."""
+    browser, adapter = prepare_mock_browser()
+    url = 'mock://binary'
+    mock_get(adapter, url=url, reply=b'\x89PNG\r\n\x1a\n' + os.urandom(4096),
+             content_type='')
+    response = browser.session.get(url)
+
+    def fail_on_decode(self):
+        raise AssertionError("response body should not be decoded")
+
+    monkeypatched = type(response)
+    with mock.patch.object(monkeypatched, 'text', property(fail_on_decode)):
+        mechanicalsoup.Browser.add_soup(response, {'features': 'lxml'})
+
+    assert response.soup is None
 
 
 if __name__ == '__main__':

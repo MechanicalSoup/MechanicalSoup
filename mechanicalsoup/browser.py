@@ -1,5 +1,6 @@
 import io
 import os
+import re
 import tempfile
 import urllib
 import weakref
@@ -53,13 +54,26 @@ class Browser:
 
         self.soup_config = dict(soup_config or ())
 
+    _HTML_MARKER_RE = re.compile(
+        rb'\s*(?:\xef\xbb\xbf|\xff\xfe|\xfe\xff)?\s*(?:<html|<!doctype)',
+        re.IGNORECASE
+    )
+
     @staticmethod
     def __looks_like_html(response):
         """Guesses entity type when Content-Type header is missing.
         Since Content-Type is not strictly required, some servers leave it out.
         """
-        text = response.text.lstrip().lower()
-        return text.startswith('<html') or text.startswith('<!doctype')
+        # Match on the raw leading bytes: decoding response.text means
+        # decoding (and charset-sniffing) the whole body, which is very
+        # slow for large binary responses such as images or PDFs.
+        prefix = response.content[:200]
+        return bool(
+            Browser._HTML_MARKER_RE.match(prefix)
+            # UTF-16/UTF-32 encoded markup, whose ASCII characters are
+            # interleaved with NUL bytes.
+            or Browser._HTML_MARKER_RE.match(prefix.replace(b'\x00', b''))
+        )
 
     @staticmethod
     def add_soup(response, soup_config):
