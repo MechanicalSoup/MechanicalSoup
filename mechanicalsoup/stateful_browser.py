@@ -315,7 +315,14 @@ class StatefulBrowser(Browser):
         *text*-attribute of the Tag. All other arguments are forwarded to
         the `.find_all() method in BeautifulSoup
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#find-all>`__.
+
+        If no page is currently loaded, raise :class:`AttributeError`.
         """
+        if self.page is None:
+            raise AttributeError(
+                "No page has been opened yet on this browser, or the last "
+                "response was not parsed as a page (e.g. it was not HTML)."
+            )
         all_links = self.page.find_all(
             'a', href=True, *args, **kwargs)
         if url_regex is not None:

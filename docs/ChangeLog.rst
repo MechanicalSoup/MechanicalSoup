@@ -8,6 +8,8 @@ Version 1.5 (in development)
 * Form controls inside a disabled ``<fieldset>`` are no longer submitted,
   matching browser behavior and the HTML specification. Controls inside the
   fieldset's first ``<legend>`` remain enabled.
+* ``StatefulBrowser.links`` now raises an explanatory ``AttributeError`` when
+  no page is loaded, instead of failing inside BeautifulSoup.
 
 Version 1.4
 ===========
