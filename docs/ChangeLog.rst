@@ -5,6 +5,11 @@ Release Notes
 Version 1.5 (in development)
 ============================
 
+* When the ``Content-Type`` header is missing, HTML is now detected from the
+  first bytes of the response instead of decoding the whole body, which is
+  much faster for large binary responses. Uppercase markup such as ``<HTML>``
+  is now detected as well.
+
 * Form controls inside a disabled ``<fieldset>`` are no longer submitted,
   matching browser behavior and the HTML specification. Controls inside the
   fieldset's first ``<legend>`` remain enabled.
