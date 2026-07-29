@@ -54,6 +54,8 @@ class Browser:
 
         self.soup_config = dict(soup_config or ())
 
+    # Regex identifying html-like response content. Allow for optional BOM
+    # (UTF-8, UTF-16 little endian, or UTF-16 big endian) prefix.
     _HTML_MARKER_RE = re.compile(
         rb'\s*(?:\xef\xbb\xbf|\xff\xfe|\xfe\xff)?\s*(?:<html|<!doctype)',
         re.IGNORECASE
