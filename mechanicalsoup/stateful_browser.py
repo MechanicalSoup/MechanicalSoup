@@ -1,6 +1,6 @@
 import re
 import sys
-import urllib
+import urllib.parse
 
 import bs4
 import requests
@@ -132,6 +132,11 @@ class StatefulBrowser(Browser):
         ``url``, as in the `.urljoin() method of urllib.parse
         <https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urljoin>`__.
         """
+        if self.url is None:
+            raise AttributeError(
+                "No page has been opened yet on this browser, or the last "
+                "response was not parsed as a page (e.g. it was not HTML)."
+            )
         return urllib.parse.urljoin(self.url, url)
 
     def open(self, url, *args, **kwargs) -> ResponseWithSoup:
@@ -208,8 +213,13 @@ class StatefulBrowser(Browser):
         :return: The selected form as a soup object. It can also be
             retrieved later with the :attr:`form` attribute.
         """
+        if self.page is None:
+            raise AttributeError(
+                "No page has been opened yet on this browser, or the last "
+                "response was not parsed as a page (e.g. it was not HTML)."
+            )
 
-        def find_associated_elements(form_id):
+        def find_associated_elements(form_id, page):
             """Find all elements associated to a form
                 (i.e. an element with a form attribute -> ``form=form_id``)
             """
@@ -223,7 +233,7 @@ class StatefulBrowser(Browser):
 
             for element in elements_with_owner_form:
                 found_elements.extend(
-                    self.page.find_all(element, form=form_id)
+                    page.find_all(element, form=form_id)
                 )
             return found_elements
 
@@ -244,8 +254,7 @@ class StatefulBrowser(Browser):
             form = found_forms[-1]
 
         if form and form.has_attr('id'):
-            form_id = form["id"]
-            new_elements = find_associated_elements(form_id)
+            new_elements = find_associated_elements(form.get("id"), self.page)
             form.extend(new_elements)
 
         self.__state.form = Form(form)
@@ -362,7 +371,7 @@ class StatefulBrowser(Browser):
         * If searching for the link fails and debug is active, launch
           a browser.
         """
-        if hasattr(link, 'attrs') and 'href' in link.attrs:
+        if link and hasattr(link, 'attrs') and 'href' in link.attrs:
             return link
 
         # Check if "link" parameter should be treated as "url_regex"
