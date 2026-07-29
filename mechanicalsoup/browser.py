@@ -3,7 +3,7 @@ import os
 import re
 import tempfile
 from typing import cast
-import urllib
+import urllib.parse
 import weakref
 import webbrowser
 
