@@ -143,6 +143,14 @@ def test_links():
     assert two_links == BeautifulSoup(html, "lxml").find_all('a')
 
 
+def test_links_no_page():
+    """links() must report that no page is loaded rather than failing with
+    an opaque AttributeError from the underlying None."""
+    browser = mechanicalsoup.StatefulBrowser()
+    with pytest.raises(AttributeError, match="No page has been opened"):
+        browser.links()
+
+
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
         [
