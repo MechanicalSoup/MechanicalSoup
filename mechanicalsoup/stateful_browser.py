@@ -34,6 +34,11 @@ class StatefulBrowser(Browser):
         parser. Other choices include ``'lxml'`` and ``'html5lib'``;
         the corresponding parser package must be installed (``lxml`` is
         installed as a MechanicalSoup dependency).
+        See BeautifulSoup's `parser comparison
+        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser>`__
+        and `differences between parsers
+        <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#differences-between-parsers>`__
+        for help choosing a parser.
         If overridden, it is highly recommended to `specify a parser
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
         Otherwise, BeautifulSoup will issue a warning and pick one for
