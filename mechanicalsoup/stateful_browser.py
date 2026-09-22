@@ -29,6 +29,11 @@ class StatefulBrowser(Browser):
         constructing a new one.
     :param soup_config: Configuration passed to BeautifulSoup to affect
         the way HTML is parsed. Defaults to ``{'features': 'lxml'}``.
+        Select the HTML parser with the ``features`` key, for example
+        ``soup_config={'features': 'html.parser'}`` to use Python's built-in
+        parser. Other choices include ``'lxml'`` and ``'html5lib'``;
+        the corresponding parser package must be installed (``lxml`` is
+        installed as a MechanicalSoup dependency).
         If overridden, it is highly recommended to `specify a parser
         <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use>`__.
         Otherwise, BeautifulSoup will issue a warning and pick one for
