@@ -393,6 +393,16 @@ class StatefulBrowser(Browser):
         If ``link`` doesn't have a *href*-attribute or is None, treat
         ``link`` as a url_regex and look it up with :func:`find_link`.
         ``bs4_kwargs`` are forwarded to :func:`find_link`.
+        Within ``bs4_kwargs``, ``url_regex`` searches the link's *href* and
+        ``link_text`` matches its anchor text exactly. Other filters, such as
+        ``class_``, ``attrs`` and ``string``, are passed to BeautifulSoup's
+        ``find_all`` (see :func:`links`). For example::
+
+            browser.follow_link(bs4_kwargs={'url_regex': r'/docs/'})
+            browser.follow_link(bs4_kwargs={'link_text': 'Documentation'})
+            browser.follow_link(bs4_kwargs={'class_': 'next'},
+                                requests_kwargs={'timeout': 10})
+
         For backward compatibility, any excess keyword arguments
         (aka ``**kwargs``)
         are also forwarded to :func:`find_link`.
@@ -402,6 +412,8 @@ class StatefulBrowser(Browser):
         page and launch a browser.
 
         ``requests_kwargs`` are forwarded to :func:`open_relative`.
+        HTTP options such as ``timeout`` belong in ``requests_kwargs``,
+        not in ``bs4_kwargs`` or the excess keyword arguments.
 
         :return: Forwarded from :func:`open_relative`.
         """
