@@ -151,6 +151,18 @@ def test_links_no_page():
         browser.links()
 
 
+def test_select_form_no_page():
+    browser = mechanicalsoup.StatefulBrowser()
+    with pytest.raises(AttributeError, match="No page has been opened"):
+        browser.select_form()
+
+
+def test_absolute_url_no_page():
+    browser = mechanicalsoup.StatefulBrowser()
+    with pytest.raises(AttributeError, match="No page has been opened"):
+        browser.absolute_url("foo")
+
+
 @pytest.mark.parametrize("expected_post", [
     pytest.param(
         [
