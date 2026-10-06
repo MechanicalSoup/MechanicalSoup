@@ -358,8 +358,10 @@ class Form:
         # Case-insensitive search for type=submit
         inps = [
             inp for inp in self.form.select('input[type="submit" i], button')
-            if not isinstance(inp_type := inp.get("type"), str)
-            or inp_type.lower() not in ('button', 'reset')
+            if (
+                not isinstance(inp_type := inp.get("type"), str)
+                or inp_type.lower() not in ('button', 'reset')
+            )
         ]
 
         submit_chosen = None
