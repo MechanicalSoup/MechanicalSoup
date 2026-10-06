@@ -1,8 +1,10 @@
+from collections.abc import Mapping
 import copy
 import io
+from typing import Any, Literal
 import warnings
 
-from bs4 import BeautifulSoup
+import bs4
 
 from .utils import LinkNotFoundError, is_multipart_file_upload
 
@@ -35,7 +37,7 @@ class Form:
     It also handles submit-type elements using :func:`~Form.choose_submit`.
     """
 
-    def __init__(self, form):
+    def __init__(self, form: bs4.element.Tag):
         if form.name != 'form':
             warnings.warn(
                 f"Constructed a Form from a '{form.name}' instead of a 'form' "
@@ -43,7 +45,7 @@ class Form:
                 "MechanicalSoup.", FutureWarning)
 
         self.form = form
-        self._submit_chosen = None
+        self._submit_chosen: bs4.element.Tag | Literal[False] | None = None
 
         # Aliases for backwards compatibility
         # (Included specifically in __init__ to suppress them in Sphinx docs)
@@ -52,11 +54,11 @@ class Form:
         self.textarea = self.set_textarea
 
     @property
-    def submit_chosen(self):
+    def submit_chosen(self) -> bs4.element.Tag | Literal[False] | None:
         """Get the currently selected submit element."""
         return self._submit_chosen
 
-    def set_input(self, data):
+    def set_input(self, data: Mapping[str, Any]) -> None:
         """Fill-in a set of fields in a form.
 
         Example: filling-in a login/password form
@@ -77,7 +79,7 @@ class Form:
             self._assert_valid_file_upload(i, value)
             i["value"] = value
 
-    def uncheck_all(self, name):
+    def uncheck_all(self, name: str) -> None:
         """Remove the *checked*-attribute of all input elements with
         a *name*-attribute given by ``name``.
         """
@@ -85,7 +87,7 @@ class Form:
             if "checked" in option.attrs:
                 del option.attrs["checked"]
 
-    def check(self, data):
+    def check(self, data: Mapping[str, Any]) -> None:
         """For backwards compatibility, this method handles checkboxes
         and radio buttons in a single call. It will not uncheck any
         checkboxes unless explicitly specified by ``data``, in contrast
@@ -104,7 +106,11 @@ class Form:
                 pass
             raise LinkNotFoundError("No input checkbox/radio named " + name)
 
-    def set_checkbox(self, data, uncheck_other_boxes=True):
+    def set_checkbox(
+        self,
+        data: Mapping[str, Any],
+        uncheck_other_boxes: bool = True,
+    ) -> None:
         """Set the *checked*-attribute of input elements of type "checkbox"
         specified by ``data`` (i.e. check boxes).
 
@@ -154,7 +160,7 @@ class Form:
                         (name, choice)
                     )
 
-    def set_radio(self, data):
+    def set_radio(self, data: Mapping[str, Any]) -> None:
         """Set the *checked*-attribute of input elements of type "radio"
         specified by ``data`` (i.e. select radio buttons).
 
@@ -183,7 +189,7 @@ class Form:
                     f"No input radio named {name} with choice {value}"
                 )
 
-    def set_textarea(self, data):
+    def set_textarea(self, data: Mapping[str, Any]) -> None:
         """Set the *string*-attribute of the first textarea element
         specified by ``data`` (i.e. set the text of a textarea).
 
@@ -197,7 +203,7 @@ class Form:
                 raise InvalidFormMethod("No textarea named " + name)
             t.string = value
 
-    def set_select(self, data):
+    def set_select(self, data: Mapping[str, Any]) -> None:
         """Set the *selected*-attribute of the first option element
         specified by ``data`` (i.e. select an option from a dropdown).
 
@@ -215,9 +221,9 @@ class Form:
                 raise InvalidFormMethod("No select named " + name)
 
             # Deselect all options first
-            for option in select.find_all("option"):
-                if "selected" in option.attrs:
-                    del option.attrs["selected"]
+            for option_ in select.find_all("option"):
+                if "selected" in option_.attrs:
+                    del option_.attrs["selected"]
 
             # Wrap individual values in a 1-element tuple.
             # If value is a list/tuple, select must be a <select multiple>.
@@ -240,13 +246,13 @@ class Form:
 
                 option.attrs["selected"] = "selected"
 
-    def __setitem__(self, name, value):
+    def __setitem__(self, name: str, value: Any) -> None:
         """Forwards arguments to :func:`~Form.set`. For example,
         :code:`form["name"] = "value"` calls :code:`form.set("name", "value")`.
         """
         return self.set(name, value)
 
-    def set(self, name, value, force=False):
+    def set(self, name: str, value: Any, force: bool = False) -> None:
         """Set a form element identified by ``name`` to a specified ``value``.
         The type of element (input, textarea, select, ...) does not
         need to be given; it is inferred by the following methods:
@@ -287,7 +293,13 @@ class Form:
             return
         raise LinkNotFoundError("No valid element named " + name)
 
-    def new_control(self, type, name, value, **kwargs):
+    def new_control(
+        self,
+        type: str,
+        name: str,
+        value: Any,
+        **kwargs: Any,
+    ) -> bs4.element.Tag:
         """Add a new input element to the form.
 
         The arguments set the attributes of the new element.
@@ -301,7 +313,7 @@ class Form:
         # new_tag(). We're only building the soup object, not parsing
         # anything, so the parser doesn't matter. Specify the one
         # included in Python to avoid having dependency issue.
-        control = BeautifulSoup("", "html.parser").new_tag('input')
+        control = bs4.BeautifulSoup("", "html.parser").new_tag('input')
         control['type'] = type
         control['name'] = name
         control['value'] = value
@@ -311,7 +323,10 @@ class Form:
         self.form.append(control)
         return control
 
-    def choose_submit(self, submit):
+    def choose_submit(
+        self,
+        submit: bs4.element.Tag | str | Literal[False] | None,
+    ) -> bs4.element.Tag | Literal[False] | None:
         """Selects the input (or button) element to use for form submission.
 
         :param submit: The :class:`bs4.element.Tag` (or just its
@@ -341,8 +356,13 @@ class Form:
 
         # All buttons NOT of type (button,reset) are valid submits
         # Case-insensitive search for type=submit
-        inps = [i for i in self.form.select('input[type="submit" i], button')
-                if i.get("type", "").lower() not in ('button', 'reset')]
+        inps = [
+            inp for inp in self.form.select('input[type="submit" i], button')
+            if (
+                not isinstance(inp_type := inp.get("type"), str)
+                or inp_type.lower() not in ('button', 'reset')
+            )
+        ]
 
         submit_chosen = None
 
@@ -371,7 +391,7 @@ class Form:
 
         return self._submit_chosen
 
-    def print_summary(self):
+    def print_summary(self) -> None:
         """Print a summary of the form.
 
         May help finding which fields need to be filled-in.
@@ -386,7 +406,11 @@ class Form:
                     subtag.string = subtag.string.strip()
             print(input_copy)
 
-    def _assert_valid_file_upload(self, tag, value):
+    def _assert_valid_file_upload(
+        self,
+        tag: bs4.element.Tag,
+        value: Any,
+    ) -> None:
         """Raise an exception if a multipart file input is not an open file."""
         if (
             is_multipart_file_upload(self.form, tag) and
