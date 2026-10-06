@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import re
 import sys
 import urllib.parse
@@ -12,12 +13,12 @@ from .utils import LinkNotFoundError
 from requests.structures import CaseInsensitiveDict
 
 
+@dataclass
 class _BrowserState:
-    def __init__(self, page=None, url=None, form=None, request=None):
-        self.page = page
-        self.url = url
-        self.form = form
-        self.request = request
+    page: bs4.BeautifulSoup | None = None
+    url: str | None = None
+    form: Form | None = None
+    request: requests.PreparedRequest | None = None
 
 
 class StatefulBrowser(Browser):
