@@ -13,7 +13,8 @@ import requests
 
 from .__version__ import __title__, __version__
 from .form import Form
-from .utils import LinkNotFoundError, is_disabled, is_multipart_file_upload
+from .utils import (LinkNotFoundError, is_disabled, is_file_upload_tuple,
+                    is_multipart_file_upload)
 
 
 class ResponseWithSoup(requests.Response):
@@ -275,7 +276,20 @@ class Browser:
 
                 # If the enctype is not multipart, the filename is put in
                 # the form as a text input and the file is not sent.
-                if is_multipart_file_upload(form, tag):
+                if tag_type == "file" and isinstance(value, tuple):
+                    if not is_file_upload_tuple(value):
+                        raise ValueError(
+                            "File upload tuples must contain an "
+                            "open readable binary file and a content type "
+                            "without carriage returns or newlines."
+                        )
+                    content, content_type = value
+                    filename = os.path.basename(getattr(content, "name", ""))
+                    if multipart:
+                        files[name] = (filename, content, content_type)
+                    else:
+                        data.append((name, filename))
+                elif is_multipart_file_upload(form, tag):
                     if isinstance(value, io.IOBase):
                         content = value
                         filename = os.path.basename(getattr(value, "name", ""))

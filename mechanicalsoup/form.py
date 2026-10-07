@@ -6,7 +6,8 @@ import warnings
 
 import bs4
 
-from .utils import LinkNotFoundError, is_multipart_file_upload
+from .utils import (LinkNotFoundError, is_file_upload_tuple,
+                    is_multipart_file_upload)
 
 
 class InvalidFormMethod(LinkNotFoundError):
@@ -69,7 +70,8 @@ class Form:
 
         This will find the input element named "login" and give it the
         value ``username``, and the input element named "password" and
-        give it the value ``password``.
+        give it the value ``password``. File inputs accept the same upload
+        values as :func:`~Form.set`.
         """
 
         for (name, value) in data.items():
@@ -279,7 +281,27 @@ class Form:
 
         .. code-block:: python
 
-            form.set("tagname", open(path_to_local_file, "rb"))
+            with open(path_to_local_file, "rb") as upload:
+                form.set("tagname", upload)
+                browser.submit(form, url)
+
+        To specify a MIME type, pass an
+        ``(open_binary_file, content_type)`` tuple:
+
+        .. code-block:: python
+
+            with open(path_to_local_file, "rb") as upload:
+                form.set("tagname", (upload, "application/pdf"))
+                browser.submit(form, url)
+
+        The file must remain open until submission. The tuple's first item
+        must be a readable binary file object, not a path or string of file
+        contents. The filename is derived from the file object's name, as
+        with an ordinary file upload. MechanicalSoup never opens that name.
+        The content type must be a nonempty string without carriage returns
+        or newlines.
+        As with an ordinary file object, a form without
+        ``enctype="multipart/form-data"`` submits only the filename.
 
         """
         for func in ("checkbox", "radio", "input", "textarea", "select"):
@@ -302,7 +324,8 @@ class Form:
     ) -> bs4.element.Tag:
         """Add a new input element to the form.
 
-        The arguments set the attributes of the new element.
+        The arguments set the attributes of the new element. A file input's
+        ``value`` accepts the upload values documented in :func:`~Form.set`.
         """
         # Remove existing input-like elements with the same name
         for tag in ('input', 'textarea', 'select'):
@@ -411,14 +434,16 @@ class Form:
         tag: bs4.element.Tag,
         value: Any,
     ) -> None:
-        """Raise an exception if a multipart file input is not an open file."""
+        """Require explicit file contents, never a path supplied by HTML."""
         if (
             is_multipart_file_upload(self.form, tag) and
-            not isinstance(value, io.IOBase)
+            not isinstance(value, io.IOBase) and
+            not is_file_upload_tuple(value)
         ):
             raise ValueError(
                 "From v1.3.0 onwards, you must pass an open file object "
-                'directly, e.g. `form["name"] = open("/path/to/file", "rb")`. '
+                'directly, e.g. `form["name"] = open("/path/to/file", "rb")`, '
+                'or a (open_binary_file, content_type) tuple. '
                 "This change is to remediate a security vulnerability where "
                 "a malicious web server could read arbitrary files from the "
                 "client (CVE-2023-34457)."
