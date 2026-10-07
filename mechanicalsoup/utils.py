@@ -1,3 +1,6 @@
+import io
+
+
 class LinkNotFoundError(Exception):
     """Exception raised when mechanicalsoup fails to find something.
 
@@ -46,3 +49,16 @@ def is_disabled(tag):
             continue
         return True
     return False
+
+
+def is_file_upload_tuple(value):
+    """Whether a Requests-style upload tuple contains an open binary stream."""
+    return (
+        isinstance(value, tuple) and len(value) == 3 and
+        isinstance(value[0], str) and
+        isinstance(value[1], io.IOBase) and
+        not isinstance(value[1], io.TextIOBase) and
+        not value[1].closed and value[1].readable() and
+        isinstance(value[2], str) and bool(value[2]) and
+        "\r" not in value[2] and "\n" not in value[2]
+    )
