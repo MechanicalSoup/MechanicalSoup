@@ -279,14 +279,16 @@ class Browser:
                 if tag_type == "file" and isinstance(value, tuple):
                     if not is_file_upload_tuple(value):
                         raise ValueError(
-                            "File upload tuples must contain a filename, an "
+                            "File upload tuples must contain an "
                             "open readable binary file and a content type "
                             "without carriage returns or newlines."
                         )
+                    content, content_type = value
+                    filename = os.path.basename(getattr(content, "name", ""))
                     if multipart:
-                        files[name] = value
+                        files[name] = (filename, content, content_type)
                     else:
-                        data.append((name, os.path.basename(value[0])))
+                        data.append((name, filename))
                 elif is_multipart_file_upload(form, tag):
                     if isinstance(value, io.IOBase):
                         content = value

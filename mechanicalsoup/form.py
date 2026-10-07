@@ -285,19 +285,21 @@ class Form:
                 form.set("tagname", upload)
                 browser.submit(form, url)
 
-        To specify the transmitted filename and MIME type, pass a
-        ``(filename, open_binary_file, content_type)`` tuple:
+        To specify a MIME type, pass an
+        ``(open_binary_file, content_type)`` tuple:
 
         .. code-block:: python
 
             with open(path_to_local_file, "rb") as upload:
-                form.set("tagname", ("report.pdf", upload, "application/pdf"))
+                form.set("tagname", (upload, "application/pdf"))
                 browser.submit(form, url)
 
-        The file must remain open until submission. The tuple's second item
+        The file must remain open until submission. The tuple's first item
         must be a readable binary file object, not a path or string of file
-        contents. MechanicalSoup never opens the filename. The content type
-        must be a nonempty string without carriage returns or newlines.
+        contents. The filename is derived from the file object's name, as
+        with an ordinary file upload. MechanicalSoup never opens that name.
+        The content type must be a nonempty string without carriage returns
+        or newlines.
         As with an ordinary file object, a form without
         ``enctype="multipart/form-data"`` submits only the filename.
 
@@ -441,7 +443,7 @@ class Form:
             raise ValueError(
                 "From v1.3.0 onwards, you must pass an open file object "
                 'directly, e.g. `form["name"] = open("/path/to/file", "rb")`, '
-                'or a (filename, open_binary_file, content_type) tuple. '
+                'or a (open_binary_file, content_type) tuple. '
                 "This change is to remediate a security vulnerability where "
                 "a malicious web server could read arbitrary files from the "
                 "client (CVE-2023-34457)."

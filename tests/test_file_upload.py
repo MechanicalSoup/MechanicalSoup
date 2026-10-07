@@ -46,15 +46,14 @@ def test_explicit_file_content_type(tmp_path, route):
     path.write_bytes(payload)
     form = upload_form()
     with path.open('rb') as stream:
-        set_upload(form, ('remote-name.bin', stream, 'application/x-report'),
-                   route)
+        set_upload(form, (stream, 'application/x-report'), route)
         request = prepare(form)
         assert 'multipart/form-data; boundary=' in request.headers[
             'Content-Type']
-        assert b'name="upload"; filename="remote-name.bin"' in request.body
+        assert b'name="upload"; filename="local-name.txt"' in request.body
         assert b'Content-Type: application/x-report\r\n' in request.body
         assert b'\r\n\r\n' + payload + b'\r\n' in request.body
-        assert b'local-name.txt' not in request.body
+        assert str(tmp_path).encode() not in request.body
         assert not stream.closed
 
 
@@ -66,12 +65,12 @@ def test_stateful_explicit_file_content_type(requests_mock):
         browser.open_fake_page(html, UPLOAD_URL)
         browser.select_form()
         with io.BytesIO(b'file contents') as stream:
-            browser['upload'] = ('report.bin', stream, 'application/x-report')
+            browser['upload'] = (stream, 'application/x-report')
             response = browser.submit_selected()
             assert response.text == 'accepted'
             body = requests_mock.last_request.body
             assert b'Content-Type: application/x-report\r\n' in body
-            assert b'filename="report.bin"' in body
+            assert b'filename=""' in body
             assert b'\r\n\r\nfile contents\r\n' in body
             assert not stream.closed
 
@@ -80,17 +79,17 @@ def test_stateful_explicit_file_content_type(requests_mock):
     'set', 'set_input', 'new_control', 'raw_soup',
 ])
 @pytest.mark.parametrize('bad_value', [
-    ('report.bin', '/path/to/secret', 'application/pdf'),
-    ('report.bin', b'contents', 'application/pdf'),
-    ('report.bin', None, 'application/pdf'),
-    ('report.bin', io.StringIO('text'), 'text/plain'),
-    ('report.bin', io.BytesIO(), ''),
-    ('report.bin', io.BytesIO(), None),
-    ('report.bin', io.BytesIO(), 'text/plain\r\nX-Injected: yes'),
-    ('report.bin', io.BytesIO(), 'text/plain\nX-Injected: yes'),
-    (42, io.BytesIO(), 'text/plain'),
-    ('report.bin', io.BytesIO()),
-    ('report.bin', io.BytesIO(), 'text/plain', {}),
+    ('/path/to/secret', 'application/pdf'),
+    (b'contents', 'application/pdf'),
+    (None, 'application/pdf'),
+    (io.StringIO('text'), 'text/plain'),
+    (io.BytesIO(), ''),
+    (io.BytesIO(), None),
+    (io.BytesIO(), 'text/plain\r\nX-Injected: yes'),
+    (io.BytesIO(), 'text/plain\nX-Injected: yes'),
+    (42, 'text/plain'),
+    (io.BytesIO(),),
+    ('report.bin', io.BytesIO(), 'text/plain'),
 ])
 def test_invalid_file_upload_tuple(route, bad_value):
     form = upload_form()
@@ -110,8 +109,7 @@ def test_unreadable_file_upload_tuple(tmp_path, route, stream_state):
             stream.close()
         form = upload_form()
         with pytest.raises(ValueError):
-            set_upload(form, ('file.bin', stream, 'application/octet-stream'),
-                       route)
+            set_upload(form, (stream, 'application/octet-stream'), route)
             prepare(form)
 
 
@@ -156,12 +154,16 @@ def test_server_prefilled_file_path_never_read(tmp_path):
 
 
 @pytest.mark.parametrize('enctype', ['', 'application/x-www-form-urlencoded'])
-def test_file_tuple_without_multipart(enctype):
-    with io.BytesIO(b'PRIVATE CONTENTS') as stream:
+@pytest.mark.parametrize('named', [True, False])
+def test_file_tuple_without_multipart(tmp_path, enctype, named):
+    path = tmp_path / 'report.bin'
+    path.write_bytes(b'PRIVATE CONTENTS')
+    stream = path.open('rb') if named else io.BytesIO(b'PRIVATE CONTENTS')
+    with stream:
         form = upload_form(enctype=enctype)
-        form['upload'] = ('report.bin', stream, 'application/octet-stream')
+        form['upload'] = (stream, 'application/octet-stream')
         request = prepare(form)
-        assert request.body == 'upload=report.bin'
+        assert request.body == ('upload=report.bin' if named else 'upload=')
         assert stream.tell() == 0
 
 
@@ -169,7 +171,7 @@ def test_disabled_file_tuple_not_read():
     with io.BytesIO(b'PRIVATE CONTENTS') as stream:
         form = upload_form()
         form.form.input['disabled'] = ''
-        form['upload'] = ('report.bin', stream, 'application/octet-stream')
+        form['upload'] = (stream, 'application/octet-stream')
         kwargs = mechanicalsoup.Browser.get_request_kwargs(form.form)
         assert kwargs['files'] == {}
         assert stream.tell() == 0
@@ -178,7 +180,7 @@ def test_disabled_file_tuple_not_read():
 def test_file_tuple_closed_before_submission():
     form = upload_form()
     with io.BytesIO(b'contents') as stream:
-        form['upload'] = ('report.bin', stream, 'application/octet-stream')
+        form['upload'] = (stream, 'application/octet-stream')
     with pytest.raises(ValueError):
         prepare(form)
 
@@ -196,18 +198,19 @@ def test_file_tuple_preserves_other_controls():
     with io.BytesIO(b'file contents') as stream:
         form = upload_form()
         form.new_control('text', 'description', 'normal form field')
-        form['upload'] = ('report.bin', stream, 'application/octet-stream')
+        form['upload'] = (stream, 'application/octet-stream')
         request = prepare(form)
         assert b'name="description"\r\n\r\nnormal form field' in request.body
         assert b'\r\n\r\nfile contents\r\n' in request.body
 
 
-def test_tuple_filename_is_not_opened(tmp_path):
+def test_tuple_stream_filename_is_not_opened(tmp_path):
     path = tmp_path / 'secret.txt'
     path.write_bytes(b'PRIVATE CONTENTS')
     with io.BytesIO(b'explicitly supplied contents') as stream:
         form = upload_form()
-        form['upload'] = (str(path), stream, 'application/octet-stream')
+        stream.name = str(path)
+        form['upload'] = (stream, 'application/octet-stream')
         request = prepare(form)
         assert b'PRIVATE CONTENTS' not in request.body
         assert b'explicitly supplied contents' in request.body

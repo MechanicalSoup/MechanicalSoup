@@ -52,13 +52,12 @@ def is_disabled(tag):
 
 
 def is_file_upload_tuple(value):
-    """Whether a Requests-style upload tuple contains an open binary stream."""
+    """Whether a file/MIME tuple contains an open binary stream."""
     return (
-        isinstance(value, tuple) and len(value) == 3 and
-        isinstance(value[0], str) and
-        isinstance(value[1], io.IOBase) and
-        not isinstance(value[1], io.TextIOBase) and
-        not value[1].closed and value[1].readable() and
-        isinstance(value[2], str) and bool(value[2]) and
-        "\r" not in value[2] and "\n" not in value[2]
+        isinstance(value, tuple) and len(value) == 2 and
+        isinstance(value[0], io.IOBase) and
+        not isinstance(value[0], io.TextIOBase) and
+        not value[0].closed and value[0].readable() and
+        isinstance(value[1], str) and bool(value[1]) and
+        "\r" not in value[1] and "\n" not in value[1]
     )

@@ -5,9 +5,9 @@ Release Notes
 Version 1.5 (in development)
 ============================
 
-* File inputs now accept ``(filename, open_binary_file, content_type)`` tuples
-  to set an explicit multipart MIME type and transmitted filename. File
-  contents must still be supplied through an explicitly opened file object.
+* File inputs now accept ``(open_binary_file, content_type)`` tuples
+  to set an explicit multipart MIME type. The filename is derived from the
+  open file object, as with an ordinary file upload.
 
 * When the ``Content-Type`` header is missing, HTML is now detected from the
   first bytes of the response instead of decoding the whole body, which is
