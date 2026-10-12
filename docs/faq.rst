@@ -29,6 +29,41 @@ like:
 * If the website is specifically designed to interact with humans,
   please don't go against the will of the website's owner.
 
+.. _streaming-responses:
+
+How can I stream a response without loading it into memory?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Passing ``stream=True`` to :func:`~mechanicalsoup.Browser.get` does not
+prevent MechanicalSoup from reading the response body. The same applies to
+:func:`~mechanicalsoup.Browser.request`, :func:`~mechanicalsoup.Browser.post`,
+:func:`~mechanicalsoup.Browser.put` and
+:func:`~mechanicalsoup.StatefulBrowser.open`. These methods inspect the body
+and, for HTML responses, build a BeautifulSoup object before returning.
+This consumes the response even when it is not HTML.
+
+To process a response in chunks, use the browser's public Requests session
+directly. This reuses the session's cookies and authentication without
+adding a ``soup`` attribute or updating the current page, URL or selected
+form in a :class:`~mechanicalsoup.StatefulBrowser`.
+
+For an existing ``browser`` and an absolute ``url``, download the response
+to a file as follows (``download.bin`` is overwritten if it already exists):
+
+.. code-block:: python
+
+    with browser.session.get(url, stream=True) as response:
+        response.raise_for_status()
+        with open("download.bin", "wb") as output:
+            for chunk in response.iter_content(chunk_size=8192):
+                output.write(chunk)
+
+The response context manager closes the response even if downloading or
+writing fails. Avoid accessing ``response.content`` or ``response.text``
+when streaming, as both load the response into memory. Since this bypasses
+MechanicalSoup's request wrappers, ``raise_on_404`` does not apply;
+``raise_for_status()`` raises for HTTP errors instead.
+
 How do I get debug information/logs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

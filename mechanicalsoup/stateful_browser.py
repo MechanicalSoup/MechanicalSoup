@@ -154,6 +154,9 @@ class StatefulBrowser(Browser):
         """Open the URL and store the Browser's state in this object.
         All arguments are forwarded to :func:`Browser.get`.
 
+        The response body is read before returning, even with ``stream=True``.
+        See :ref:`streaming-responses` to stream without updating the state.
+
         :return: Forwarded from :func:`Browser.get`.
         """
         if self.__verbose == 1:
