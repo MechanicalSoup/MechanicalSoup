@@ -162,6 +162,9 @@ class Browser:
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
 
+        The response body is read before returning, even with ``stream=True``.
+        See :ref:`streaming-responses` for streaming via the Requests session.
+
         This is a low-level function that should not be called for
         basic usage (use :func:`get` or :func:`post` instead). Use it if you
         need an HTTP verb that MechanicalSoup doesn't manage (e.g. MKCOL) for
@@ -177,6 +180,9 @@ class Browser:
         :return: `requests.Response
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
+
+        The response body is read before returning, even with ``stream=True``.
+        See :ref:`streaming-responses` for streaming via the Requests session.
         """
         response = self.session.get(*args, **kwargs)
         if self.raise_on_404 and response.status_code == 404:
@@ -190,6 +196,9 @@ class Browser:
         :return: `requests.Response
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
+
+        The response body is read before returning, even with ``stream=True``.
+        See :ref:`streaming-responses` for streaming via the Requests session.
         """
         response = self.session.post(*args, **kwargs)
         return Browser.add_soup(response, self.soup_config)
@@ -201,6 +210,9 @@ class Browser:
         :return: `requests.Response
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
+
+        The response body is read before returning, even with ``stream=True``.
+        See :ref:`streaming-responses` for streaming via the Requests session.
         """
         response = self.session.put(*args, **kwargs)
         return Browser.add_soup(response, self.soup_config)
@@ -380,6 +392,9 @@ class Browser:
         :return: `requests.Response
             <http://docs.python-requests.org/en/master/api/#requests.Response>`__
             object with a *soup*-attribute added by :func:`add_soup`.
+
+        The response body is read before returning, even with ``stream=True``.
+        See :ref:`streaming-responses` for streaming via the Requests session.
         """
         if not isinstance(form, Form):
             form = Form(form)
