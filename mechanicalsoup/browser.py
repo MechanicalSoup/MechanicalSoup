@@ -234,7 +234,8 @@ class Browser:
             data = kwargs.pop("params", dict())
         else:
             data = kwargs.pop("data", dict())
-        files = kwargs.pop("files", dict())
+        files = {name: [file] for name, file in
+                 kwargs.pop("files", dict()).items()}
 
         # Use a list of 2-tuples to better reflect the behavior of browser QSL.
         # Requests also retains order when encoding form data in 2-tuple lists.
@@ -273,23 +274,28 @@ class Browser:
                     # browsers use empty string for inputs with missing values
                     value = tag.get("value", "")
 
-                # If the enctype is not multipart, the filename is put in
-                # the form as a text input and the file is not sent.
                 if is_multipart_file_upload(form, tag):
-                    if isinstance(value, io.IOBase):
-                        content = value
-                        filename = os.path.basename(getattr(value, "name", ""))
+                    files[name] = []
+                values = (value if tag_type == "file" and
+                          "multiple" in tag.attrs and
+                          isinstance(value, (list, tuple)) else [value])
+                for value in values or [""]:
+                    # Without multipart encoding, submit only the filename.
+                    if is_multipart_file_upload(form, tag):
+                        if isinstance(value, io.IOBase):
+                            content = value
+                            filename = os.path.basename(
+                                getattr(value, "name", ""))
+                        else:
+                            content = ""
+                            filename = os.path.basename(value)
+                        # Empty selections still submit an empty file (#250).
+                        files[name].append((filename, content))
                     else:
-                        content = ""
-                        filename = os.path.basename(value)
-                    # If content is the empty string, we still pass it
-                    # for consistency with browsers (see
-                    # https://github.com/MechanicalSoup/MechanicalSoup/issues/250).
-                    files[name] = (filename, content)
-                else:
-                    if isinstance(value, io.IOBase):
-                        value = os.path.basename(getattr(value, "name", ""))
-                    data.append((name, value))
+                        if isinstance(value, io.IOBase):
+                            value = os.path.basename(
+                                getattr(value, "name", ""))
+                        data.append((name, value))
 
             elif tag.name == "button":
                 # Buttons are only included if they are the selected submit
@@ -329,6 +335,8 @@ class Browser:
         # content. Since Requests doesn't have yet a feature to choose
         # enctype, we have to use tricks to make it behave as we want
         # This code will be updated if Requests implements it.
+        files = [(name, file) for name, values in files.items()
+                 for file in values]
         if multipart and not files:
             # Requests will switch to "multipart/form-data" only if
             # files pass the `if files:` test, so in this case we use

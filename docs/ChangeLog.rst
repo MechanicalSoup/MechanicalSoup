@@ -5,6 +5,9 @@ Release Notes
 Version 1.5 (in development)
 ============================
 
+* File inputs with the ``multiple`` attribute accept a list or tuple of
+  open file objects and submit each file under the input's field name.
+
 * When the ``Content-Type`` header is missing, HTML is now detected from the
   first bytes of the response instead of decoding the whole body, which is
   much faster for large binary responses. Uppercase markup such as ``<HTML>``
