@@ -69,7 +69,8 @@ class Form:
 
         This will find the input element named "login" and give it the
         value ``username``, and the input element named "password" and
-        give it the value ``password``.
+        give it the value ``password``. File inputs accept the upload values
+        documented in :func:`~Form.set`.
         """
 
         for (name, value) in data.items():
@@ -281,6 +282,10 @@ class Form:
 
             form.set("tagname", open(path_to_local_file, "rb"))
 
+        For a file input with the ``multiple`` attribute, pass a list or
+        tuple of open file objects. Keep the files open until submission;
+        MechanicalSoup does not close them.
+
         """
         for func in ("checkbox", "radio", "input", "textarea", "select"):
             try:
@@ -414,7 +419,10 @@ class Form:
         """Raise an exception if a multipart file input is not an open file."""
         if (
             is_multipart_file_upload(self.form, tag) and
-            not isinstance(value, io.IOBase)
+            not isinstance(value, io.IOBase) and
+            not ('multiple' in tag.attrs and
+                 isinstance(value, (list, tuple)) and
+                 all(isinstance(file, io.IOBase) for file in value))
         ):
             raise ValueError(
                 "From v1.3.0 onwards, you must pass an open file object "
