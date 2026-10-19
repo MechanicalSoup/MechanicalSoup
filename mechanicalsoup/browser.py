@@ -305,19 +305,20 @@ class Browser:
                 # If the value attribute is not specified, the content will
                 # be passed as a value instead.
                 options = tag.select("option")
-                selected_values = [i.get("value", i.text) for i in options
-                                   if "selected" in i.attrs]
-                if "multiple" in tag.attrs:
-                    for value in selected_values:
-                        data.append((name, value))
-                elif selected_values:
-                    # A standard select element only allows one option to be
-                    # selected, but browsers pick last if somehow multiple.
-                    data.append((name, selected_values[-1]))
-                elif options:
-                    # Selects the first option if none are selected
-                    first_value = options[0].get("value", options[0].text)
-                    data.append((name, first_value))
+                selected_options = [i for i in options
+                                    if "selected" in i.attrs]
+                if "multiple" not in tag.attrs:
+                    if selected_options:
+                        # Browsers pick the last selected option, even if it
+                        # is disabled. Do not fall back to an enabled option.
+                        selected_options = selected_options[-1:]
+                    else:
+                        # Select the first enabled option if none are selected.
+                        selected_options = [i for i in options
+                                            if not is_disabled(i)][:1]
+                for option in selected_options:
+                    if not is_disabled(option):
+                        data.append((name, option.get("value", option.text)))
 
         if method.lower() == "get":
             kwargs["params"] = data

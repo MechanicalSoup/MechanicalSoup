@@ -32,10 +32,17 @@ def is_disabled(tag):
     which stays enabled. Disabled controls are barred from submission, so
     browsers do not include their name/value pairs in the form data.
 
+    Options can also be disabled by their containing ``<optgroup>``.
+
     https://html.spec.whatwg.org/multipage/form-elements.html#concept-fieldset-disabled
     """
     if tag.has_attr("disabled"):
         return True
+    if tag.name == "option":
+        ancestor = tag.find_parent(
+            ["select", "hr", "datalist", "option", "optgroup"])
+        return (ancestor is not None and ancestor.name == "optgroup"
+                and ancestor.has_attr("disabled"))
     for fieldset in tag.find_parents("fieldset"):
         if not fieldset.has_attr("disabled"):
             continue
