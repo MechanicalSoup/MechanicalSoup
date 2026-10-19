@@ -275,6 +275,58 @@ def test__request_select_none(httpbin):
     assert response.json()['form'] == {'shape': 'round'}
 
 
+def test_get_request_kwargs_disabled_multiple_options():
+    form_html = """
+    <form method="post">
+      <select name="choice" multiple>
+        <option value="first" selected>First</option>
+        <option value="disabled" selected disabled="false">Disabled</option>
+        <optgroup disabled>
+          <option value="group" selected>Disabled group</option>
+        </optgroup>
+        <optgroup>
+          <option value="" selected>Empty value</option>
+          <option selected>Text value</option>
+          <option value="unselected">Unselected</option>
+        </optgroup>
+      </select>
+    </form>"""
+    form = BeautifulSoup(form_html, "lxml").form
+
+    kwargs = mechanicalsoup.Browser.get_request_kwargs(
+        form, "https://example.com/")
+
+    assert kwargs['data'] == [
+        ('choice', 'first'), ('choice', ''), ('choice', 'Text value')]
+
+
+@pytest.mark.parametrize("options, expected", [
+    ('<option disabled selected>Disabled</option>'
+     '<option>Enabled</option>', []),
+    ('<optgroup disabled><option selected>Disabled</option></optgroup>'
+     '<option>Enabled</option>', []),
+    ('<option selected>Earlier</option>'
+     '<option disabled selected>Last</option>', []),
+    ('<option disabled selected>Earlier</option>'
+     '<option selected>Last</option>', [('choice', 'Last')]),
+    ('<option disabled>Disabled</option>'
+     '<option>Enabled</option>', [('choice', 'Enabled')]),
+    ('<optgroup disabled><option>Disabled</option></optgroup>'
+     '<optgroup><option>Enabled</option></optgroup>', [('choice', 'Enabled')]),
+    ('<option disabled>Disabled</option>'
+     '<optgroup disabled><option>Disabled group</option></optgroup>', []),
+])
+def test_get_request_kwargs_disabled_single_options(options, expected):
+    form = BeautifulSoup(
+        '<form method="post"><select name="choice">'
+        + options + '</select></form>', "lxml").form
+
+    kwargs = mechanicalsoup.Browser.get_request_kwargs(
+        form, "https://example.com/")
+
+    assert kwargs['data'] == expected
+
+
 def test__request_disabled_attr(httpbin):
     """Make sure that disabled form controls are not submitted."""
     form_html = f"""
