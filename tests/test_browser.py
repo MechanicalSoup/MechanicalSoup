@@ -3,6 +3,7 @@ import os
 import sys
 import tempfile
 from unittest import mock
+from urllib.parse import parse_qsl
 
 import pytest
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
@@ -114,6 +115,37 @@ def test_get_request_kwargs_many_submit_elements_have_formaction_attribute():
         form, "https://example.com", submit
     )
     assert request_kwargs["url"] == "https://example.com/submit2"
+
+
+@pytest.mark.parametrize("method", ["get", "post"])
+@pytest.mark.parametrize("input_type", ["button", "reset", "bUtToN", "ReSeT"])
+@pytest.mark.parametrize("submit", [None, False],
+                         ids=["selected-submit", "no-submit"])
+def test_submit_ignores_non_submit_input_buttons(
+        requests_mock, method, input_type, submit):
+    form = mechanicalsoup.Form(BeautifulSoup(f"""
+        <form method="{method}" action="https://example.test/submit">
+            <input name="action" value="keep">
+            <input type="{input_type}" name="action" value="ignore">
+            <input type="submit" name="action" value="save">
+            <input type="hidden" name="token" value="">
+        </form>
+    """, "lxml").form)
+    form.choose_submit(submit)
+    requests_mock.register_uri(method.upper(), "https://example.test/submit",
+                               text="<html>ok</html>")
+
+    with mechanicalsoup.Browser() as browser:
+        response = browser.submit(form)
+
+    assert response.status_code == 200
+    request = requests_mock.last_request
+    encoded = request.query if method == "get" else request.text
+    expected = [("action", "keep")]
+    if submit is not False:
+        expected.append(("action", "save"))
+    expected.append(("token", ""))
+    assert parse_qsl(encoded, keep_blank_values=True) == expected
 
 
 def test__request(httpbin):
