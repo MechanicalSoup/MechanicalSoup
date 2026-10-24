@@ -258,6 +258,8 @@ class Browser:
 
             if tag.name == "input":
                 tag_type = tag.get("type", "").lower()
+                if tag_type in ("button", "reset"):
+                    continue
                 if tag_type == "submit":
                     # Skip submit-type inputs that were not selected
                     if submit_added or (tag != submit):
