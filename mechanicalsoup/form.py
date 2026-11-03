@@ -6,7 +6,7 @@ import warnings
 
 import bs4
 
-from .utils import LinkNotFoundError, is_multipart_file_upload
+from .utils import LinkNotFoundError, is_disabled, is_multipart_file_upload
 
 
 class InvalidFormMethod(LinkNotFoundError):
@@ -366,9 +366,10 @@ class Form:
 
         submit_chosen = None
 
-        # If no submit specified, choose the first one
-        if submit is None and inps:
-            submit_chosen = inps[0]
+        # If no submit specified, choose the first enabled one
+        if submit is None:
+            submit_chosen = next(
+                (inp for inp in inps if not is_disabled(inp)), None)
 
         for inp in inps:
             if (inp.has_attr('name') and inp['name'] == submit):
