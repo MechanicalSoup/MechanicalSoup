@@ -371,6 +371,41 @@ def test_form_check_uncheck():
     assert "checked" not in form.form.find("input", {"name": "foo"}).attrs
 
 
+@pytest.mark.parametrize("value, expected", [
+    (True, ["bacon", "cheese", "onion"]),
+    (False, []),
+    (["cheese", True], ["bacon", "cheese", "onion"]),
+    ([True, "cheese"], ["bacon", "cheese", "onion"]),
+    (["cheese", False], []),
+    ([False, "cheese"], ["cheese"]),
+    ("cheese", ["bacon", "cheese", "onion"]),
+])
+def test_form_checkbox_family_booleans(value, expected):
+    soup = bs4.BeautifulSoup('''<form>
+        <input type="checkbox" name="topping" value="bacon" checked>
+        <input type="Checkbox" name="topping" value="cheese">
+        <input type="checkbox" name="topping" value="onion" checked>
+        <input type="checkbox" name="other" checked>
+    </form>''', 'lxml')
+    form = mechanicalsoup.Form(soup.form)
+    form.set_checkbox({"topping": value}, uncheck_other_boxes=False)
+    assert [box["value"] for box in soup.select(
+        'input[name="topping"][checked]')] == expected
+    assert soup.select_one('input[name="other"]').has_attr("checked")
+
+
+def test_form_checkbox_family_true():
+    soup = bs4.BeautifulSoup('''<form>
+        <input type="checkbox" name="box" value="a">
+        <input type="checkbox" name="box" value="b">
+    </form>''', 'lxml')
+    form = mechanicalsoup.Form(soup.form)
+    form.set_checkbox({"box": True})
+    assert len(soup.select('input[checked]')) == 2
+    form.set_checkbox({"box": "b"})
+    assert [box["value"] for box in soup.select('input[checked]')] == ["b"]
+
+
 page_with_various_fields = '''
 <html>
   <form method="post">
