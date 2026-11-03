@@ -126,8 +126,11 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=checkbox
-            selector = 'input[type="checkbox" i][name="{}"]'.format(name)
-            checkboxes = self.form.select(selector)
+            selector = 'input[type="checkbox" i]'
+            checkboxes = [
+                option for option in self.form.select(selector)
+                if option.get("name") == name
+            ]
             if not checkboxes:
                 raise InvalidFormMethod("No input checkbox named " + name)
 
@@ -171,8 +174,11 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=radio
-            selector = 'input[type="radio" i][name="{}"]'.format(name)
-            radios = self.form.select(selector)
+            selector = 'input[type="radio" i]'
+            radios = [
+                option for option in self.form.select(selector)
+                if option.get("name") == name
+            ]
             if not radios:
                 raise InvalidFormMethod("No input radio named " + name)
 
