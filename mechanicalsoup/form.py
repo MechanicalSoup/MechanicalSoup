@@ -141,18 +141,18 @@ class Form:
 
             # Check or uncheck one or more boxes
             for choice in value:
+                # Boolean choices apply to the entire checkbox family.
+                if choice is True or choice is False:
+                    for checkbox in checkboxes:
+                        if choice is True:
+                            checkbox["checked"] = ""
+                        elif "checked" in checkbox.attrs:
+                            del checkbox.attrs["checked"]
+                    continue
                 choice_str = str(choice)  # Allow for example literal numbers
                 for checkbox in checkboxes:
                     if checkbox.attrs.get("value", "on") == choice_str:
                         checkbox["checked"] = ""
-                        break
-                    # Allow specifying True or False to check/uncheck
-                    elif choice is True:
-                        checkbox["checked"] = ""
-                        break
-                    elif choice is False:
-                        if "checked" in checkbox.attrs:
-                            del checkbox.attrs["checked"]
                         break
                 else:
                     raise LinkNotFoundError(

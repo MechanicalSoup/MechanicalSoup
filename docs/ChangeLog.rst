@@ -5,6 +5,9 @@ Release Notes
 Version 1.5 (in development)
 ============================
 
+* Boolean choices in ``Form.set_checkbox`` now check or uncheck the entire
+  named checkbox family, as documented.
+
 * When the ``Content-Type`` header is missing, HTML is now detected from the
   first bytes of the response instead of decoding the whole body, which is
   much faster for large binary responses. Uppercase markup such as ``<HTML>``
