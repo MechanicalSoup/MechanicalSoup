@@ -548,5 +548,60 @@ def test_option_without_value(fail, selected, expected_post):
         assert res.status_code == 200 and res.text == 'Success!'
 
 
+@pytest.mark.parametrize('controls', [
+    '<input type="submit" name="action" value="disabled" disabled>',
+    '<button name="action" value="disabled" disabled>Disabled</button>',
+    '<fieldset disabled><button name="action" value="disabled">'
+    'Disabled</button></fieldset>',
+    '<fieldset disabled><legend>First</legend><legend>'
+    '<button name="action" value="disabled">Disabled</button>'
+    '</legend></fieldset>',
+])
+def test_default_submit_skips_disabled(controls, requests_mock):
+    form = mechanicalsoup.Form(bs4.BeautifulSoup(
+        '<form method="post" action="https://example.com/submit">'
+        '<input name="message" value="hello">' + controls +
+        '<button name="action" value="save">Save</button></form>',
+        'lxml').form)
+    requests_mock.post('https://example.com/submit', text='ok')
+
+    mechanicalsoup.Browser().submit(form)
+
+    assert requests_mock.last_request.text == 'message=hello&action=save'
+
+
+def test_default_submit_preserves_enabled_legend(requests_mock):
+    form = mechanicalsoup.Form(bs4.BeautifulSoup('''
+        <form method="post" action="https://example.com/submit">
+          <fieldset disabled><legend>
+            <button name="action" value="legend">Legend</button>
+          </legend></fieldset>
+          <button name="action" value="save">Save</button>
+        </form>
+    ''', 'lxml').form)
+    requests_mock.post('https://example.com/submit', text='ok')
+
+    mechanicalsoup.Browser().submit(form)
+
+    assert requests_mock.last_request.text == 'action=legend'
+
+
+def test_default_submit_all_disabled():
+    form = mechanicalsoup.Form(bs4.BeautifulSoup('''
+        <form><button disabled name="action">Disabled</button></form>
+    ''', 'lxml').form)
+    assert form.choose_submit(None) is None
+
+
+def test_explicit_disabled_submit_can_be_enabled():
+    form = mechanicalsoup.Form(bs4.BeautifulSoup('''
+        <form><button disabled name="action">Disabled</button></form>
+    ''', 'lxml').form)
+    submit = form.choose_submit('action')
+    assert submit is form.form.button
+    del submit['disabled']
+    assert form.choose_submit(None) is submit
+
+
 if __name__ == '__main__':
     pytest.main(sys.argv)
