@@ -16,6 +16,12 @@ from .form import Form
 from .utils import LinkNotFoundError, is_disabled, is_multipart_file_upload
 
 
+def _get_option_value(option):
+    if "value" in option.attrs:
+        return option["value"]
+    return re.sub(r"[ \t\n\r\f]+", " ", option.text).strip(" ")
+
+
 class ResponseWithSoup(requests.Response):
     soup: bs4.BeautifulSoup | None
 
@@ -305,7 +311,7 @@ class Browser:
                 # If the value attribute is not specified, the content will
                 # be passed as a value instead.
                 options = tag.select("option")
-                selected_values = [i.get("value", i.text) for i in options
+                selected_values = [_get_option_value(i) for i in options
                                    if "selected" in i.attrs]
                 if "multiple" in tag.attrs:
                     for value in selected_values:
@@ -316,7 +322,7 @@ class Browser:
                     data.append((name, selected_values[-1]))
                 elif options:
                     # Selects the first option if none are selected
-                    first_value = options[0].get("value", options[0].text)
+                    first_value = _get_option_value(options[0])
                     data.append((name, first_value))
 
         if method.lower() == "get":

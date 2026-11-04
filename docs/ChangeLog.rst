@@ -5,6 +5,9 @@ Release Notes
 Version 1.5 (in development)
 ============================
 
+* ``<option>`` elements without a ``value`` attribute now normalize ASCII
+  whitespace in their fallback text value, matching browser behavior.
+
 * When the ``Content-Type`` header is missing, HTML is now detected from the
   first bytes of the response instead of decoding the whole body, which is
   much faster for large binary responses. Uppercase markup such as ``<HTML>``
