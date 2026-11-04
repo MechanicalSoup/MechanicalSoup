@@ -1,4 +1,5 @@
 import sys
+from html import escape
 
 import bs4
 import pytest
@@ -550,3 +551,35 @@ def test_option_without_value(fail, selected, expected_post):
 
 if __name__ == '__main__':
     pytest.main(sys.argv)
+
+
+@pytest.mark.parametrize("kind", ["radio", "checkbox"])
+@pytest.mark.parametrize("method", ["direct", "set", "check"])
+@pytest.mark.parametrize("name", [
+    'choice"quoted', r"choice\backslash", "選択[]",
+    'choice"], input[name="other',
+])
+def test_checkable_family_name_is_literal(kind, method, name):
+    """Control names are literal HTML attributes, not CSS expressions."""
+    soup = bs4.BeautifulSoup(
+        '<form>'
+        f'<input type="{kind.upper()}" name="{escape(name)}" '
+        'value="old" checked>'
+        f'<input type="{kind.title()}" name="{escape(name)}" value="new">'
+        f'<input type="{kind}" name="other" value="new" checked>'
+        f'<input type="text" name="{escape(name)}" value="new">'
+        '</form>', 'lxml')
+    form = mechanicalsoup.Form(soup.form)
+    if method == "direct":
+        getattr(form, "set_" + kind)({name: "new"})
+    elif method == "set":
+        form.set(name, "new")
+    else:
+        form.check({name: "new"})
+
+    inputs = form.form.find_all("input")
+    assert ("checked" in inputs[0].attrs) == (method == "check" and
+                                              kind == "checkbox")
+    assert "checked" in inputs[1].attrs
+    assert "checked" in inputs[2].attrs
+    assert "checked" not in inputs[3].attrs

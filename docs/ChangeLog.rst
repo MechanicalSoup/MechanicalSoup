@@ -5,6 +5,9 @@ Release Notes
 Version 1.5 (in development)
 ============================
 
+* Radio and checkbox family names containing quotes or backslashes are now
+  matched literally when setting their values.
+
 * When the ``Content-Type`` header is missing, HTML is now detected from the
   first bytes of the response instead of decoding the whole body, which is
   much faster for large binary responses. Uppercase markup such as ``<HTML>``

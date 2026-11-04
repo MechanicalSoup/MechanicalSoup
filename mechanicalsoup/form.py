@@ -126,9 +126,9 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=checkbox
-            selector = 'input[type="checkbox" i][name="{}"]'.format(name)
+            selector = 'input[type="checkbox" i]'
             checkboxes = self.form.select(selector)
-            if not checkboxes:
+            if not any(option.get("name") == name for option in checkboxes):
                 raise InvalidFormMethod("No input checkbox named " + name)
 
             # uncheck if requested
@@ -142,7 +142,10 @@ class Form:
             # Check or uncheck one or more boxes
             for choice in value:
                 choice_str = str(choice)  # Allow for example literal numbers
-                for checkbox in checkboxes:
+                for checkbox in (
+                    option for option in checkboxes
+                    if option.get("name") == name
+                ):
                     if checkbox.attrs.get("value", "on") == choice_str:
                         checkbox["checked"] = ""
                         break
@@ -171,16 +174,18 @@ class Form:
         """
         for (name, value) in data.items():
             # Case-insensitive search for type=radio
-            selector = 'input[type="radio" i][name="{}"]'.format(name)
+            selector = 'input[type="radio" i]'
             radios = self.form.select(selector)
-            if not radios:
+            if not any(option.get("name") == name for option in radios):
                 raise InvalidFormMethod("No input radio named " + name)
 
             # only one radio button can be checked
             self.uncheck_all(name)
 
             # Check the appropriate radio button (value cannot be a list/tuple)
-            for radio in radios:
+            for radio in (
+                option for option in radios if option.get("name") == name
+            ):
                 if radio.attrs.get("value", "on") == str(value):
                     radio["checked"] = ""
                     break
