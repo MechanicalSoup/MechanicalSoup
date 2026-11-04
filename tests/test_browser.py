@@ -275,6 +275,29 @@ def test__request_select_none(httpbin):
     assert response.json()['form'] == {'shape': 'round'}
 
 
+@pytest.mark.parametrize("selected", [False, True])
+@pytest.mark.parametrize(("attrs", "text", "expected"), [
+    ("", "  spaced\t\nlabel  ", "spaced label"),
+    ("", "left\u00a0\u00a0right", "left\u00a0\u00a0right"),
+    (' value="  explicit  "', "ignored", "  explicit  "),
+])
+def test_option_without_value_uses_normalized_text(
+    selected, attrs, text, expected
+):
+    """An option's missing value attribute falls back to browser-like text."""
+    selected_attr = " selected" if selected else ""
+    form = BeautifulSoup(
+        '<form method="post" action="https://example.test/">'
+        f'<select name="choice"><option{selected_attr}{attrs}>{text}</option>'
+        '</select></form>',
+        "lxml",
+    ).form
+
+    kwargs = mechanicalsoup.Browser.get_request_kwargs(form)
+
+    assert kwargs["data"] == [("choice", expected)]
+
+
 def test__request_disabled_attr(httpbin):
     """Make sure that disabled form controls are not submitted."""
     form_html = f"""
