@@ -242,10 +242,11 @@ class Browser:
 
         multipart = form.get("enctype", "") == "multipart/form-data"
 
-        # Process form tags in the order that they appear on the page,
-        # skipping those tags that do not have a name-attribute.
+        # Process named controls in page order. Image submit inputs can
+        # contribute coordinates even when they do not have a name.
         selector = ",".join(f"{tag}[name]" for tag in
                             ("input", "button", "textarea", "select"))
+        selector += ',input[type="image" i]'
         submit_added = False
         for tag in form.select(selector):
             name = tag.get("name")  # name-attribute of tag
@@ -264,6 +265,13 @@ class Browser:
                         continue
                     # Avoid duplicate submits
                     submit_added = True
+                elif tag_type == "image":
+                    if not submit_added and tag == submit:
+                        # A non-pointing submission uses coordinates (0, 0).
+                        prefix = f"{name}." if name else ""
+                        data.extend(((f"{prefix}x", "0"), (f"{prefix}y", "0")))
+                        submit_added = True
+                    continue
 
                 if tag_type in ("radio", "checkbox"):
                     if "checked" not in tag.attrs:
