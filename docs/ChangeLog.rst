@@ -16,6 +16,10 @@ Version 1.5 (in development)
 * ``StatefulBrowser.links`` now raises an explanatory ``AttributeError`` when
   no page is loaded, instead of failing inside BeautifulSoup.
 
+* ``StatefulBrowser.launch_browser`` now raises the same explanatory
+  ``AttributeError`` when it is called without an explicit soup object and no
+  page is loaded, instead of failing inside BeautifulSoup.
+
 Version 1.4
 ===========
 

@@ -491,7 +491,15 @@ class StatefulBrowser(Browser):
 
         :param: soup: Page contents to display, supplied as a bs4 soup object.
             Defaults to the current page of the ``StatefulBrowser`` instance.
+
+        If no soup is supplied and no page is loaded, raise
+        :class:`AttributeError`.
         """
         if soup is None:
             soup = self.page
+        if soup is None:
+            raise AttributeError(
+                "No page has been opened yet on this browser, or the last "
+                "response was not parsed as a page (e.g. it was not HTML)."
+            )
         super().launch_browser(soup)
