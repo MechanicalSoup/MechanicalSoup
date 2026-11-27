@@ -282,6 +282,32 @@ def test_launch_browser(mocker):
     assert webbrowser.open.call_count == 1
 
 
+def test_launch_browser_no_page(mocker):
+    """launch_browser() must report that no page is loaded instead of failing
+    with an opaque AttributeError from the underlying None."""
+    mocker.patch('webbrowser.open')
+    browser = mechanicalsoup.StatefulBrowser()
+    assert browser.page is None
+    with pytest.raises(AttributeError, match="No page has been opened"):
+        browser.launch_browser()
+    assert webbrowser.open.call_count == 0
+
+
+def test_launch_browser_unparsed_page(mocker):
+    """The last response may not have been parsed as a page (e.g. a PDF), in
+    which case there is no page to display either."""
+    mocker.patch('webbrowser.open')
+    browser, adapter = prepare_mock_browser()
+    mock_get(adapter, url='mock://binary', reply=b'%PDF-1.4',
+             content_type='application/pdf')
+    response = browser.open('mock://binary')
+    assert response.status_code == 200
+    assert browser.page is None
+    with pytest.raises(AttributeError, match="No page has been opened"):
+        browser.launch_browser()
+    assert webbrowser.open.call_count == 0
+
+
 def test_find_link():
     browser = mechanicalsoup.StatefulBrowser()
     browser.open_fake_page('<html></html>')
