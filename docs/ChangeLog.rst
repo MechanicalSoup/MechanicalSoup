@@ -16,6 +16,10 @@ Version 1.5 (in development)
 * ``StatefulBrowser.links`` now raises an explanatory ``AttributeError`` when
   no page is loaded, instead of failing inside BeautifulSoup.
 
+* Forms now recognize image inputs as submit buttons. A selected image input
+  submits default coordinates of zero as ``name.x`` and ``name.y`` (or ``x`` and
+  ``y`` when unnamed) rather than sending the image input's value.
+
 Version 1.4
 ===========
 

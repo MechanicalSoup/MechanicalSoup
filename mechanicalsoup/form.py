@@ -6,7 +6,7 @@ import warnings
 
 import bs4
 
-from .utils import LinkNotFoundError, is_multipart_file_upload
+from .utils import LinkNotFoundError, is_disabled, is_multipart_file_upload
 
 
 class InvalidFormMethod(LinkNotFoundError):
@@ -337,7 +337,8 @@ class Form:
 
         To simulate a normal web browser, only one submit element must be
         sent. Therefore, this does not need to be called if there is only
-        one submit element in the form.
+        one submit element in the form. Selected image inputs submit the
+        default coordinates (0, 0) instead of a regular name/value pair.
 
         If the element is not found or if multiple elements match, raise a
         :class:`LinkNotFoundError` exception.
@@ -354,15 +355,19 @@ class Form:
             self._submit_chosen = False
             return self._submit_chosen
 
-        # All buttons NOT of type (button,reset) are valid submits
-        # Case-insensitive search for type=submit
-        inps = [
-            inp for inp in self.form.select('input[type="submit" i], button')
-            if (
-                not isinstance(inp_type := inp.get("type"), str)
-                or inp_type.lower() not in ('button', 'reset')
-            )
-        ]
+        # All buttons NOT of type (button, reset) are valid submits.
+        selector = 'input[type="submit" i], input[type="image" i], button'
+        inps = []
+        for inp in self.form.select(selector):
+            inp_type = inp.get("type")
+            if isinstance(inp_type, str):
+                inp_type = inp_type.lower()
+                if inp_type in ("button", "reset"):
+                    continue
+                if (inp.name == "input" and inp_type == "image"
+                        and is_disabled(inp)):
+                    continue
+            inps.append(inp)
 
         submit_chosen = None
 

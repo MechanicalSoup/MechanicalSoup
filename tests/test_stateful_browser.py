@@ -215,6 +215,68 @@ def test_submit_no_btn(expected_post):
     assert initial_state != browser._StatefulBrowser__state
 
 
+@pytest.mark.parametrize("btn_name, expected_button", [
+    pytest.param(None, [("search.x", "0"), ("search.y", "0")], id="default"),
+    pytest.param("search", [("search.x", "0"), ("search.y", "0")], id="named"),
+    pytest.param("regular", [("regular", "go")], id="other-submit"),
+    pytest.param(False, [], id="no-submit"),
+])
+def test_submit_image_input(btn_name, expected_button):
+    form_html = """
+    <form method="post" action="mock://form.com/post">
+      <input type="text" name="search" value="query">
+      <input type="IMAGE" name="search" value="not a coordinate">
+      <input type="image" name="not_selected">
+      <button type="submit" name="regular" value="go">Go</button>
+      <input type="hidden" name="after" value="last">
+    </form>
+    """
+    expected = [("search", "query"), *expected_button, ("after", "last")]
+    browser, url = setup_mock_browser(expected_post=expected, text=form_html)
+    browser.open(url)
+    browser.select_form()
+
+    assert browser.submit_selected(btnName=btn_name).text == "Success!"
+
+
+@pytest.mark.parametrize("name_attribute", ["", 'name=""'])
+def test_submit_unnamed_image_input(name_attribute):
+    form_html = f"""
+    <form method="post" action="mock://form.com/post">
+      <button type="submit" name="regular" value="go">Go</button>
+      <input type="image" {name_attribute} id="image">
+    </form>
+    """
+    browser, url = setup_mock_browser(
+        expected_post=[("x", "0"), ("y", "0")], text=form_html,
+    )
+    browser.open(url)
+    form = browser.select_form()
+    form.choose_submit(form.form.select_one("#image"))
+
+    assert browser.submit_selected().text == "Success!"
+
+
+@pytest.mark.parametrize("image_markup", [
+    '<input type="image" name="image" disabled>',
+    '<fieldset disabled><input type="image" name="image"></fieldset>',
+])
+def test_submit_ignores_disabled_image_input(image_markup):
+    form_html = f"""
+    <form method="post" action="mock://form.com/post">
+      {image_markup}
+      <button type="submit" name="regular" value="go">Go</button>
+    </form>
+    """
+    browser, url = setup_mock_browser(
+        expected_post=[("regular", "go")], text=form_html,
+    )
+    browser.open(url)
+    browser.select_form()
+
+    assert browser.submit_selected().text == "Success!"
+
+
 def test_submit_dont_modify_kwargs():
     """Test that submit_selected() doesn't modify the caller's passed-in
     kwargs, for example when adding a Referer header.
